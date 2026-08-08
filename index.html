@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="धर्मवीर ॲडव्हर्टायझिंग — Graphics Design & Digital Marketing">
+  <title>धर्मवीर ॲडव्हर्टायझिंग | Graphics Design & Digital Marketing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="loader" class="loader">
+    <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग">
+    <div class="loader-line"></div>
+    <p>धर्मवीर ॲडव्हर्टायझिंग</p>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Home">
+      <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग Logo">
+      <span>धर्मवीर ॲडव्हर्टायझिंग<small>Graphics • Marketing</small></span>
+    </a>
+
+    <nav id="mainNav">
+      <a href="#home" data-i18n="navHome">Home</a>
+      <a href="#portfolio" data-i18n="navPortfolio">Portfolio</a>
+      <a href="#services" data-i18n="navServices">Services</a>
+      <a href="#about" data-i18n="navAbout">About</a>
+      <a href="#reviews" data-i18n="navReviews">Reviews</a>
+      <a href="#contact" data-i18n="navContact">Contact</a>
+      <div class="language">
+        <button id="languageBtn">भाषा ▾</button>
+        <div class="language-menu">
+          <button data-lang="mr">मराठी</button>
+          <button data-lang="en">English</button>
+          <button data-lang="hi">हिन्दी</button>
+        </div>
+      </div>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+  </header>
+
+  <main>
+    <section id="home" class="hero section">
+      <div class="hero-content">
+        <p class="eyebrow" data-i18n="eyebrow">CREATIVE DESIGN • DIGITAL MARKETING</p>
+        <h1 data-i18n="heroTitle">तुमच्या ब्रँडला<br><span>वेगळी ओळख</span> देऊया.</h1>
+        <p class="hero-text" data-i18n="heroText">
+          आकर्षक Graphics Design, Social Media Creatives आणि Digital Marketing — तुमच्या कामासाठी एकाच ठिकाणी.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#portfolio" data-i18n="viewWork">माझं काम पाहा</a>
+          <a class="btn btn-ghost" href="#contact" data-i18n="startProject">कामाबद्दल बोला →</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>100%</strong><span data-i18n="stat1">Creative Focus</span></div>
+          <div><strong>∞</strong><span data-i18n="stat2">Design Possibilities</span></div>
+          <div><strong>24/7</strong><span data-i18n="stat3">Digital Presence</span></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="glow"></div>
+        <img src="assets/logo.png" alt="" class="hero-logo">
+        <div class="floating-card card-one">✦ <span data-i18n="creative">Creative</span></div>
+        <div class="floating-card card-two">◈ <span data-i18n="branding">Branding</span></div>
+        <div class="floating-card card-three">↗ <span data-i18n="marketing">Marketing</span></div>
+      </div>
+    </section>
+
+    <section class="marquee" aria-label="Services">
+      <div>GRAPHICS DESIGN &nbsp; ✦ &nbsp; SOCIAL MEDIA &nbsp; ✦ &nbsp; BRANDING &nbsp; ✦ &nbsp; DIGITAL MARKETING &nbsp; ✦ &nbsp; GRAPHICS DESIGN &nbsp; ✦ &nbsp;</div>
+    </section>
+
+    <section id="portfolio" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">02 — PORTFOLIO</p>
+        <h2 data-i18n="portfolioTitle">निवडक <span>काम</span></h2>
+        <p data-i18n="portfolioText">तुमच्या गरजेनुसार तयार केलेल्या creative designs ची झलक.</p>
+      </div>
+
+      <div class="filters" id="filters"></div>
+      <div class="portfolio-grid" id="portfolioGrid"></div>
+      <p class="edit-note" data-i18n="editNote">नंतर तुझी खरी designs assets/portfolio मध्ये टाकून script.js मधून सहज बदलता येतील.</p>
+    </section>
+
+    <section id="before-after" class="section split-section">
+      <div>
+        <p class="eyebrow">03 — BEFORE / AFTER</p>
+        <h2 data-i18n="beforeTitle">Design मध्ये <span>फरक</span> दिसला पाहिजे.</h2>
+        <p data-i18n="beforeText">तुमच्या जुन्या creative ला अधिक clean, premium आणि attention-grabbing look देण्याचा प्रयत्न.</p>
+      </div>
+      <div class="comparison">
+        <div class="compare before"><span>BEFORE</span><div class="sample-text">YOUR<br>DESIGN</div></div>
+        <div class="compare after"><span>AFTER</span><div class="sample-text">YOUR<br><b>BRAND</b></div></div>
+      </div>
+    </section>
+
+    <section id="services" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">04 — SERVICES</p>
+        <h2 data-i18n="servicesTitle">तुमच्यासाठी <span>काय करू शकतो?</span></h2>
+      </div>
+      <div class="services-grid" id="servicesGrid"></div>
+    </section>
+
+    <section id="why" class="section why-section">
+      <div class="why-copy">
+        <p class="eyebrow">05 — WHY CHOOSE US</p>
+        <h2 data-i18n="whyTitle">फक्त design नाही,<br><span>ओळख तयार करूया.</span></h2>
+        <p data-i18n="whyText">प्रत्येक creative मध्ये तुमचा brand, audience आणि purpose लक्षात घेऊन काम करण्याचा प्रयत्न.</p>
+      </div>
+      <div class="why-list" id="whyList"></div>
+    </section>
+
+    <section id="reviews" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">06 — REVIEWS</p>
+        <h2 data-i18n="reviewsTitle">Client <span>Reviews</span></h2>
+        <p data-i18n="reviewsText">तुमच्या feedback ला आमच्यासाठी विशेष महत्त्व आहे.</p>
+      </div>
+      <div class="reviews-grid" id="reviewsGrid"></div>
+      <p class="edit-note" data-i18n="reviewNote">खरे client reviews मिळाल्यावर इथे सहज बदलता येतील.</p>
+    </section>
+
+    <section id="about" class="section about-section">
+      <div class="about-logo"><img src="assets/logo.png" alt="Logo"></div>
+      <div>
+        <p class="eyebrow">07 — ABOUT</p>
+        <h2 data-i18n="aboutTitle">धर्मवीर ॲडव्हर्टायझिंग</h2>
+        <p data-i18n="aboutText">Graphics Design आणि Digital Marketing साठी creative आणि practical solutions देण्याचा आमचा प्रयत्न. सध्या आम्ही घरून काम करतो; भविष्यात office सुरू झाल्यावर location इथे जोडता येईल.</p>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact-section">
+      <div class="contact-copy">
+        <p class="eyebrow">08 — CONTACT</p>
+        <h2 data-i18n="contactTitle">तुमच्या project बद्दल <span>बोलूया.</span></h2>
+        <p data-i18n="contactText">Design, poster, social media किंवा digital marketing — कामाची माहिती पाठवा.</p>
+        <div class="contact-placeholder">
+          <span>WhatsApp</span><strong id="whatsappDisplay">नंतर जोडू</strong>
+        </div>
+        <div class="contact-placeholder">
+          <span>Instagram</span><strong id="instagramDisplay">नंतर जोडू</strong>
+        </div>
+        <div class="contact-placeholder">
+          <span>Email</span><strong id="emailDisplay">नंतर जोडू</strong>
+        </div>
+      </div>
+
+      <form class="contact-form" id="contactForm">
+        <label data-i18n="nameLabel">नाव<input required name="name" placeholder="तुमचे नाव"></label>
+        <label data-i18n="phoneLabel">मोबाईल नंबर<input required name="phone" placeholder="मोबाईल नंबर"></label>
+        <label data-i18n="workLabel">कामाचा प्रकार
+          <select name="work">
+            <option>Poster Design</option>
+            <option>Social Media Design</option>
+            <option>Logo / Branding</option>
+            <option>Digital Marketing</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label data-i18n="messageLabel">संदेश<textarea name="message" rows="5" placeholder="तुमच्या कामाबद्दल थोडक्यात लिहा"></textarea></label>
+        <button class="btn btn-primary" type="submit" data-i18n="sendMessage">Message तयार करा →</button>
+        <small data-i18n="formNote">WhatsApp नंबर जोडल्यावर हा form थेट WhatsApp message तयार करेल.</small>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand">
+      <img src="assets/logo.png" alt="">
+      <div><strong>धर्मवीर ॲडव्हर्टायझिंग</strong><span>Graphics Design • Digital Marketing</span></div>
+    </div>
+    <p>© <span id="year"></span> धर्मवीर ॲडव्हर्टायझिंग. All rights reserved.</p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
