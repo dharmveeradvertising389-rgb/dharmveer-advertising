@@ -1,124 +1,392 @@
+```html
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Dharmveer Advertising</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: 30px auto; background: #ffffff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1, h2 { color: #1a1a1a; margin-top: 0; }
-        .hidden { display: none !important; }
-        
-        /* Login Form Styles */
-        .login-card { max-width: 400px; margin: 50px auto; text-align: center; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
-        input[type="password"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        
-        button { background: #007bff; color: white; border: none; padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 6px; width: 100%; transition: 0.3s; }
-        button:hover { background: #0056b3; }
-        
-        /* Dashboard Navigation */
-        .nav-tabs { display: flex; gap: 10px; margin: 20px 0; border-bottom: 2px solid #eee; padding-bottom: 10px; flex-wrap: wrap; }
-        .nav-tabs button { width: auto; background: #e9ecef; color: #495057; font-weight: 600; }
-        .nav-tabs button.active { background: #007bff; color: white; }
-        
-        .section { padding: 20px; background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; margin-top: 15px; }
-        .logout-btn { background: #dc3545; width: auto; float: right; }
-        .logout-btn:hover { background: #a71d2a; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>धर्मवीर ॲडव्हर्टायझिंग - Admin Panel</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 25px auto;
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    button {
+      padding: 11px 18px;
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #111;
+      color: white;
+      font-size: 15px;
+      margin-right: 6px;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    .danger {
+      background: #c62828;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .item {
+      border: 1px solid #ddd;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+  </style>
 </head>
+
 <body>
 
+<header>
+  <h1>धर्मवीर ॲडव्हर्टायझिंग</h1>
+  <p>Admin Panel</p>
+</header>
+
 <div class="container">
-    <!-- 1. LOGIN BOX -->
-    <div id="login-box" class="login-card">
-        <h2>🔐 Admin Panel Login</h2>
-        <p style="color: #666; font-size: 14px;">पुढे जाण्यासाठी तुमचा Admin Password टाका</p>
-        <div class="form-group">
-            <label for="adminKeyInput">Admin Password (ADMIN_KEY):</label>
-            <input type="password" id="adminKeyInput" placeholder="तुमची Password Key टाका">
-        </div>
-        <button onclick="login()">Login करा</button>
-        <p id="loginError" style="color: red; margin-top: 10px;" class="hidden">कृपया पासवर्ड एंटर करा!</p>
+
+  <div id="loginBox" class="card">
+    <h2>Admin Login</h2>
+
+    <input
+      type="password"
+      id="adminPassword"
+      placeholder="Admin Password"
+    >
+
+    <button onclick="login()">Login</button>
+
+    <p id="loginMessage"></p>
+  </div>
+
+  <div id="adminPanel" class="hidden">
+
+    <div class="card">
+      <h2>Dashboard</h2>
+      <p>Dharmveer Advertising Admin Panel</p>
+      <button onclick="logout()">Logout</button>
     </div>
 
-    <!-- 2. ADMIN DASHBOARD (लॉगिन झाल्यावर दिसेल) -->
-    <div id="dashboard" class="hidden">
-        <button onclick="logout()" class="logout-btn">Logout</button>
-        <h1>🛠️ Admin Dashboard</h1>
-        <p>Dharmveer Advertising वेबसाईट कंट्रोल पॅनेल</p>
-        <hr>
+    <div class="card">
+      <h2>Portfolio / Posters</h2>
 
-        <!-- Dynamic Navigation Tabs -->
-        <div class="nav-tabs">
-            <button onclick="showTab('portfolio')" id="btn-portfolio" class="active">🖼️ Portfolio</button>
-            <button onclick="showTab('services')" id="btn-services">🛠️ Services</button>
-            <button onclick="showTab('reviews')" id="btn-reviews">⭐ Reviews</button>
-            <button onclick="showTab('settings')" id="btn-settings">⚙️ Website Settings</button>
-        </div>
+      <input id="portfolioTitle" placeholder="Poster title">
+      <input id="portfolioCategory" placeholder="Category">
+      <input id="portfolioImage" placeholder="Image URL">
 
-        <!-- Sections Content -->
-        <div id="portfolio" class="tab-content section">
-            <h2>🖼️ Portfolio Section</h2>
-            <p>इथे तुम्ही केलेले नवीन बॅनर्स, डिझाईन्स आणि प्रोजेक्ट्स अपलोड किंवा मॅनेज करा.</p>
-        </div>
+      <button onclick="addPortfolio()">Add Poster</button>
 
-        <div id="services" class="tab-content section hidden">
-            <h2>🛠️ Services Section</h2>
-            <p>इथे फ्लेक्स प्रिंटिंग, सोशल मीडिया डिझाईन किंवा इतर सर्व्हिसेसची यादी अपडेट करा.</p>
-        </div>
-
-        <div id="reviews" class="tab-content section hidden">
-            <h2>⭐ Customer Reviews Section</h2>
-            <p>इथे ग्राहकांचे रिव्ह्यू आणि फीडबॅक सेट करा.</p>
-        </div>
-
-        <div id="settings" class="tab-content section hidden">
-            <h2>⚙️ Website Settings</h2>
-            <p>इथे मोबाईल नंबर, पत्ता, लोगो आणि वेबसाईटच्या मुख्य सेटिंग्ज बदला.</p>
-        </div>
+      <div id="portfolioList"></div>
     </div>
+
+    <div class="card">
+      <h2>Services</h2>
+
+      <input id="serviceTitle" placeholder="Service title">
+
+      <textarea
+        id="serviceDescription"
+        placeholder="Service description"
+      ></textarea>
+
+      <input id="serviceIcon" placeholder="Icon">
+
+      <button onclick="addService()">Add Service</button>
+
+      <div id="serviceList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Reviews</h2>
+
+      <input id="clientName" placeholder="Client name">
+
+      <textarea
+        id="reviewText"
+        placeholder="Client review"
+      ></textarea>
+
+      <input
+        id="rating"
+        type="number"
+        min="1"
+        max="5"
+        value="5"
+      >
+
+      <button onclick="addReview()">Add Review</button>
+
+      <div id="reviewList"></div>
+    </div>
+
+  </div>
 </div>
 
 <script>
-    function login() {
-        const key = document.getElementById('adminKeyInput').value;
-        if (key.trim() !== "") {
-            // पासवर्ड तात्पुरता सेशनमध्ये सेव्ह केला जातो
-            sessionStorage.setItem('admin_key', key);
-            document.getElementById('login-box').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-        } else {
-            document.getElementById('loginError').classList.remove('hidden');
-        }
+
+  const API_URL =
+    "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
+
+  let adminKey = "";
+
+  function login() {
+    const password =
+      document.getElementById("adminPassword").value.trim();
+
+    if (!password) {
+      document.getElementById("loginMessage").textContent =
+        "Password टाका.";
+      return;
     }
 
-    function logout() {
-        sessionStorage.removeItem('admin_key');
-        document.getElementById('adminKeyInput').value = "";
-        document.getElementById('login-box').classList.remove('hidden');
-        document.getElementById('dashboard').classList.add('hidden');
+    adminKey = password;
+
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("adminPanel").classList.remove("hidden");
+
+    loadData();
+  }
+
+  function logout() {
+    adminKey = "";
+
+    document.getElementById("adminPassword").value = "";
+
+    document.getElementById("adminPanel").classList.add("hidden");
+    document.getElementById("loginBox").classList.remove("hidden");
+  }
+
+  async function api(path, options = {}) {
+
+    const headers = {
+      "Content-Type": "application/json",
+      "X-Admin-Key": adminKey,
+      ...(options.headers || {})
+    };
+
+    const response = await fetch(
+      API_URL + path,
+      {
+        ...options,
+        headers
+      }
+    );
+
+    return response.json();
+  }
+
+  async function loadData() {
+
+    try {
+
+      const portfolio =
+        await fetch(API_URL + "/api/portfolio")
+        .then(r => r.json());
+
+      document.getElementById("portfolioList").innerHTML =
+        portfolio.map(item => `
+          <div class="item">
+            <strong>${item.title}</strong>
+            <br>
+            ${item.category}
+            <br>
+            <button class="danger"
+              onclick="deletePortfolio(${item.id})">
+              Delete
+            </button>
+          </div>
+        `).join("");
+
+      const services =
+        await fetch(API_URL + "/api/services")
+        .then(r => r.json());
+
+      document.getElementById("serviceList").innerHTML =
+        services.map(item => `
+          <div class="item">
+            <strong>${item.title}</strong>
+            <br>
+            ${item.description || ""}
+          </div>
+        `).join("");
+
+      const reviews =
+        await fetch(API_URL + "/api/reviews")
+        .then(r => r.json());
+
+      document.getElementById("reviewList").innerHTML =
+        reviews.map(item => `
+          <div class="item">
+            <strong>${item.client_name}</strong>
+            <br>
+            ${item.review_text}
+            <br>
+            Rating: ${item.rating}/5
+          </div>
+        `).join("");
+
+    } catch (error) {
+
+      alert("API connection problem.");
+
+    }
+  }
+
+  async function addPortfolio() {
+
+    const title =
+      document.getElementById("portfolioTitle").value.trim();
+
+    const category =
+      document.getElementById("portfolioCategory").value.trim();
+
+    const image_url =
+      document.getElementById("portfolioImage").value.trim();
+
+    if (!title || !category || !image_url) {
+      alert("सगळी माहिती भरा.");
+      return;
     }
 
-    function showTab(tabName) {
-        // सर्व सेक्शन्स हायड करणे
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-        // निवडलेला सेक्शन दाखवणे
-        document.getElementById(tabName).classList.remove('hidden');
-        
-        // टॅब बटन्सचे ॲक्टिव्ह स्टेटस बदलणे
-        document.querySelectorAll('.nav-tabs button').forEach(btn => btn.classList.remove('active'));
-        document.getElementById('btn-' + tabName).classList.add('active');
+    await api("/api/portfolio", {
+      method: "POST",
+      body: JSON.stringify({
+        title,
+        category,
+        image_url
+      })
+    });
+
+    document.getElementById("portfolioTitle").value = "";
+    document.getElementById("portfolioCategory").value = "";
+    document.getElementById("portfolioImage").value = "";
+
+    loadData();
+  }
+
+  async function deletePortfolio(id) {
+
+    if (!confirm("हा poster delete करायचा आहे का?")) {
+      return;
     }
 
-    // जर आधीच लॉगिन असेल तर थेट डॅशबोर्ड उघडेल
-    if (sessionStorage.getItem('admin_key')) {
-        document.getElementById('login-box').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
+    await api("/api/portfolio/" + id, {
+      method: "DELETE"
+    });
+
+    loadData();
+  }
+
+  async function addService() {
+
+    const title =
+      document.getElementById("serviceTitle").value.trim();
+
+    const description =
+      document.getElementById("serviceDescription").value.trim();
+
+    const icon =
+      document.getElementById("serviceIcon").value.trim();
+
+    if (!title) {
+      alert("Service title भरा.");
+      return;
     }
+
+    await api("/api/services", {
+      method: "POST",
+      body: JSON.stringify({
+        title,
+        description,
+        icon
+      })
+    });
+
+    document.getElementById("serviceTitle").value = "";
+    document.getElementById("serviceDescription").value = "";
+    document.getElementById("serviceIcon").value = "";
+
+    loadData();
+  }
+
+  async function addReview() {
+
+    const client_name =
+      document.getElementById("clientName").value.trim();
+
+    const review_text =
+      document.getElementById("reviewText").value.trim();
+
+    const rating =
+      Number(document.getElementById("rating").value);
+
+    if (!client_name || !review_text) {
+      alert("Client name आणि review भरा.");
+      return;
+    }
+
+    await api("/api/reviews", {
+      method: "POST",
+      body: JSON.stringify({
+        client_name,
+        review_text,
+        rating
+      })
+    });
+
+    document.getElementById("clientName").value = "";
+    document.getElementById("reviewText").value = "";
+
+    loadData();
+  }
+
 </script>
 
 </body>
 </html>
+```
