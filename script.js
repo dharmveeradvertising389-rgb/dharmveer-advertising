@@ -1,152 +1,107 @@
-/* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — EDIT THIS FILE LATER
-   =========================================================
-   1) Add your real portfolio images in assets/portfolio/
-   2) Change the image path below.
-   3) Replace contact details in CONTACT below.
-   ========================================================= */
+// ==========================================
+// ⚙️ धर्मवीर ॲडव्हर्टायझिंग - कंट्रोल सेंटर
+// (इथून तुम्ही भविष्यात काहीही बदलू शकता)
+// ==========================================
 
-const CONTACT = {
-  whatsapp: "",       // Example: "919876543210" (country code + number, no +)
-  instagram: "",      // Example: "https://instagram.com/yourid"
-  email: ""           // Example: "yourmail@gmail.com"
+const WEBSITE_DATA = {
+    // 1. तुमची संपर्क माहिती (Contact Details)
+    whatsapp: "919309860089", // तुमचा १० अंकी WhatsApp नंबर (देशाच्या कोडसह उदा. 91...)
+    phone: "+91 9309860089",   // कॉल करण्यासाठी मोबाईल नंबर
+    instagram: "@dharmveer_advertising", // इंस्टाग्राम युजरनेम
+    email: "dharmveeradvertising@gmail.com",       // ईमेल आयडी
+
+    // 2. पोर्टफोलिओ (तुम्ही केलेले नवीन डिझाईन्स इथे जोडा)
+    portfolio: [
+        { title: "Flex Banner Design", category: "flex", image: "assets/logo.png" },
+        { title: "Social Media Post", category: "social", image: "assets/logo.png" },
+        { title: "Business Branding Logo", category: "logo", image: "assets/logo.png" }
+    ],
+
+    // 3. सर्व्हिसची यादी (Services)
+    services: [
+        { title: "Flex Printing", desc: "उच्च गुणवत्तेचे फ्लेक्स आणि बॅनर प्रिंटिंग." },
+        { title: "Social Media Posts", desc: "फेसबुक आणि इंस्टाग्रामसाठी आकर्षक पोस्ट डिझाईन." },
+        { title: "Logo & Branding", desc: "तुमच्या व्यवसायासाठी युनिक आणि प्रीमियम लोगो." },
+        { title: "Digital Marketing", desc: "व्यवसाय ऑनलाइन वाढवण्यासाठी डिजिटल मार्केटिंग." }
+    ],
+
+    // 4. ग्राहकांचे रिव्ह्यू (Reviews)
+    reviews: [
+        { name: "राहुल पाटील", text: "खूप छान आणि वेळेत डिझाईन करून दिले. सर्व्हिस उत्तम आहे!", rating: "⭐⭐⭐⭐⭐" },
+        { name: "अमित देशपांडे", text: "सोशल मीडिया पोस्ट्सचे डिझाईन्स खूप आकर्षक असतात.", rating: "⭐⭐⭐⭐⭐" }
+    ]
 };
 
-const portfolioItems = [
-  {title:"Business Design", category:"Business", desc:"Business / Branding Creative", image:""},
-  {title:"Social Media Creative", category:"Social Media", desc:"Instagram / Facebook Post", image:""},
-  {title:"Festival Design", category:"Festival", desc:"Festival & Special Occasion", image:""},
-  {title:"Political Creative", category:"Political", desc:"Campaign / Political Creative", image:""},
-  {title:"Personal Branding", category:"Personal", desc:"Personal / Professional Design", image:""},
-  {title:"Poster Design", category:"Other", desc:"Custom Poster Creative", image:""}
-];
+// ==========================================
+// 🚀 वेबसाईट ऑटोमेशन (या कोडला हात लावू नका)
+// ==========================================
 
-const services = [
-  ["✦","Logo Design","Brand identity, logo concepts आणि visual direction."],
-  ["▣","Poster Design","Business, festival, event आणि custom posters."],
-  ["◎","Social Media Design","Instagram, Facebook आणि digital creatives."],
-  ["◈","Branding","Consistent visual identity आणि brand materials."],
-  ["↗","Digital Marketing","Digital presence वाढवण्यासाठी creative support."],
-  ["◌","Content Creatives","Campaigns आणि promotions साठी engaging designs."]
-];
+document.addEventListener("DOMContentLoaded", function () {
+    // १. मोबाईल नंबर व सोशल मीडिया लिंक्स सेट करणे
+    if (document.getElementById("whatsappDisplay")) {
+        document.getElementById("whatsappDisplay").innerHTML = `<a href="https://wa.me/${WEBSITE_DATA.whatsapp}" target="_blank">+${WEBSITE_DATA.whatsapp}</a>`;
+    }
+    if (document.getElementById("instagramDisplay")) {
+        document.getElementById("instagramDisplay").innerHTML = `<a href="https://instagram.com/${WEBSITE_DATA.instagram.replace('@','')}" target="_blank">${WEBSITE_DATA.instagram}</a>`;
+    }
+    if (document.getElementById("emailDisplay")) {
+        document.getElementById("emailDisplay").innerText = WEBSITE_DATA.email;
+    }
 
-const whyItems = [
-  ["01","Creative Design","प्रत्येक कामासाठी वेगळा आणि purpose-driven creative approach."],
-  ["02","Professional Work","Clean, premium आणि उपयोगी final designs."],
-  ["03","Client Focus","तुमची गरज, audience आणि कामाचा प्रकार लक्षात घेऊन design."],
-  ["04","Digital Support","Social media आणि digital marketing साठी creative support."]
-];
+    // २. पोर्टफोलिओ ग्रिड लोड करणे
+    const portfolioGrid = document.getElementById("portfolioGrid");
+    if (portfolioGrid) {
+        portfolioGrid.innerHTML = WEBSITE_DATA.portfolio.map(item => `
+            <div class="portfolio-card">
+                <img src="${item.image}" alt="${item.title}">
+                <h3>${item.title}</h3>
+            </div>
+        `).join('');
+    }
 
-const reviews = [
-  ["Client Review","तुमचा खरा client feedback इथे दिसेल.","Client Name"],
-  ["Your Review","काम पूर्ण झाल्यावर client review इथे add करा.","Client Name"],
-  ["Future Review","नवीन reviews सहज add करता येतील.","Client Name"]
-];
+    // ३. सर्व्हिस ग्रिड लोड करणे
+    const servicesGrid = document.getElementById("servicesGrid");
+    if (servicesGrid) {
+        servicesGrid.innerHTML = WEBSITE_DATA.services.map(s => `
+            <div class="service-card">
+                <h3>${s.title}</h3>
+                <p>${s.desc}</p>
+            </div>
+        `).join('');
+    }
 
-const translations = {
-  mr:{
-    navHome:"Home",navPortfolio:"Portfolio",navServices:"Services",navAbout:"About",navReviews:"Reviews",navContact:"Contact",
-    eyebrow:"CREATIVE DESIGN • DIGITAL MARKETING",heroTitle:"तुमच्या ब्रँडला<br><span>वेगळी ओळख</span> देऊया.",
-    heroText:"आकर्षक Graphics Design, Social Media Creatives आणि Digital Marketing — तुमच्या कामासाठी एकाच ठिकाणी.",
-    viewWork:"माझं काम पाहा",startProject:"कामाबद्दल बोला →",stat1:"Creative Focus",stat2:"Design Possibilities",stat3:"Digital Presence",
-    creative:"Creative",branding:"Branding",marketing:"Marketing",portfolioTitle:"निवडक <span>काम</span>",portfolioText:"तुमच्या गरजेनुसार तयार केलेल्या creative designs ची झलक.",
-    editNote:"नंतर तुझी खरी designs assets/portfolio मध्ये टाकून script.js मधून सहज बदलता येतील.",
-    beforeTitle:"Design मध्ये <span>फरक</span> दिसला पाहिजे.",beforeText:"तुमच्या जुन्या creative ला अधिक clean, premium आणि attention-grabbing look देण्याचा प्रयत्न.",
-    servicesTitle:"तुमच्यासाठी <span>काय करू शकतो?</span>",whyTitle:"फक्त design नाही,<br><span>ओळख तयार करूया.</span>",whyText:"प्रत्येक creative मध्ये तुमचा brand, audience आणि purpose लक्षात घेऊन काम करण्याचा प्रयत्न.",
-    reviewsTitle:"Client <span>Reviews</span>",reviewsText:"तुमच्या feedback ला आमच्यासाठी विशेष महत्त्व आहे.",reviewNote:"खरे client reviews मिळाल्यावर इथे सहज बदलता येतील.",
-    aboutTitle:"धर्मवीर ॲडव्हर्टायझिंग",aboutText:"Graphics Design आणि Digital Marketing साठी creative आणि practical solutions देण्याचा आमचा प्रयत्न. सध्या आम्ही घरून काम करतो; भविष्यात office सुरू झाल्यावर location इथे जोडता येईल.",
-    contactTitle:"तुमच्या project बद्दल <span>बोलूया.</span>",contactText:"Design, poster, social media किंवा digital marketing — कामाची माहिती पाठवा.",
-    nameLabel:"नाव",phoneLabel:"मोबाईल नंबर",workLabel:"कामाचा प्रकार",messageLabel:"संदेश",sendMessage:"Message तयार करा →",formNote:"WhatsApp नंबर जोडल्यावर हा form थेट WhatsApp message तयार करेल."
-  },
-  en:{
-    navHome:"Home",navPortfolio:"Portfolio",navServices:"Services",navAbout:"About",navReviews:"Reviews",navContact:"Contact",
-    eyebrow:"CREATIVE DESIGN • DIGITAL MARKETING",heroTitle:"Give your brand<br><span>a different identity.</span>",
-    heroText:"Graphics Design, Social Media Creatives and Digital Marketing — creative support for your work in one place.",
-    viewWork:"View My Work",startProject:"Start a Project →",stat1:"Creative Focus",stat2:"Design Possibilities",stat3:"Digital Presence",
-    creative:"Creative",branding:"Branding",marketing:"Marketing",portfolioTitle:"Selected <span>Work</span>",portfolioText:"A glimpse of creative work built around your needs.",
-    editNote:"Add your real designs later in assets/portfolio and update them easily from script.js.",
-    beforeTitle:"Design should <span>show the difference.</span>",beforeText:"A cleaner, premium and attention-grabbing direction for your creatives.",
-    servicesTitle:"What can we <span>do for you?</span>",whyTitle:"Not just design,<br><span>build an identity.</span>",whyText:"Every creative is approached with your brand, audience and purpose in mind.",
-    reviewsTitle:"Client <span>Reviews</span>",reviewsText:"Your feedback matters to us.",reviewNote:"Replace these placeholders with real client reviews later.",
-    aboutTitle:"धर्मवीर ॲडव्हर्टायझिंग",aboutText:"Creative and practical solutions for Graphics Design and Digital Marketing. We currently work from home; an office location can be added here in the future.",
-    contactTitle:"Let's talk about <span>your project.</span>",contactText:"Design, posters, social media or digital marketing — send us the details.",
-    nameLabel:"Name",phoneLabel:"Mobile Number",workLabel:"Work Type",messageLabel:"Message",sendMessage:"Create Message →",formNote:"Once a WhatsApp number is added, this form will create a WhatsApp message."
-  },
-  hi:{
-    navHome:"Home",navPortfolio:"Portfolio",navServices:"Services",navAbout:"About",navReviews:"Reviews",navContact:"Contact",
-    eyebrow:"CREATIVE DESIGN • DIGITAL MARKETING",heroTitle:"आपके ब्रांड को<br><span>एक अलग पहचान दें.</span>",
-    heroText:"Graphics Design, Social Media Creatives और Digital Marketing — आपके काम के लिए creative support एक ही जगह.",
-    viewWork:"मेरा काम देखें",startProject:"काम के बारे में बात करें →",stat1:"Creative Focus",stat2:"Design Possibilities",stat3:"Digital Presence",
-    creative:"Creative",branding:"Branding",marketing:"Marketing",portfolioTitle:"चुना हुआ <span>काम</span>",portfolioText:"आपकी जरूरत के अनुसार तैयार किए गए creative designs की झलक.",
-    editNote:"बाद में अपनी असली designs assets/portfolio में डालकर script.js से आसानी से बदल सकते हैं.",
-    beforeTitle:"Design में <span>फर्क</span> दिखना चाहिए.",beforeText:"आपके creative को clean, premium और attention-grabbing look देने का प्रयास.",
-    servicesTitle:"हम आपके लिए <span>क्या कर सकते हैं?</span>",whyTitle:"सिर्फ design नहीं,<br><span>पहचान बनाएं.</span>",whyText:"हर creative में आपके brand, audience और purpose को ध्यान में रखा जाता है.",
-    reviewsTitle:"Client <span>Reviews</span>",reviewsText:"आपका feedback हमारे लिए महत्वपूर्ण है.",reviewNote:"बाद में असली client reviews यहां आसानी से बदल सकते हैं.",
-    aboutTitle:"धर्मवीर ॲडव्हर्टायझिंग",aboutText:"Graphics Design और Digital Marketing के लिए creative और practical solutions. अभी हम घर से काम करते हैं; भविष्य में office location यहां जोड़ी जा सकती है.",
-    contactTitle:"आपके project के बारे में <span>बात करते हैं.</span>",contactText:"Design, poster, social media या digital marketing — काम की जानकारी भेजें.",
-    nameLabel:"नाम",phoneLabel:"मोबाइल नंबर",workLabel:"काम का प्रकार",messageLabel:"संदेश",sendMessage:"Message बनाएं →",formNote:"WhatsApp नंबर जोड़ने के बाद यह form सीधे WhatsApp message तैयार करेगा."
-  }
-};
+    // ४. रिव्ह्यू ग्रिड लोड करणे
+    const reviewsGrid = document.getElementById("reviewsGrid");
+    if (reviewsGrid) {
+        reviewsGrid.innerHTML = WEBSITE_DATA.reviews.map(r => `
+            <div class="review-card">
+                <p>"${r.text}"</p>
+                <strong>- ${r.name}</strong>
+                <div>${r.rating}</div>
+            </div>
+        `).join('');
+    }
 
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
+    // ५. फॉर्म थेट WhatsApp शी जोडणे
+    const contactForm = document.getElementById("contactForm");
+    if (contactForm) {
+        contactForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const name = contactForm.name.value;
+            const phone = contactForm.phone.value;
+            const work = contactForm.work.value;
+            const message = contactForm.message.value;
 
-function renderPortfolio(category="All"){
-  const grid=$("#portfolioGrid");
-  const cats=["All",...new Set(portfolioItems.map(x=>x.category))];
-  $("#filters").innerHTML=cats.map(c=>`<button class="filter-btn ${c===category?'active':''}" data-category="${c}">${c==="All"?"All":c}</button>`).join("");
-  grid.innerHTML=portfolioItems.filter(x=>category==="All"||x.category===category).map((x,i)=>`
-    <article class="portfolio-card">
-      <div class="portfolio-visual" ${x.image?`style="background-image:url('${x.image}');background-size:cover;background-position:center"`:""}>
-        ${x.image?"":`<span>${String(i+1).padStart(2,"0")}</span>`}
-      </div>
-      <div class="portfolio-info"><span class="tag">${x.category}</span><h3>${x.title}</h3><p>${x.desc}</p></div>
-    </article>`).join("");
-  $$(".filter-btn").forEach(b=>b.onclick=()=>renderPortfolio(b.dataset.category));
-}
+            const text = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aमाझे नाव: ${name}%0Aमोबाईल: ${phone}%0Aकामाचा प्रकार: ${work}%0Aसंदेश: ${message}`;
+            window.open(`https://wa.me/${WEBSITE_DATA.whatsapp}?text=${text}`, '_blank');
+        });
+    }
 
-function renderServices(){
-  $("#servicesGrid").innerHTML=services.map(x=>`<article class="service"><div class="icon">${x[0]}</div><h3>${x[1]}</h3><p>${x[2]}</p></article>`).join("");
-}
-function renderWhy(){
-  $("#whyList").innerHTML=whyItems.map(x=>`<div class="why-item"><b>${x[0]}</b><div><h3>${x[1]}</h3><p>${x[2]}</p></div></div>`).join("");
-}
-function renderReviews(){
-  $("#reviewsGrid").innerHTML=reviews.map(x=>`<article class="review"><div class="stars">★★★★★</div><p>“${x[1]}”</p><strong>${x[2]}</strong><small>${x[0]}</small></article>`).join("");
-}
-
-function applyLanguage(lang){
-  const t=translations[lang]||translations.mr;
-  document.documentElement.lang=lang;
-  $$("[data-i18n]").forEach(el=>{if(t[el.dataset.i18n]!==undefined)el.innerHTML=t[el.dataset.i18n]});
-  localStorage.setItem("dv-lang",lang);
-}
-
-function updateContact(){
-  $("#whatsappDisplay").textContent=CONTACT.whatsapp?"Available":"नंतर जोडू";
-  $("#instagramDisplay").textContent=CONTACT.instagram?"Instagram":"नंतर जोडू";
-  $("#emailDisplay").textContent=CONTACT.email||"नंतर जोडू";
-}
-
-window.addEventListener("load",()=>{
-  setTimeout(()=>$("#loader").classList.add("hide"),700);
-  renderPortfolio();renderServices();renderWhy();renderReviews();updateContact();
-  applyLanguage(localStorage.getItem("dv-lang")||"mr");
-  $("#year").textContent=new Date().getFullYear();
-});
-
-$("#menuToggle").onclick=()=>$("#mainNav").classList.toggle("open");
-$$(".language-menu button").forEach(b=>b.onclick=()=>applyLanguage(b.dataset.lang));
-
-$("#contactForm").addEventListener("submit",e=>{
-  e.preventDefault();
-  const fd=new FormData(e.currentTarget);
-  const msg=`नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aनाव: ${fd.get("name")}%0Aमोबाईल: ${fd.get("phone")}%0Aकाम: ${fd.get("work")}%0Aसंदेश: ${fd.get("message")||"-"}`;
-  if(CONTACT.whatsapp){
-    window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`,"_blank");
-  }else{
-    $("#toast").textContent="WhatsApp number नंतर script.js मध्ये जोडा.";
-    $("#toast").classList.add("show");
-    setTimeout(()=>$("#toast").classList.remove("show"),3000);
-  }
+    // ६. वर्ष ऑटो-अपडेट करणे
+    const yearEl = document.getElementById("year");
+    if (yearEl) yearEl.innerText = new Date().getFullYear();
+    
+    // Loader हायड करणे
+    const loader = document.getElementById("loader");
+    if (loader) loader.style.display = "none";
 });
