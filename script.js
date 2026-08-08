@@ -6,11 +6,87 @@
    3) Replace contact details in CONTACT below.
    ========================================================= */
 
-const CONTACT = {
-  whatsapp: "",       // Example: "919876543210" (country code + number, no +)
-  instagram: "",      // Example: "https://instagram.com/yourid"
-  email: ""           // Example: "yourmail@gmail.com"
+let CONTACT = {
+  whatsapp: "",
+  instagram: "",
+  email: "",
+  logo_url: "",
+  about: ""
 };
+
+const API_BASE =
+  "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
+
+async function loadSettings() {
+  try {
+    const response = await fetch(API_BASE + "/api/settings");
+    const data = await response.json();
+
+    if (Array.isArray(data) && data.length > 0) {
+      const settings = data[0];
+
+      CONTACT.whatsapp = settings.whatsapp || "";
+      CONTACT.instagram = settings.instagram || "";
+      CONTACT.email = settings.email || "";
+      CONTACT.logo_url = settings.logo_url || "";
+      CONTACT.about = settings.about || "";
+
+      updateContact();
+
+      // Logo
+      if (CONTACT.logo_url) {
+        document.querySelectorAll(
+          ".about-logo img, .brand img, .hero-logo, .footer-brand img"
+        ).forEach(img => {
+          img.src = CONTACT.logo_url;
+        });
+      }
+
+      // About
+      if (CONTACT.about) {
+        const aboutText = document.querySelector(
+          "#about [data-i18n='aboutText']"
+        );
+
+        if (aboutText) {
+          aboutText.textContent = CONTACT.about;
+        }
+      }
+    }
+
+  } catch (error) {
+    console.error("Settings error:", error);
+  }
+}
+
+function updateContact() {
+
+  const whatsapp =
+    document.getElementById("whatsappDisplay");
+
+  const instagram =
+    document.getElementById("instagramDisplay");
+
+  const email =
+    document.getElementById("emailDisplay");
+
+  if (whatsapp) {
+    whatsapp.textContent =
+      CONTACT.whatsapp || "नंतर जोडू";
+  }
+
+  if (instagram) {
+    instagram.textContent =
+      CONTACT.instagram || "नंतर जोडू";
+  }
+
+  if (email) {
+    email.textContent =
+      CONTACT.email || "नंतर जोडू";
+  }
+}
+
+loadSettings();
 
 const portfolioItems = [
   {title:"Business Design", category:"Business", desc:"Business / Branding Creative", image:""},
