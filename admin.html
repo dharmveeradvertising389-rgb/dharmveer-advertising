@@ -1,84 +1,95 @@
-```html
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>धर्मवीर ॲडव्हर्टायझिंग - Admin Panel</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dharmveer Advertising - Admin Panel</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #222;
-    }
-
-    header {
-      background: #111;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 25px auto;
-      padding: 15px;
-    }
-
-    .card {
-      background: white;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0 14px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-    }
-
-    button {
-      padding: 11px 18px;
-      border: 0;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #111;
-      color: white;
-      font-size: 15px;
-      margin-right: 6px;
-    }
-
-    button:hover {
-      opacity: 0.85;
-    }
-
-    .danger {
-      background: #c62828;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .item {
-      border: 1px solid #ddd;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 8px;
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f5f5f5;
+  color:#222
+}
+header{
+  background:#111;
+  color:#fff;
+  padding:20px;
+  text-align:center
+}
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px
+}
+.card{
+  background:#fff;
+  padding:20px;
+  margin-bottom:20px;
+  border-radius:14px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08)
+}
+input,textarea,select{
+  width:100%;
+  padding:12px;
+  margin:7px 0 14px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:15px
+}
+textarea{min-height:100px;resize:vertical}
+button{
+  padding:11px 18px;
+  border:0;
+  border-radius:8px;
+  cursor:pointer;
+  background:#111;
+  color:#fff;
+  margin:4px
+}
+button:hover{opacity:.85}
+.danger{background:#c62828}
+.edit{background:#e67e22}
+.success{background:#16803c}
+.hidden{display:none}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:15px
+}
+.item{
+  border:1px solid #ddd;
+  padding:15px;
+  border-radius:10px;
+  margin-top:10px
+}
+.item img{
+  width:100%;
+  max-height:220px;
+  object-fit:cover;
+  border-radius:8px;
+  margin-bottom:10px
+}
+nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:20px
+}
+nav button{background:#333}
+nav button.active{background:#e67e22}
+.section{display:none}
+.section.active{display:block}
+.msg{
+  padding:10px;
+  margin:10px 0;
+  border-radius:8px;
+  background:#eee
+}
+.small{font-size:13px;color:#666}
+</style>
 </head>
 
 <body>
@@ -90,303 +101,986 @@
 
 <div class="container">
 
-  <div id="loginBox" class="card">
-    <h2>Admin Login</h2>
+<!-- LOGIN -->
+<div id="loginBox" class="card">
+  <h2>🔐 Admin Login</h2>
 
-    <input
-      type="password"
-      id="adminPassword"
-      placeholder="Admin Password"
-    >
+  <input
+    type="password"
+    id="adminPassword"
+    placeholder="Admin Password"
+  >
 
-    <button onclick="login()">Login</button>
+  <button onclick="login()">Login</button>
 
-    <p id="loginMessage"></p>
+  <p id="loginMessage"></p>
+</div>
+
+
+<!-- ADMIN -->
+<div id="adminPanel" class="hidden">
+
+  <div class="card">
+    <h2>Dashboard</h2>
+    <p>तुझ्या website मधील content इथून manage कर.</p>
+    <button onclick="logout()">Logout</button>
+    <div id="message" class="msg hidden"></div>
   </div>
 
-  <div id="adminPanel" class="hidden">
+  <nav>
+    <button onclick="showSection('home',this)" class="active">🏠 Home</button>
+    <button onclick="showSection('portfolio',this)">🖼️ Portfolio</button>
+    <button onclick="showSection('beforeafter',this)">🔄 Before / After</button>
+    <button onclick="showSection('services',this)">🛠️ Services</button>
+    <button onclick="showSection('why',this)">⭐ Why Choose Us</button>
+    <button onclick="showSection('reviews',this)">💬 Reviews</button>
+    <button onclick="showSection('settings',this)">⚙️ Settings</button>
+  </nav>
 
+
+  <!-- HOME -->
+  <section id="home" class="section active">
     <div class="card">
-      <h2>Dashboard</h2>
-      <p>Dharmveer Advertising Admin Panel</p>
-      <button onclick="logout()">Logout</button>
+      <h2>🏠 Home / Website Content</h2>
+
+      <label>Website Title</label>
+      <input id="website_title" placeholder="Dharmveer Advertising">
+
+      <label>Main Heading</label>
+      <input id="hero_title" placeholder="Main heading">
+
+      <label>Hero Description</label>
+      <textarea id="hero_description"></textarea>
+
+      <label>Button 1 Text</label>
+      <input id="hero_button1_text">
+
+      <label>Button 1 Link</label>
+      <input id="hero_button1_link">
+
+      <label>Button 2 Text</label>
+      <input id="hero_button2_text">
+
+      <label>Button 2 Link</label>
+      <input id="hero_button2_link">
+
+      <label>Creative Text</label>
+      <input id="creative_text">
+
+      <label>Branding Text</label>
+      <input id="branding_text">
+
+      <label>Marketing Text</label>
+      <input id="marketing_text">
+
+      <label>Marquee / Moving Text</label>
+      <input id="marquee_text">
+
+      <button class="success" onclick="saveHome()">Save Home</button>
     </div>
+  </section>
 
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio" class="section">
     <div class="card">
-      <h2>Portfolio / Posters</h2>
+      <h2>🖼️ Portfolio / Posters</h2>
 
-      <input id="portfolioTitle" placeholder="Poster title">
-      <input id="portfolioCategory" placeholder="Category">
+      <input id="portfolioTitle" placeholder="Design / Poster title">
+
+      <input id="portfolioCategory"
+        placeholder="Category e.g. Business, Political, Festival">
+
       <input id="portfolioImage" placeholder="Image URL">
 
-      <button onclick="addPortfolio()">Add Poster</button>
+      <button class="success" onclick="addPortfolio()">
+        Add Design
+      </button>
 
       <div id="portfolioList"></div>
     </div>
+  </section>
 
+
+  <!-- BEFORE AFTER -->
+  <section id="beforeafter" class="section">
     <div class="card">
-      <h2>Services</h2>
+      <h2>🔄 Before / After</h2>
+
+      <input id="beforeImage" placeholder="Before image URL">
+
+      <input id="afterImage" placeholder="After image URL">
+
+      <input id="beforeTitle" placeholder="Title">
+
+      <textarea id="beforeDescription"
+        placeholder="Description"></textarea>
+
+      <input id="beforeSort"
+        type="number"
+        value="0"
+        placeholder="Order">
+
+      <button class="success" onclick="addBeforeAfter()">
+        Add Before / After
+      </button>
+
+      <div id="beforeAfterList"></div>
+    </div>
+  </section>
+
+
+  <!-- SERVICES -->
+  <section id="services" class="section">
+    <div class="card">
+      <h2>🛠️ Services</h2>
 
       <input id="serviceTitle" placeholder="Service title">
 
-      <textarea
-        id="serviceDescription"
-        placeholder="Service description"
-      ></textarea>
+      <textarea id="serviceDescription"
+        placeholder="Service description"></textarea>
 
-      <input id="serviceIcon" placeholder="Icon">
+      <input id="serviceIcon"
+        placeholder="Icon / Emoji">
 
-      <button onclick="addService()">Add Service</button>
+      <input id="serviceOrder"
+        type="number"
+        value="0"
+        placeholder="Order">
+
+      <button class="success" onclick="addService()">
+        Add Service
+      </button>
 
       <div id="serviceList"></div>
     </div>
+  </section>
 
+
+  <!-- WHY CHOOSE -->
+  <section id="why" class="section">
     <div class="card">
-      <h2>Reviews</h2>
+      <h2>⭐ Why Choose Us</h2>
+
+      <input id="whyNumber" placeholder="01">
+
+      <input id="whyTitle" placeholder="Title">
+
+      <textarea id="whyDescription"
+        placeholder="Description"></textarea>
+
+      <input id="whyOrder"
+        type="number"
+        value="0">
+
+      <button class="success" onclick="addWhy()">
+        Add Point
+      </button>
+
+      <div id="whyList"></div>
+    </div>
+  </section>
+
+
+  <!-- REVIEWS -->
+  <section id="reviews" class="section">
+    <div class="card">
+      <h2>💬 Reviews</h2>
 
       <input id="clientName" placeholder="Client name">
 
-      <textarea
-        id="reviewText"
-        placeholder="Client review"
-      ></textarea>
+      <textarea id="reviewText"
+        placeholder="Client review"></textarea>
 
-      <input
-        id="rating"
+      <input id="rating"
         type="number"
         min="1"
         max="5"
-        value="5"
-      >
+        value="5">
 
-      <button onclick="addReview()">Add Review</button>
+      <button class="success" onclick="addReview()">
+        Add Review
+      </button>
 
       <div id="reviewList"></div>
     </div>
+  </section>
 
-  </div>
+
+  <!-- SETTINGS -->
+  <section id="settings" class="section">
+    <div class="card">
+      <h2>⚙️ Website Settings</h2>
+
+      <label>Logo URL</label>
+      <input id="logo_url"
+        placeholder="Logo image URL">
+
+      <label>Mobile / Phone</label>
+      <input id="phone">
+
+      <label>WhatsApp</label>
+      <input id="whatsapp">
+
+      <label>Email</label>
+      <input id="email">
+
+      <label>Instagram</label>
+      <input id="instagram">
+
+      <label>Facebook</label>
+      <input id="facebook">
+
+      <label>Address</label>
+      <textarea id="address"></textarea>
+
+      <label>About</label>
+      <textarea id="about"></textarea>
+
+      <label>Footer Text</label>
+      <input id="footer_text">
+
+      <button class="success" onclick="saveSettings()">
+        Save Settings
+      </button>
+    </div>
+  </section>
+
 </div>
+</div>
+
 
 <script>
 
-  const API_URL =
-    "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
+const API_URL =
+"https://falling-tree-3813.dharmveeradvertising389.workers.dev";
 
-  let adminKey = "";
+let adminKey = "";
 
-  function login() {
-    const password =
-      document.getElementById("adminPassword").value.trim();
 
-    if (!password) {
-      document.getElementById("loginMessage").textContent =
-        "Password टाका.";
-      return;
+/* LOGIN */
+
+function login(){
+
+  const password =
+    document.getElementById("adminPassword").value.trim();
+
+  if(!password){
+    document.getElementById("loginMessage").textContent =
+      "Password टाका.";
+    return;
+  }
+
+  adminKey = password;
+
+  document.getElementById("loginBox")
+    .classList.add("hidden");
+
+  document.getElementById("adminPanel")
+    .classList.remove("hidden");
+
+  loadAll();
+}
+
+
+function logout(){
+
+  adminKey = "";
+
+  document.getElementById("adminPassword").value = "";
+
+  document.getElementById("adminPanel")
+    .classList.add("hidden");
+
+  document.getElementById("loginBox")
+    .classList.remove("hidden");
+}
+
+
+/* NAVIGATION */
+
+function showSection(id,btn){
+
+  document.querySelectorAll(".section")
+    .forEach(x=>x.classList.remove("active"));
+
+  document.getElementById(id)
+    .classList.add("active");
+
+  document.querySelectorAll("nav button")
+    .forEach(x=>x.classList.remove("active"));
+
+  btn.classList.add("active");
+}
+
+
+/* MESSAGE */
+
+function message(text){
+
+  const box=document.getElementById("message");
+
+  box.textContent=text;
+  box.classList.remove("hidden");
+
+  setTimeout(()=>{
+    box.classList.add("hidden");
+  },2500);
+}
+
+
+/* API */
+
+async function api(path,options={}){
+
+  const headers={
+    "Content-Type":"application/json",
+    "X-Admin-Key":adminKey,
+    ...(options.headers||{})
+  };
+
+  const response=await fetch(
+    API_URL+path,
+    {...options,headers}
+  );
+
+  const data=await response.json();
+
+  if(!response.ok){
+    throw new Error(data.error||"API error");
+  }
+
+  return data;
+}
+
+
+/* LOAD ALL */
+
+async function loadAll(){
+
+  try{
+
+    await loadSettings();
+    await loadContent();
+    await loadPortfolio();
+    await loadServices();
+    await loadReviews();
+    await loadBeforeAfter();
+    await loadWhy();
+
+  }catch(error){
+
+    alert("Data load problem: "+error.message);
+  }
+}
+
+
+/* SETTINGS */
+
+async function loadSettings(){
+
+  const data=await fetch(
+    API_URL+"/api/settings"
+  ).then(r=>r.json());
+
+  if(!data.length)return;
+
+  const s=data[0];
+
+  setValue("logo_url",s.logo_url);
+  setValue("phone",s.phone);
+  setValue("whatsapp",s.whatsapp);
+  setValue("email",s.email);
+  setValue("instagram",s.instagram);
+  setValue("facebook",s.facebook);
+  setValue("address",s.address);
+  setValue("about",s.about);
+  setValue("footer_text",s.footer_text);
+  setValue("website_title",s.website_title);
+}
+
+
+async function saveSettings(){
+
+  try{
+
+    await api("/api/settings",{
+      method:"PUT",
+      body:JSON.stringify({
+
+        logo_url:getValue("logo_url"),
+        phone:getValue("phone"),
+        whatsapp:getValue("whatsapp"),
+        email:getValue("email"),
+        instagram:getValue("instagram"),
+        facebook:getValue("facebook"),
+        address:getValue("address"),
+        about:getValue("about"),
+        footer_text:getValue("footer_text"),
+        website_title:getValue("website_title")
+
+      })
+    });
+
+    message("Settings saved successfully ✅");
+
+  }catch(e){
+
+    alert(e.message);
+  }
+}
+
+
+/* HOME CONTENT */
+
+const contentKeys=[
+  "hero_title",
+  "hero_description",
+  "hero_button1_text",
+  "hero_button1_link",
+  "hero_button2_text",
+  "hero_button2_link",
+  "creative_text",
+  "branding_text",
+  "marketing_text",
+  "marquee_text"
+];
+
+
+async function loadContent(){
+
+  const data=await fetch(
+    API_URL+"/api/content"
+  ).then(r=>r.json());
+
+  data.forEach(item=>{
+
+    if(document.getElementById(item.content_key)){
+      setValue(
+        item.content_key,
+        item.content_value
+      );
     }
 
-    adminKey = password;
+  });
+}
 
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("adminPanel").classList.remove("hidden");
 
-    loadData();
-  }
+async function saveHome(){
 
-  function logout() {
-    adminKey = "";
+  try{
 
-    document.getElementById("adminPassword").value = "";
+    for(const key of contentKeys){
 
-    document.getElementById("adminPanel").classList.add("hidden");
-    document.getElementById("loginBox").classList.remove("hidden");
-  }
-
-  async function api(path, options = {}) {
-
-    const headers = {
-      "Content-Type": "application/json",
-      "X-Admin-Key": adminKey,
-      ...(options.headers || {})
-    };
-
-    const response = await fetch(
-      API_URL + path,
-      {
-        ...options,
-        headers
-      }
-    );
-
-    return response.json();
-  }
-
-  async function loadData() {
-
-    try {
-
-      const portfolio =
-        await fetch(API_URL + "/api/portfolio")
-        .then(r => r.json());
-
-      document.getElementById("portfolioList").innerHTML =
-        portfolio.map(item => `
-          <div class="item">
-            <strong>${item.title}</strong>
-            <br>
-            ${item.category}
-            <br>
-            <button class="danger"
-              onclick="deletePortfolio(${item.id})">
-              Delete
-            </button>
-          </div>
-        `).join("");
-
-      const services =
-        await fetch(API_URL + "/api/services")
-        .then(r => r.json());
-
-      document.getElementById("serviceList").innerHTML =
-        services.map(item => `
-          <div class="item">
-            <strong>${item.title}</strong>
-            <br>
-            ${item.description || ""}
-          </div>
-        `).join("");
-
-      const reviews =
-        await fetch(API_URL + "/api/reviews")
-        .then(r => r.json());
-
-      document.getElementById("reviewList").innerHTML =
-        reviews.map(item => `
-          <div class="item">
-            <strong>${item.client_name}</strong>
-            <br>
-            ${item.review_text}
-            <br>
-            Rating: ${item.rating}/5
-          </div>
-        `).join("");
-
-    } catch (error) {
-
-      alert("API connection problem.");
+      await api("/api/content",{
+        method:"POST",
+        body:JSON.stringify({
+          content_key:key,
+          content_value:getValue(key)
+        })
+      });
 
     }
+
+    await saveSettings();
+
+    message("Home updated successfully ✅");
+
+  }catch(e){
+
+    alert(e.message);
+  }
+}
+
+
+/* PORTFOLIO */
+
+async function loadPortfolio(){
+
+  const data=await fetch(
+    API_URL+"/api/portfolio"
+  ).then(r=>r.json());
+
+  document.getElementById("portfolioList").innerHTML=
+    data.map(item=>`
+
+      <div class="item">
+
+        <img src="${escapeHtml(item.image_url)}">
+
+        <strong>${escapeHtml(item.title)}</strong>
+
+        <p>Category:
+          ${escapeHtml(item.category)}
+        </p>
+
+        <button class="danger"
+          onclick="deletePortfolio(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `).join("");
+}
+
+
+async function addPortfolio(){
+
+  const title=getValue("portfolioTitle");
+  const category=getValue("portfolioCategory");
+  const image_url=getValue("portfolioImage");
+
+  if(!title||!category||!image_url){
+    alert("Title, Category आणि Image URL भरा.");
+    return;
   }
 
-  async function addPortfolio() {
+  try{
 
-    const title =
-      document.getElementById("portfolioTitle").value.trim();
-
-    const category =
-      document.getElementById("portfolioCategory").value.trim();
-
-    const image_url =
-      document.getElementById("portfolioImage").value.trim();
-
-    if (!title || !category || !image_url) {
-      alert("सगळी माहिती भरा.");
-      return;
-    }
-
-    await api("/api/portfolio", {
-      method: "POST",
-      body: JSON.stringify({
+    await api("/api/portfolio",{
+      method:"POST",
+      body:JSON.stringify({
         title,
         category,
         image_url
       })
     });
 
-    document.getElementById("portfolioTitle").value = "";
-    document.getElementById("portfolioCategory").value = "";
-    document.getElementById("portfolioImage").value = "";
+    setValue("portfolioTitle","");
+    setValue("portfolioCategory","");
+    setValue("portfolioImage","");
 
-    loadData();
+    await loadPortfolio();
+
+    message("Design added ✅");
+
+  }catch(e){
+
+    alert(e.message);
   }
+}
 
-  async function deletePortfolio(id) {
 
-    if (!confirm("हा poster delete करायचा आहे का?")) {
-      return;
-    }
+async function deletePortfolio(id){
 
-    await api("/api/portfolio/" + id, {
-      method: "DELETE"
+  if(!confirm("हा design delete करायचा आहे का?"))
+    return;
+
+  try{
+
+    await api("/api/portfolio/"+id,{
+      method:"DELETE"
     });
 
-    loadData();
+    await loadPortfolio();
+
+    message("Design deleted ✅");
+
+  }catch(e){
+
+    alert(e.message);
+  }
+}
+
+
+/* SERVICES */
+
+async function loadServices(){
+
+  const data=await fetch(
+    API_URL+"/api/services"
+  ).then(r=>r.json());
+
+  document.getElementById("serviceList").innerHTML=
+    data.map(item=>`
+
+      <div class="item">
+
+        <strong>${escapeHtml(item.title)}</strong>
+
+        <p>${escapeHtml(item.description||"")}</p>
+
+        <p>Icon: ${escapeHtml(item.icon||"")}</p>
+
+        <button class="danger"
+          onclick="deleteService(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `).join("");
+}
+
+
+async function addService(){
+
+  const title=getValue("serviceTitle");
+
+  if(!title){
+    alert("Service title भरा.");
+    return;
   }
 
-  async function addService() {
+  try{
 
-    const title =
-      document.getElementById("serviceTitle").value.trim();
+    await api("/api/services",{
+      method:"POST",
+      body:JSON.stringify({
 
-    const description =
-      document.getElementById("serviceDescription").value.trim();
-
-    const icon =
-      document.getElementById("serviceIcon").value.trim();
-
-    if (!title) {
-      alert("Service title भरा.");
-      return;
-    }
-
-    await api("/api/services", {
-      method: "POST",
-      body: JSON.stringify({
         title,
-        description,
-        icon
+        description:getValue("serviceDescription"),
+        icon:getValue("serviceIcon"),
+        sort_order:Number(
+          getValue("serviceOrder")
+        )||0
+
       })
     });
 
-    document.getElementById("serviceTitle").value = "";
-    document.getElementById("serviceDescription").value = "";
-    document.getElementById("serviceIcon").value = "";
+    setValue("serviceTitle","");
+    setValue("serviceDescription","");
+    setValue("serviceIcon","");
 
-    loadData();
+    await loadServices();
+
+    message("Service added ✅");
+
+  }catch(e){
+
+    alert(e.message);
+  }
+}
+
+
+async function deleteService(id){
+
+  if(!confirm("हा service delete करायचा आहे का?"))
+    return;
+
+  try{
+
+    await api("/api/services/"+id,{
+      method:"DELETE"
+    });
+
+    await loadServices();
+
+    message("Service deleted ✅");
+
+  }catch(e){
+
+    alert(e.message);
+  }
+}
+
+
+/* REVIEWS */
+
+async function loadReviews(){
+
+  const data=await fetch(
+    API_URL+"/api/reviews"
+  ).then(r=>r.json());
+
+  document.getElementById("reviewList").innerHTML=
+    data.map(item=>`
+
+      <div class="item">
+
+        <strong>${escapeHtml(item.client_name)}</strong>
+
+        <p>${escapeHtml(item.review_text)}</p>
+
+        <p>⭐ ${item.rating}/5</p>
+
+        <button class="danger"
+          onclick="deleteReview(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `).join("");
+}
+
+
+async function addReview(){
+
+  const client_name=getValue("clientName");
+  const review_text=getValue("reviewText");
+  const rating=Number(getValue("rating"))||5;
+
+  if(!client_name||!review_text){
+    alert("Client name आणि review भरा.");
+    return;
   }
 
-  async function addReview() {
+  try{
 
-    const client_name =
-      document.getElementById("clientName").value.trim();
-
-    const review_text =
-      document.getElementById("reviewText").value.trim();
-
-    const rating =
-      Number(document.getElementById("rating").value);
-
-    if (!client_name || !review_text) {
-      alert("Client name आणि review भरा.");
-      return;
-    }
-
-    await api("/api/reviews", {
-      method: "POST",
-      body: JSON.stringify({
+    await api("/api/reviews",{
+      method:"POST",
+      body:JSON.stringify({
         client_name,
         review_text,
         rating
       })
     });
 
-    document.getElementById("clientName").value = "";
-    document.getElementById("reviewText").value = "";
+    setValue("clientName","");
+    setValue("reviewText","");
 
-    loadData();
+    await loadReviews();
+
+    message("Review added ✅");
+
+  }catch(e){
+
+    alert(e.message);
   }
+}
+
+
+async function deleteReview(id){
+
+  if(!confirm("हा review delete करायचा आहे का?"))
+    return;
+
+  try{
+
+    await api("/api/reviews/"+id,{
+      method:"DELETE"
+    });
+
+    await loadReviews();
+
+    message("Review deleted ✅");
+
+  }catch(e){
+
+    alert(e.message);
+  }
+}
+
+
+/* BEFORE AFTER */
+
+async function loadBeforeAfter(){
+
+  const data=await fetch(
+    API_URL+"/api/before-after"
+  ).then(r=>r.json());
+
+  document.getElementById("beforeAfterList").innerHTML=
+    data.map(item=>`
+
+      <div class="item">
+
+        <img src="${escapeHtml(item.before_image)}">
+
+        <img src="${escapeHtml(item.after_image)}">
+
+        <strong>${escapeHtml(item.title||"")}</strong>
+
+        <p>${escapeHtml(item.description||"")}</p>
+
+        <button class="danger"
+          onclick="deleteBeforeAfter(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `).join("");
+}
+
+
+async function addBeforeAfter(){
+
+  const before_image=getValue("beforeImage");
+  const after_image=getValue("afterImage");
+
+  if(!before_image||!after_image){
+    alert("Before आणि After image URL भरा.");
+    return;
+  }
+
+  try{
+
+    await api("/api/before-after",{
+      method:"POST",
+      body:JSON.stringify({
+
+        before_image,
+        after_image,
+        before_label:"BEFORE",
+        after_label:"AFTER",
+        title:getValue("beforeTitle"),
+        description:getValue("beforeDescription"),
+        sort_order:Number(
+          getValue("beforeSort")
+        )||0
+
+      })
+    });
+
+    setValue("beforeImage","");
+    setValue("afterImage","");
+    setValue("beforeTitle","");
+    setValue("beforeDescription","");
+
+    await loadBeforeAfter();
+
+    message("Before / After added ✅");
+
+  }catch(e){
+
+    alert(e.message);
+  }
+}
+
+
+async function deleteBeforeAfter(id){
+
+  if(!confirm("हा Before / After delete करायचा आहे का?"))
+    return;
+
+  try{
+
+    await api("/api/before-after/"+id,{
+      method:"DELETE"
+    });
+
+    await loadBeforeAfter();
+
+  }catch(e){
+
+    alert(e.message);
+  }
+}
+
+
+/* WHY CHOOSE */
+
+async function loadWhy(){
+
+  const data=await fetch(
+    API_URL+"/api/why-choose"
+  ).then(r=>r.json());
+
+  document.getElementById("whyList").innerHTML=
+    data.map(item=>`
+
+      <div class="item">
+
+        <strong>
+          ${escapeHtml(item.number||"")}
+          ${escapeHtml(item.title)}
+        </strong>
+
+        <p>${escapeHtml(item.description||"")}</p>
+
+        <button class="danger"
+          onclick="deleteWhy(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `).join("");
+}
+
+
+async function addWhy(){
+
+  const title=getValue("whyTitle");
+
+  if(!title){
+    alert("Title भरा.");
+    return;
+  }
+
+  try{
+
+    await api("/api/why-choose",{
+      method:"POST",
+      body:JSON.stringify({
+
+        number:getValue("whyNumber"),
+        title,
+        description:getValue("whyDescription"),
+        sort_order:Number(
+          getValue("whyOrder")
+        )||0
+
+      })
+    });
+
+    setValue("whyNumber","");
+    setValue("whyTitle","");
+    setValue("whyDescription","");
+
+    await loadWhy();
+
+    message("Point added ✅");
+
+  }catch(e){
+
+    alert(e.message);
+  }
+}
+
+
+async function deleteWhy(id){
+
+  if(!confirm("हा point delete करायचा आहे का?"))
+    return;
+
+  try{
+
+    await api("/api/why-choose/"+id,{
+      method:"DELETE"
+    });
+
+    await loadWhy();
+
+  }catch(e){
+
+    alert(e.message);
+  }
+}
+
+
+/* HELPERS */
+
+function getValue(id){
+
+  const el=document.getElementById(id);
+
+  return el ? el.value.trim() : "";
+}
+
+
+function setValue(id,value){
+
+  const el=document.getElementById(id);
+
+  if(el) el.value=value||"";
+}
+
+
+function escapeHtml(value){
+
+  return String(value??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
 
 </script>
 
 </body>
 </html>
-```
