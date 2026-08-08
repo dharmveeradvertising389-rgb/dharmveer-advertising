@@ -178,5 +178,157 @@
 
   <div class="toast" id="toast"></div>
   <script src="script.js"></script>
+
+  <!-- Dharmveer Advertising: Admin Panel live data -->
+  <script>
+    const DHARMVEER_API =
+      "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
+
+    async function loadDharmveerAdminData() {
+      try {
+        // SETTINGS
+        const settingsResponse =
+          await fetch(DHARMVEER_API + "/api/settings");
+        const settingsData = await settingsResponse.json();
+        const settings = Array.isArray(settingsData) ? settingsData[0] : null;
+
+        if (settings) {
+          if (settings.logo_url) {
+            document.querySelectorAll(
+              ".brand img, .hero-logo, .about-logo img, .footer-brand img, #loader img"
+            ).forEach(img => {
+              img.src = settings.logo_url;
+            });
+          }
+
+          if (settings.whatsapp) {
+            const el = document.getElementById("whatsappDisplay");
+            if (el) {
+              el.textContent = settings.whatsapp;
+              el.style.cursor = "pointer";
+              el.onclick = () => {
+                const number = String(settings.whatsapp).replace(/\D/g, "");
+                if (number) {
+                  window.open("https://wa.me/" + number, "_blank");
+                }
+              };
+            }
+          }
+
+          if (settings.instagram) {
+            const el = document.getElementById("instagramDisplay");
+            if (el) {
+              el.textContent = settings.instagram;
+              el.style.cursor = "pointer";
+              el.onclick = () => {
+                window.open(settings.instagram, "_blank");
+              };
+            }
+          }
+
+          if (settings.email) {
+            const el = document.getElementById("emailDisplay");
+            if (el) {
+              el.textContent = settings.email;
+              el.style.cursor = "pointer";
+              el.onclick = () => {
+                window.location.href = "mailto:" + settings.email;
+              };
+            }
+          }
+
+          if (settings.about) {
+            const about = document.querySelector(
+              "#about [data-i18n='aboutText']"
+            );
+            if (about) about.textContent = settings.about;
+          }
+        }
+
+        // PORTFOLIO
+        const portfolioResponse =
+          await fetch(DHARMVEER_API + "/api/portfolio");
+        const portfolioData = await portfolioResponse.json();
+
+        const portfolioGrid =
+          document.getElementById("portfolioGrid");
+
+        if (portfolioGrid && Array.isArray(portfolioData)) {
+          portfolioGrid.innerHTML = portfolioData.map(item => `
+            <article class="portfolio-item">
+              <img
+                src="${escapeDharmveer(item.image_url)}"
+                alt="${escapeDharmveer(item.title || "Portfolio")}"
+                loading="lazy"
+              >
+              <div class="portfolio-info">
+                <h3>${escapeDharmveer(item.title || "")}</h3>
+                <p>${escapeDharmveer(item.category || "")}</p>
+              </div>
+            </article>
+          `).join("");
+        }
+
+        // SERVICES
+        const servicesResponse =
+          await fetch(DHARMVEER_API + "/api/services");
+        const servicesData = await servicesResponse.json();
+
+        const servicesGrid =
+          document.getElementById("servicesGrid");
+
+        if (servicesGrid && Array.isArray(servicesData)) {
+          servicesGrid.innerHTML = servicesData.map(item => `
+            <article class="service-card">
+              <div class="service-icon">
+                ${escapeDharmveer(item.icon || "✦")}
+              </div>
+              <h3>${escapeDharmveer(item.title || "")}</h3>
+              <p>${escapeDharmveer(item.description || "")}</p>
+            </article>
+          `).join("");
+        }
+
+        // REVIEWS
+        const reviewsResponse =
+          await fetch(DHARMVEER_API + "/api/reviews");
+        const reviewsData = await reviewsResponse.json();
+
+        const reviewsGrid =
+          document.getElementById("reviewsGrid");
+
+        if (reviewsGrid && Array.isArray(reviewsData)) {
+          reviewsGrid.innerHTML = reviewsData.map(item => {
+            const rating = Math.max(
+              1,
+              Math.min(5, Number(item.rating) || 5)
+            );
+
+            return `
+              <article class="review-card">
+                <h3>${escapeDharmveer(item.client_name || "")}</h3>
+                <p>${escapeDharmveer(item.review_text || "")}</p>
+                <div class="review-rating">${"★".repeat(rating)}</div>
+              </article>
+            `;
+          }).join("");
+        }
+
+      } catch (error) {
+        console.error("Dharmveer Admin data error:", error);
+      }
+    }
+
+    function escapeDharmveer(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    loadDharmveerAdminData();
+  </script>
 </body>
 </html>
