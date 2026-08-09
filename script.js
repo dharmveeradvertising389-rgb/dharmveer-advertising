@@ -240,23 +240,33 @@ function applyLanguage(lang){
   $$("[data-i18n]").forEach(el=>{if(t[el.dataset.i18n]!==undefined)el.innerHTML=t[el.dataset.i18n]});
   localStorage.setItem("dv-lang",lang);
 }
-
+// 1. Main Initialization Function
 function initApp() {
-  const loader = $("#loader");
-  if (loader) loader.classList.add("hide");
-  renderPortfolio(); renderServices(); renderWhy(); renderReviews(); updateContact();
+  const loader = document.getElementById("loader");
+  if (loader) {
+    loader.classList.add("hide");
+    loader.style.display = "none"; // लोडर सक्तीने बंद करा
+  }
+  
+  if (typeof renderPortfolio === 'function') renderPortfolio();
+  if (typeof renderServices === 'function') renderServices();
+  if (typeof renderWhy === 'function') renderWhy();
+  if (typeof renderReviews === 'function') renderReviews();
+  if (typeof updateContact === 'function') updateContact();
   applyLanguage(localStorage.getItem("dv-lang") || "mr");
   if ($("#year")) $("#year").textContent = new Date().getFullYear();
 }
 
+// 2. Timer (१.५ सेकंदात लोडर १००% हटणार)
 setTimeout(initApp, 1500);
-// Menu Toggle
+
+// 3. Menu Toggle
 if ($("#menuToggle")) {
   $("#menuToggle").onclick = () => $("#mainNav").classList.toggle("open");
 }
 $$(".language-menu button").forEach(b => b.onclick = () => applyLanguage(b.dataset.lang));
 
-// Contact Form
+// 4. Contact Form
 if ($("#contactForm")) {
   $("#contactForm").addEventListener("submit", e => {
     e.preventDefault();
@@ -272,7 +282,7 @@ if ($("#contactForm")) {
   });
 }
 
-// Client Feedback Button WhatsApp Logic
+// 5. Client Feedback Button WhatsApp Logic
 const feedbackBtn = document.getElementById("giveFeedbackBtn");
 if (feedbackBtn) {
   feedbackBtn.onclick = () => {
@@ -285,6 +295,4 @@ if (feedbackBtn) {
       setTimeout(() => $("#toast").classList.remove("show"), 3000);
     }
   };
-}
-  });
 }
