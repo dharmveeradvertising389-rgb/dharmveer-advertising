@@ -241,7 +241,6 @@ function applyLanguage(lang){
   localStorage.setItem("dv-lang",lang);
 }
 
-// Loader and App Initialization Logic (1.5 sec logo delay)
 function initApp() {
   const loader = $("#loader");
   if (loader) loader.classList.add("hide");
@@ -250,10 +249,7 @@ function initApp() {
   if ($("#year")) $("#year").textContent = new Date().getFullYear();
 }
 
-window.addEventListener("load", () => {
-  setTimeout(initApp, 1500); // १.५ सेकंद लोगो दिसेल आणि मग वेबसाईट उघडेल
-});
-
+setTimeout(initApp, 1500);
 // Menu Toggle
 if ($("#menuToggle")) {
   $("#menuToggle").onclick = () => $("#mainNav").classList.toggle("open");
