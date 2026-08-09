@@ -43,4 +43,4 @@ footer{border-top:1px solid var(--line);padding:30px max(22px,calc((100% - var(-
   .hero h1{letter-spacing:-2px}.hero-stats{gap:22px}.section{padding:75px 18px}.portfolio-grid,.services-grid,.reviews-grid{grid-template-columns:1fr 1fr}.split-section,.why-section,.contact-section{grid-template-columns:1fr;gap:35px}.about-section{grid-template-columns:1fr;gap:30px;text-align:center}.about-logo img{width:160px}
 }
 @media(max-width:560px){.portfolio-grid,.services-grid,.reviews-grid{grid-template-columns:1fr}.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.hero-stats strong{font-size:18px}.hero-stats span{font-size:9px}.comparison{height:260px}.sample-text{font-size:30px}footer{flex-direction:column;align-items:flex-start}.brand span{font-size:12px}}
-#loader { display: none !important; }
+
