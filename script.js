@@ -263,3 +263,17 @@ $("#contactForm").addEventListener("submit",e=>{
     setTimeout(()=>$("#toast").classList.remove("show"),3000);
   }
 });
+// Client Feedback Button WhatsApp Logic
+const feedbackBtn = document.getElementById("giveFeedbackBtn");
+if (feedbackBtn) {
+  feedbackBtn.onclick = () => {
+    const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aमला माझी प्रतिक्रिया (Review) द्यायची आहे:%0A%0Aरेटिंग: ⭐⭐⭐⭐⭐%0Aनाव: %0Aप्रतिक्रिया: `;
+    if (CONTACT.whatsapp) {
+      window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
+    } else {
+      $("#toast").textContent = "WhatsApp number नंतर Admin Panel मध्ये जोडा.";
+      $("#toast").classList.add("show");
+      setTimeout(() => $("#toast").classList.remove("show"), 3000);
+    }
+  };
+}
