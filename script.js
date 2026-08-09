@@ -241,12 +241,20 @@ function applyLanguage(lang){
   localStorage.setItem("dv-lang",lang);
 }
 
-window.addEventListener("load",()=>{
-  setTimeout(()=>$("#loader").classList.add("hide"),700);
-  renderPortfolio();renderServices();renderWhy();renderReviews();updateContact();
-  applyLanguage(localStorage.getItem("dv-lang")||"mr");
-  $("#year").textContent=new Date().getFullYear();
-});
+function initApp() {
+  const loader = $("#loader");
+  if (loader) loader.classList.add("hide");
+  renderPortfolio(); renderServices(); renderWhy(); renderReviews(); updateContact();
+  applyLanguage(localStorage.getItem("dv-lang") || "mr");
+  if ($("#year")) $("#year").textContent = new Date().getFullYear();
+}
+
+if (document.readyState === "complete") {
+  initApp();
+} else {
+  window.addEventListener("load", initApp);
+  setTimeout(initApp, 500);
+}
 
 $("#menuToggle").onclick=()=>$("#mainNav").classList.toggle("open");
 $$(".language-menu button").forEach(b=>b.onclick=()=>applyLanguage(b.dataset.lang));
