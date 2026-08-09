@@ -277,3 +277,15 @@ if (feedbackBtn) {
     }
   };
 }
+// Feedback Button Logic
+const feedbackBtn = document.getElementById("giveFeedbackBtn");
+if (feedbackBtn) {
+  feedbackBtn.addEventListener("click", () => {
+    const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aमला माझी प्रतिक्रिया (Review) द्यायची आहे:%0A%0Aरेटिंग: ⭐⭐⭐⭐⭐%0Aनाव: %0Aप्रतिक्रिया: `;
+    if (CONTACT.whatsapp) {
+      window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
+    } else {
+      alert("WhatsApp नंबर Admin Panel मध्ये सेव्ह करा.");
+    }
+  });
+}
