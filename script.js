@@ -241,6 +241,7 @@ function applyLanguage(lang){
   localStorage.setItem("dv-lang",lang);
 }
 
+// Loader and App Initialization Logic (1.5 sec logo delay)
 function initApp() {
   const loader = $("#loader");
   if (loader) loader.classList.add("hide");
@@ -249,28 +250,32 @@ function initApp() {
   if ($("#year")) $("#year").textContent = new Date().getFullYear();
 }
 
-if (document.readyState === "complete") {
-  initApp();
-} else {
-  window.addEventListener("load", initApp);
-  setTimeout(initApp, 500);
+window.addEventListener("load", () => {
+  setTimeout(initApp, 1500); // १.५ सेकंद लोगो दिसेल आणि मग वेबसाईट उघडेल
+});
+
+// Menu Toggle
+if ($("#menuToggle")) {
+  $("#menuToggle").onclick = () => $("#mainNav").classList.toggle("open");
+}
+$$(".language-menu button").forEach(b => b.onclick = () => applyLanguage(b.dataset.lang));
+
+// Contact Form
+if ($("#contactForm")) {
+  $("#contactForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aनाव: ${fd.get("name")}%0Aमोबाईल: ${fd.get("phone")}%0Aकामाचा प्रकार: ${fd.get("work")}%0Aसंदेश: ${fd.get("message") || "-"}`;
+    if (CONTACT.whatsapp) {
+      window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
+    } else {
+      $("#toast").textContent = "WhatsApp number नंतर Admin Panel मध्ये जोडा.";
+      $("#toast").classList.add("show");
+      setTimeout(() => $("#toast").classList.remove("show"), 3000);
+    }
+  });
 }
 
-$("#menuToggle").onclick=()=>$("#mainNav").classList.toggle("open");
-$$(".language-menu button").forEach(b=>b.onclick=()=>applyLanguage(b.dataset.lang));
-
-$("#contactForm").addEventListener("submit",e=>{
-  e.preventDefault();
-  const fd=new FormData(e.currentTarget);
-  const msg=`नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aनाव: ${fd.get("name")}%0Aमोबाईल: ${fd.get("phone")}%0Aकामाचा प्रकार: ${fd.get("work")}%0Aसंदेश: ${fd.get("message")||"-"}`;
-  if(CONTACT.whatsapp){
-    window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`,"_blank");
-  }else{
-    $("#toast").textContent="WhatsApp number नंतर Admin Panel मध्ये जोडा.";
-    $("#toast").classList.add("show");
-    setTimeout(()=>$("#toast").classList.remove("show"),3000);
-  }
-});
 // Client Feedback Button WhatsApp Logic
 const feedbackBtn = document.getElementById("giveFeedbackBtn");
 if (feedbackBtn) {
@@ -285,15 +290,5 @@ if (feedbackBtn) {
     }
   };
 }
-// Feedback Button Logic
-const feedbackBtn = document.getElementById("giveFeedbackBtn");
-if (feedbackBtn) {
-  feedbackBtn.addEventListener("click", () => {
-    const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aमला माझी प्रतिक्रिया (Review) द्यायची आहे:%0A%0Aरेटिंग: ⭐⭐⭐⭐⭐%0Aनाव: %0Aप्रतिक्रिया: `;
-    if (CONTACT.whatsapp) {
-      window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
-    } else {
-      alert("WhatsApp नंबर Admin Panel मध्ये सेव्ह करा.");
-    }
   });
 }
