@@ -19,7 +19,10 @@ const API_BASE =
 
 async function loadSettings() {
   try {
-    const response = await fetch(API_BASE + "/api/settings");
+    // ?t= timestamp आणि cache: "no-store" मुळे Admin Panel मधील बदल लगेच लाइव्ह दिसतील
+    const response = await fetch(API_BASE + "/api/settings?t=" + Date.now(), {
+      cache: "no-store"
+    });
     const data = await response.json();
 
     if (Array.isArray(data) && data.length > 0) {
@@ -171,7 +174,14 @@ function renderPortfolio(category="All"){
   const grid=$("#portfolioGrid");
   const cats=["All",...new Set(portfolioItems.map(x=>x.category))];
   $("#filters").innerHTML=cats.map(c=>`<button class="filter-btn ${c===category?'active':''}" data-category="${c}">${c==="All"?"All":c}</button>`).join("");
-  grid.innerHTML=portfolioItems.filter(x=>category==="All"||x.category===category).map((x,i)=>`
+  
+  // फिल्टर लॉजिक: 'All' वर ६ डिझाईन्स आणि कॅटेगरीवर सर्व डिझाईन्स
+  let filteredItems = portfolioItems.filter(x=>category==="All"||x.category===category);
+  if (category === "All") {
+    filteredItems = filteredItems.slice(0, 6);
+  }
+
+  grid.innerHTML=filteredItems.map((x,i)=>`
     <article class="portfolio-card">
       <div class="portfolio-visual" ${x.image?`style="background-image:url('${x.image}');background-size:cover;background-position:center"`:""}>
         ${x.image?"":`<span>${String(i+1).padStart(2,"0")}</span>`}
