@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (FIXED)
    ========================================================= */
 
 let CONTACT = {
@@ -10,8 +10,7 @@ let CONTACT = {
   about: ""
 };
 
-const API_BASE =
-  "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
+const API_BASE = "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
 
 async function loadSettings() {
   try {
@@ -42,16 +41,12 @@ async function loadSettings() {
 
       // About
       if (CONTACT.about) {
-        const aboutText = document.querySelector(
-          "#about [data-i18n='aboutText']"
-        );
-
+        const aboutText = document.querySelector("#about [data-i18n='aboutText']");
         if (aboutText) {
           aboutText.textContent = CONTACT.about;
         }
       }
     }
-
   } catch (error) {
     console.error("Settings error:", error);
   }
@@ -173,8 +168,12 @@ const $$ = s => document.querySelectorAll(s);
 
 function renderPortfolio(category="All"){
   const grid=$("#portfolioGrid");
+  if (!grid) return;
   const cats=["All",...new Set(portfolioItems.map(x=>x.category))];
-  $("#filters").innerHTML=cats.map(c=>`<button class="filter-btn ${c===category?'active':''}" data-category="${c}">${c==="All"?"All":c}</button>`).join("");
+  const filtersEl = $("#filters");
+  if (filtersEl) {
+    filtersEl.innerHTML=cats.map(c=>`<button class="filter-btn ${c===category?'active':''}" data-category="${c}">${c==="All"?"All":c}</button>`).join("");
+  }
   
   let filteredItems = portfolioItems.filter(x=>category==="All"||x.category===category);
   if (category === "All") {
@@ -192,6 +191,8 @@ function renderPortfolio(category="All"){
 }
 
 function renderServices(){
+  const servicesGrid = $("#servicesGrid");
+  if (!servicesGrid) return;
   const serviceMessages = {
     "Logo Design": "नमस्कार धर्मवीर ॲडव्हर्टायझिंग, मला माझ्या ब्रँडसाठी Logo Design करून हवे आहे. कृपया अधिक माहिती द्या.",
     "Poster Design": "नमस्कार धर्मवीर ॲडव्हर्टायझिंग, मला Poster / Banner Design करून हवे आहे. कृपया अधिक माहिती द्या.",
@@ -201,7 +202,7 @@ function renderServices(){
     "Content Creatives": "नमस्कार धर्मवीर ॲडव्हर्टायझिंग, मला Campaign / Promotional Content Creatives डिझाईन करायचे आहेत."
   };
 
-  $("#servicesGrid").innerHTML = services.map(x => {
+  servicesGrid.innerHTML = services.map(x => {
     const title = x[1];
     const msg = serviceMessages[title] || `नमस्कार धर्मवीर ॲडव्हर्टायझिंग, मला ${title} बद्दल माहिती हवी आहे.`;
     return `
@@ -219,19 +220,29 @@ function renderServices(){
       if (CONTACT.whatsapp) {
         window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
       } else {
-        $("#toast").textContent = "Admin Panel मध्ये आधी WhatsApp Number सेव्ह करा.";
-        $("#toast").classList.add("show");
-        setTimeout(() => $("#toast").classList.remove("show"), 3000);
+        const toast = $("#toast");
+        if (toast) {
+          toast.textContent = "Admin Panel मध्ये आधी WhatsApp Number सेव्ह करा.";
+          toast.classList.add("show");
+          setTimeout(() => toast.classList.remove("show"), 3000);
+        }
       }
     };
   });
 }
 
 function renderWhy(){
-  $("#whyList").innerHTML=whyItems.map(x=>`<div class="why-item"><b>${x[0]}</b><div><h3>${x[1]}</h3><p>${x[2]}</p></div></div>`).join("");
+  const whyList = $("#whyList");
+  if (whyList) {
+    whyList.innerHTML=whyItems.map(x=>`<div class="why-item"><b>${x[0]}</b><div><h3>${x[1]}</h3><p>${x[2]}</p></div></div>`).join("");
+  }
 }
+
 function renderReviews(){
-  $("#reviewsGrid").innerHTML=reviews.map(x=>`<article class="review"><div class="stars">★★★★★</div><p>“${x[1]}”</p><strong>${x[2]}</strong><small>${x[0]}</small></article>`).join("");
+  const reviewsGrid = $("#reviewsGrid");
+  if (reviewsGrid) {
+    reviewsGrid.innerHTML=reviews.map(x=>`<article class="review"><div class="stars">★★★★★</div><p>“${x[1]}”</p><strong>${x[2]}</strong><small>${x[0]}</small></article>`).join("");
+  }
 }
 
 function applyLanguage(lang){
@@ -240,59 +251,84 @@ function applyLanguage(lang){
   $$("[data-i18n]").forEach(el=>{if(t[el.dataset.i18n]!==undefined)el.innerHTML=t[el.dataset.i18n]});
   localStorage.setItem("dv-lang",lang);
 }
-// 1. Main Initialization Function
+
+// Main Initialization Function (Runs safely when page is ready)
 function initApp() {
+  // 1. Hide Loader
   const loader = document.getElementById("loader");
   if (loader) {
     loader.classList.add("hide");
-    loader.style.display = "none"; // लोडर सक्तीने बंद करा
+    loader.style.display = "none";
   }
-  
-  if (typeof renderPortfolio === 'function') renderPortfolio();
-  if (typeof renderServices === 'function') renderServices();
-  if (typeof renderWhy === 'function') renderWhy();
-  if (typeof renderReviews === 'function') renderReviews();
-  if (typeof updateContact === 'function') updateContact();
-  applyLanguage(localStorage.getItem("dv-lang") || "mr");
+
+  // 2. Render Page Elements
+  try { renderPortfolio(); } catch(e) {}
+  try { renderServices(); } catch(e) {}
+  try { renderWhy(); } catch(e) {}
+  try { renderReviews(); } catch(e) {}
+  try { updateContact(); } catch(e) {}
+  try { applyLanguage(localStorage.getItem("dv-lang") || "mr"); } catch(e) {}
+
   if ($("#year")) $("#year").textContent = new Date().getFullYear();
-}
 
-// 2. Timer (१.५ सेकंदात लोडर १००% हटणार)
-setTimeout(initApp, 1500);
+  // 3. Menu Toggle
+  const menuBtn = $("#menuToggle");
+  if (menuBtn) {
+    menuBtn.onclick = () => {
+      const mainNav = $("#mainNav");
+      if (mainNav) mainNav.classList.toggle("open");
+    };
+  }
 
-// 3. Menu Toggle
-if ($("#menuToggle")) {
-  $("#menuToggle").onclick = () => $("#mainNav").classList.toggle("open");
-}
-$$(".language-menu button").forEach(b => b.onclick = () => applyLanguage(b.dataset.lang));
-
-// 4. Contact Form
-if ($("#contactForm")) {
-  $("#contactForm").addEventListener("submit", e => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aनाव: ${fd.get("name")}%0Aमोबाईल: ${fd.get("phone")}%0Aकामाचा प्रकार: ${fd.get("work")}%0Aसंदेश: ${fd.get("message") || "-"}`;
-    if (CONTACT.whatsapp) {
-      window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
-    } else {
-      $("#toast").textContent = "WhatsApp number नंतर Admin Panel मध्ये जोडा.";
-      $("#toast").classList.add("show");
-      setTimeout(() => $("#toast").classList.remove("show"), 3000);
-    }
+  // 4. Language Selector
+  $$(".language-menu button").forEach(b => {
+    b.onclick = () => applyLanguage(b.dataset.lang);
   });
+
+  // 5. Contact Form Handler
+  const contactForm = $("#contactForm");
+  if (contactForm) {
+    contactForm.onsubmit = e => {
+      e.preventDefault();
+      const fd = new FormData(e.currentTarget);
+      const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aनाव: ${fd.get("name")}%0Aमोबाईल: ${fd.get("phone")}%0Aकामाचा प्रकार: ${fd.get("work")}%0Aसंदेश: ${fd.get("message") || "-"}`;
+      if (CONTACT.whatsapp) {
+        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
+      } else {
+        const toast = $("#toast");
+        if (toast) {
+          toast.textContent = "WhatsApp number नंतर Admin Panel मध्ये जोडा.";
+          toast.classList.add("show");
+          setTimeout(() => toast.classList.remove("show"), 3000);
+        }
+      }
+    };
+  }
+
+  // 6. Client Feedback Button Handler
+  const feedbackBtn = document.getElementById("giveFeedbackBtn");
+  if (feedbackBtn) {
+    feedbackBtn.onclick = () => {
+      const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aमला माझी प्रतिक्रिया (Review) द्यायची आहे:%0A%0Aरेटिंग: ⭐⭐⭐⭐⭐%0Aनाव: %0Aप्रतिक्रिया: `;
+      if (CONTACT.whatsapp) {
+        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
+      } else {
+        const toast = $("#toast");
+        if (toast) {
+          toast.textContent = "WhatsApp number नंतर Admin Panel मध्ये जोडा.";
+          toast.classList.add("show");
+          setTimeout(() => toast.classList.remove("show"), 3000);
+        }
+      }
+    };
+  }
 }
 
-// 5. Client Feedback Button WhatsApp Logic
-const feedbackBtn = document.getElementById("giveFeedbackBtn");
-if (feedbackBtn) {
-  feedbackBtn.onclick = () => {
-    const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aमला माझी प्रतिक्रिया (Review) द्यायची आहे:%0A%0Aरेटिंग: ⭐⭐⭐⭐⭐%0Aनाव: %0Aप्रतिक्रिया: `;
-    if (CONTACT.whatsapp) {
-      window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
-    } else {
-      $("#toast").textContent = "WhatsApp number नंतर Admin Panel मध्ये जोडा.";
-      $("#toast").classList.add("show");
-      setTimeout(() => $("#toast").classList.remove("show"), 3000);
-    }
-  };
+// Trigger setup safely after 1.2 seconds
+if (document.readyState === "complete" || document.readyState === "interactive") {
+  setTimeout(initApp, 1200);
+} else {
+  document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(initApp, 1200);
+  });
 }
