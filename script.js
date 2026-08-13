@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (FILTER & IMAGE ALL-FIX)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (PORTFOLIO & FILTERS FULL FIX)
    ========================================================= */
 
 let CONTACT = {
@@ -29,11 +29,45 @@ function getImageUrl(item) {
   return url;
 }
 
-// २. ऑटो CSS स्टाइल इंजेक्ट (इमेज सक्तीने दाखवणे + काळा ओव्हरले हटवणे)
+// २. ऑटो CSS स्टाइल इंजेक्ट (इमेज + फिल्टर बटन्स सक्तीने दाखवण्यासाठी)
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
   style.innerHTML = `
+    /* फिल्टर बटन्सची स्टाइल */
+    #filters {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 10px !important;
+      justify-content: center !important;
+      margin-bottom: 30px !important;
+      position: relative !important;
+      z-index: 20 !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    .filter-btn {
+      padding: 8px 20px !important;
+      border-radius: 25px !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      color: #ddd !important;
+      cursor: pointer !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      transition: all 0.3s ease !important;
+      display: inline-block !important;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: #e63946 !important;
+      color: #ffffff !important;
+      border-color: #e63946 !important;
+      box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3) !important;
+    }
+
+    /* इमेज आणि पोर्टफोलिओ कार्ड स्टाइल */
     .portfolio-visual::before,
     .portfolio-visual::after,
     .portfolio-card::before,
@@ -328,9 +362,10 @@ function renderPortfolio(category="All"){
 
   const currentItems = dynamicPortfolioItems.length > 0 ? dynamicPortfolioItems : defaultPortfolioItems;
   
-  // सर्व युनिक कॅटेगरीज गोळा करणे
+  // नेहमी कायम राहणाऱ्या मुख्य कॅटेगरीज + Admin Panel मधून आलेल्या नवीन कॅटेगरीज
+  const defaultCats = ["Business", "Social Media", "Festival", "Political", "Personal", "Other"];
   const dynamicCats = currentItems.map(x => x.category).filter(Boolean);
-  const allCats = ["All", ...new Set(dynamicCats)];
+  const allCats = ["All", ...new Set([...defaultCats, ...dynamicCats])];
 
   const filtersEl = $("#filters");
   if (filtersEl) {
@@ -339,32 +374,37 @@ function renderPortfolio(category="All"){
     ).join("");
   }
 
-  let filteredItems = currentItems.filter(x => 
-    category === "All" || (x.category && x.category.toLowerCase() === category.toLowerCase())
-  );
+  let filteredItems = currentItems.filter(x => {
+    if (category === "All") return true;
+    return x.category && x.category.toLowerCase() === category.toLowerCase();
+  });
 
-  grid.innerHTML = filteredItems.map((x, i) => {
-    const imgUrl = getImageUrl(x);
-    const hasImage = Boolean(imgUrl);
+  if (filteredItems.length === 0 && category !== "All") {
+    grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px; font-size: 16px;">या कॅटेगरीमध्ये सध्या डिझाईन जोडलेले नाही.</div>`;
+  } else {
+    grid.innerHTML = filteredItems.map((x, i) => {
+      const imgUrl = getImageUrl(x);
+      const hasImage = Boolean(imgUrl);
 
-    return `
-      <article class="portfolio-card">
-        <div class="portfolio-visual ${hasImage ? 'has-img' : ''}" 
-             style="${hasImage ? `background-image: url('${imgUrl}') !important; background-size: cover !important; background-position: center !important;` : ''}"
-             ${hasImage ? `onclick="openModal('${imgUrl}', '${x.title}')"` : ''}>
-          ${hasImage ? 
-            `<img src="${imgUrl}" alt="${x.title}" style="width:100% !important; height:100% !important; object-fit:cover !important; display:block !important; position:relative !important; z-index:10 !important;">` : 
-            `<span style="color:#888;">${String(i+1).padStart(2,"0")}</span>`
-          }
-        </div>
-        <div class="portfolio-info">
-          <span class="tag">${x.category}</span>
-          <h3>${x.title}</h3>
-          <p>${x.desc || ''}</p>
-        </div>
-      </article>
-    `;
-  }).join("");
+      return `
+        <article class="portfolio-card">
+          <div class="portfolio-visual ${hasImage ? 'has-img' : ''}" 
+               style="${hasImage ? `background-image: url('${imgUrl}') !important; background-size: cover !important; background-position: center !important;` : ''}"
+               ${hasImage ? `onclick="openModal('${imgUrl}', '${x.title}')"` : ''}>
+            ${hasImage ? 
+              `<img src="${imgUrl}" alt="${x.title}" style="width:100% !important; height:100% !important; object-fit:cover !important; display:block !important; position:relative !important; z-index:10 !important;">` : 
+              `<span style="color:#888;">${String(i+1).padStart(2,"0")}</span>`
+            }
+          </div>
+          <div class="portfolio-info">
+            <span class="tag">${x.category || 'Design'}</span>
+            <h3>${x.title}</h3>
+            <p>${x.desc || ''}</p>
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
 
   $$(".filter-btn").forEach(b => b.onclick = () => renderPortfolio(b.dataset.category));
 }
