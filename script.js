@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (FULL VIEW & POPUP FIXED)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (IMAGE DISPLAY FIXED)
    ========================================================= */
 
 let CONTACT = {
@@ -15,33 +15,45 @@ const API_BASE = "https://falling-tree-3813.dharmveeradvertising389.workers.dev"
 // Admin Panel मधून आलेले फोटो साठवण्यासाठी
 let dynamicPortfolioItems = [];
 
-// १. ऑटो CSS स्टाइल इंजेक्ट (मोठे बॉक्सेस, फुल स्क्रीन मॉडेल आणि बिफोर-आफ्टर फिक्स)
+// १. ऑटो CSS स्टाइल इंजेक्ट (फोटो सक्तीने दाखवणे + मोठे बॉक्सेस + फुल स्क्रीन व्ह्यू)
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
   style.innerHTML = `
-    /* तिरपी चौकट घालवणे आणि इमेज कार्ड मोठे करणे */
+    /* तिरपी चौकट घालवणे */
+    .portfolio-visual::before,
+    .portfolio-visual::after,
     .portfolio-visual.has-img::before,
     .portfolio-visual.has-img::after {
       display: none !important;
       opacity: 0 !important;
+      content: none !important;
     }
+    
+    .portfolio-visual {
+      position: relative !important;
+      overflow: hidden !important;
+      height: 280px !important;
+      border-radius: 12px !important;
+      background-color: #1a1a1a !important;
+    }
+
     .portfolio-visual.has-img {
-      position: relative;
-      overflow: hidden;
-      background: #111 !important;
-      height: 280px !important; /* मोठे कार्ड */
       cursor: pointer;
-      border-radius: 12px;
     }
+
     .portfolio-visual img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      transition: transform 0.3s ease !important;
     }
+
     .portfolio-card:hover .portfolio-visual img {
-      transform: scale(1.04);
+      transform: scale(1.05) !important;
     }
 
     /* Full View Lightbox Modal (फोटोवर क्लिक केल्यावर मोठा दिसण्यासाठी) */
@@ -128,6 +140,7 @@ function setupModal() {
 }
 
 function openModal(imageSrc, title) {
+  if (!imageSrc) return;
   const modal = document.getElementById("imgModal");
   const modalImg = document.getElementById("imgModalSrc");
   const modalCaption = document.getElementById("imgModalCaption");
@@ -186,10 +199,10 @@ async function loadPortfolioData() {
 
     if (Array.isArray(data) && data.length > 0) {
       dynamicPortfolioItems = data.map(item => ({
-        title: item.title,
+        title: item.title || "Untitled Design",
         category: item.category || "Other",
         desc: `${item.category || "Design"} Creative`,
-        image: item.image_url
+        image: item.image_url || item.image || ""
       }));
     }
   } catch (error) {
@@ -330,12 +343,14 @@ function renderPortfolio(category="All"){
   let filteredItems = currentItems.filter(x => category==="All" || x.category.toLowerCase() === category.toLowerCase());
 
   grid.innerHTML = filteredItems.map((x, i) => {
-    const hasImage = Boolean(x.image && x.image.trim() !== "");
+    const hasImage = Boolean(x.image && String(x.image).trim() !== "" && x.image !== "null" && x.image !== "undefined");
     return `
       <article class="portfolio-card">
-        <div class="portfolio-visual ${hasImage ? 'has-img' : ''}" ${hasImage ? `onclick="openModal('${x.image}', '${x.title}')"` : ''}>
+        <div class="portfolio-visual ${hasImage ? 'has-img' : ''}" 
+             style="${hasImage ? `background-image: url('${x.image}'); background-size: cover; background-position: center;` : ''}"
+             ${hasImage ? `onclick="openModal('${x.image}', '${x.title}')"` : ''}>
           ${hasImage ? 
-            `<img src="${x.image}" alt="${x.title}">` : 
+            `<img src="${x.image}" alt="${x.title}" style="width:100% !important; height:100% !important; object-fit:cover !important; display:block !important; opacity:1 !important; visibility:visible !important; border-radius:12px;">` : 
             `<span>${String(i+1).padStart(2,"0")}</span>`
           }
         </div>
@@ -430,10 +445,8 @@ async function initApp() {
     loader.style.display = "none";
   }
 
-  // Setup Popup/Modal System
   setupModal();
 
-  // Load API Data
   await loadPortfolioData();
 
   try { renderPortfolio(); } catch(e) {}
