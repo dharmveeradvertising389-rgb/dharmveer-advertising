@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (IMAGE FIX UPDATED)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (ULTIMATE IMAGE FIX)
    ========================================================= */
 
 let CONTACT = {
@@ -15,18 +15,18 @@ const API_BASE = "https://falling-tree-3813.dharmveeradvertising389.workers.dev"
 // Admin Panel मधून आलेले फोटो साठवण्यासाठी
 let dynamicPortfolioItems = [];
 
-// १. ऑटो CSS स्टाइल इंजेक्ट (काळा ओव्हरले घालवणे आणि इमेज सक्तीने वर आणणे)
+// १. ऑटो CSS स्टाइल इंजेक्ट (काळा लेयर पूर्ण नष्ट करणे)
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
   style.innerHTML = `
-    /* तिरपी चौकट व काळा लेयर पूर्ण बंद करणे */
+    /* काळा ओव्हरले आणि जुन्या चौकटी पूर्ण बंद करणे */
     .portfolio-visual::before,
     .portfolio-visual::after,
     .portfolio-card::before,
     .portfolio-card::after,
-    .portfolio-visual.has-img::before,
-    .portfolio-visual.has-img::after {
+    .portfolio-visual *::before,
+    .portfolio-visual *::after {
       display: none !important;
       opacity: 0 !important;
       visibility: hidden !important;
@@ -39,14 +39,14 @@ if (!document.getElementById("portfolio-custom-styles")) {
       overflow: hidden !important;
       height: 280px !important;
       border-radius: 12px !important;
-      background-color: #222 !important;
+      background-color: #111 !important;
     }
 
     .portfolio-visual.has-img {
       cursor: pointer;
     }
 
-    /* इमेज १००% दिसावी म्हणून z-index आणि पोजिशन फिक्स */
+    /* इमेज सक्तीने दाखवण्यासाठी */
     .portfolio-visual img {
       position: absolute !important;
       top: 0 !important;
@@ -57,8 +57,7 @@ if (!document.getElementById("portfolio-custom-styles")) {
       display: block !important;
       opacity: 1 !important;
       visibility: visible !important;
-      z-index: 10 !important;
-      transition: transform 0.3s ease !important;
+      z-index: 99 !important;
     }
 
     .portfolio-card:hover .portfolio-visual img {
@@ -74,7 +73,7 @@ if (!document.getElementById("portfolio-custom-styles")) {
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.92);
+      background-color: rgba(0, 0, 0, 0.93);
       align-items: center;
       justify-content: center;
       flex-direction: column;
@@ -101,7 +100,6 @@ if (!document.getElementById("portfolio-custom-styles")) {
       font-weight: bold;
       cursor: pointer;
       z-index: 1000000;
-      transition: color 0.2s;
     }
     .img-modal-close:hover {
       color: #ff5555;
@@ -198,7 +196,7 @@ async function loadSettings() {
   }
 }
 
-// API द्वारे डिझाईन्स लोड करणे (इमेज URL ऑटो-फिक्ससह)
+// API द्वारे डिझाईन्स लोड करणे
 async function loadPortfolioData() {
   try {
     const response = await fetch(API_BASE + "/api/portfolio?t=" + Date.now(), {
@@ -210,7 +208,6 @@ async function loadPortfolioData() {
       dynamicPortfolioItems = data.map(item => {
         let rawImg = item.image_url || item.image || item.img || "";
         
-        // जर Admin Panel वरून अर्धी लिंक येत असेल तर ती पूर्ण करणे
         if (rawImg && rawImg.startsWith("/")) {
           rawImg = API_BASE + rawImg;
         }
@@ -331,7 +328,7 @@ const translations = {
     creative:"Creative",branding:"Branding",marketing:"Marketing",portfolioTitle:"चुना हुआ <span>काम</span>",portfolioText:"आपकी जरूरत के अनुसार तैयार किए गए creative designs की झलक.",
     editNote:"बाद में अपनी असली designs assets/portfolio में डालकर script.js से आसानी से बदल सकते हैं.",
     beforeTitle:"Design में <span>फर्क</span> दिखना चाहिए.",beforeText:"आपके creative को clean, premium और attention-grabbing look देने का प्रयास.",
-    servicesTitle:"हम आपके लिए <span>क्या कर सकते हैं?</span>",whyTitle:"सिर्फ design नहीं,<br><span>पहचान बनाएं.</span>",whyText:"हर creative में आपके brand, audience और purpose को ध्यान में रखा जाता है.",
+    servicesTitle:"हम आपके लिए <span>क्या कर सकते हैं?</span>",whyTitle:"सिर्फ design नहीं,<br><span>पहचान बनाएं.</span>",whyText:"हर creative में आपके brand, audience और purpose को ध्यान में रखकर काम करने का प्रयास.",
     reviewsTitle:"Client <span>Reviews</span>",reviewsText:"आपका feedback हमारे लिए महत्वपूर्ण है.",reviewNote:"बाद में असली client reviews यहां आसानी से बदल सकते हैं.",
     aboutTitle:"धर्मवीर ॲडव्हर्टायझिंग",aboutText:"Graphics Design और Digital Marketing के लिए creative और practical solutions. अभी हम घर से काम करते हैं; भविष्य में office location यहां जोड़ी जा सकती है.",
     contactTitle:"आपके project के बारे में <span>बात करते हैं.</span>",contactText:"Design, poster, social media या digital marketing — काम की जानकारी भेजें.",
@@ -362,12 +359,17 @@ function renderPortfolio(category="All"){
 
   grid.innerHTML = filteredItems.map((x, i) => {
     const hasImage = Boolean(x.image && String(x.image).trim() !== "" && x.image !== "null" && x.image !== "undefined");
+    
+    // ड्युअल रेंडर (Background Image + <img> Tag दोन्ही एकत्र)
     return `
       <article class="portfolio-card">
         <div class="portfolio-visual ${hasImage ? 'has-img' : ''}" 
+             style="${hasImage ? `background-image: url('${x.image}'); background-size: cover; background-position: center;` : ''}"
              ${hasImage ? `onclick="openModal('${x.image}', '${x.title}')"` : ''}>
           ${hasImage ? 
-            `<img src="${x.image}" alt="${x.title}" loading="lazy">` : 
+            `<img src="${x.image}" alt="${x.title}" 
+                  style="width:100% !important; height:100% !important; object-fit:cover !important; display:block !important; z-index:99 !important;"
+                  onerror="console.error('Image failed to load link:', this.src); this.style.display='none';">` : 
             `<span>${String(i+1).padStart(2,"0")}</span>`
           }
         </div>
