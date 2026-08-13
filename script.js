@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (API PORTFOLIO FIXED)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (FULL VIEW & POPUP FIXED)
    ========================================================= */
 
 let CONTACT = {
@@ -12,8 +12,131 @@ let CONTACT = {
 
 const API_BASE = "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
 
-// Admin Panel मधून जोडलेले फोटो साठवण्यासाठी Dynamic Array
+// Admin Panel मधून आलेले फोटो साठवण्यासाठी
 let dynamicPortfolioItems = [];
+
+// १. ऑटो CSS स्टाइल इंजेक्ट (मोठे बॉक्सेस, फुल स्क्रीन मॉडेल आणि बिफोर-आफ्टर फिक्स)
+if (!document.getElementById("portfolio-custom-styles")) {
+  const style = document.createElement("style");
+  style.id = "portfolio-custom-styles";
+  style.innerHTML = `
+    /* तिरपी चौकट घालवणे आणि इमेज कार्ड मोठे करणे */
+    .portfolio-visual.has-img::before,
+    .portfolio-visual.has-img::after {
+      display: none !important;
+      opacity: 0 !important;
+    }
+    .portfolio-visual.has-img {
+      position: relative;
+      overflow: hidden;
+      background: #111 !important;
+      height: 280px !important; /* मोठे कार्ड */
+      cursor: pointer;
+      border-radius: 12px;
+    }
+    .portfolio-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .portfolio-card:hover .portfolio-visual img {
+      transform: scale(1.04);
+    }
+
+    /* Full View Lightbox Modal (फोटोवर क्लिक केल्यावर मोठा दिसण्यासाठी) */
+    .img-modal {
+      display: none;
+      position: fixed;
+      z-index: 999999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.92);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+      backdrop-filter: blur(5px);
+    }
+    .img-modal.active {
+      display: flex;
+    }
+    .img-modal img {
+      max-width: 92%;
+      max-height: 85vh;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      object-fit: contain;
+    }
+    .img-modal-close {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1000000;
+      transition: color 0.2s;
+    }
+    .img-modal-close:hover {
+      color: #ff5555;
+    }
+    .img-modal-caption {
+      margin-top: 12px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    /* Before-After Section Styling */
+    .before-after-img {
+      cursor: pointer;
+      border-radius: 8px;
+      transition: transform 0.2s ease;
+    }
+    .before-after-img:hover {
+      transform: scale(1.02);
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+// २. Full Screen View (Modal) HTML तयार करणे
+function setupModal() {
+  if (document.getElementById("imgModal")) return;
+  const modalHTML = `
+    <div id="imgModal" class="img-modal">
+      <span class="img-modal-close" id="closeModalBtn">&times;</span>
+      <img id="imgModalSrc" src="" alt="Full Design View">
+      <div id="imgModalCaption" class="img-modal-caption"></div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  const modal = document.getElementById("imgModal");
+  const closeBtn = document.getElementById("closeModalBtn");
+
+  closeBtn.onclick = () => modal.classList.remove("active");
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.classList.remove("active");
+  };
+}
+
+function openModal(imageSrc, title) {
+  const modal = document.getElementById("imgModal");
+  const modalImg = document.getElementById("imgModalSrc");
+  const modalCaption = document.getElementById("imgModalCaption");
+  if (modal && modalImg) {
+    modalImg.src = imageSrc;
+    modalCaption.textContent = title || "";
+    modal.classList.add("active");
+  }
+}
 
 async function loadSettings() {
   try {
@@ -33,7 +156,6 @@ async function loadSettings() {
 
       updateContact();
 
-      // Logo Update
       if (CONTACT.logo_url) {
         document.querySelectorAll(
           ".about-logo img, .brand img, .hero-logo, .footer-brand img"
@@ -42,7 +164,6 @@ async function loadSettings() {
         });
       }
 
-      // About Text Update
       if (CONTACT.about) {
         const aboutText = document.querySelector("#about [data-i18n='aboutText']");
         if (aboutText) {
@@ -55,7 +176,7 @@ async function loadSettings() {
   }
 }
 
-// Admin Panel मधून Portfolio Designs API द्वारे आणणे
+// API द्वारे डिझाईन्स लोड करणे
 async function loadPortfolioData() {
   try {
     const response = await fetch(API_BASE + "/api/portfolio?t=" + Date.now(), {
@@ -66,8 +187,8 @@ async function loadPortfolioData() {
     if (Array.isArray(data) && data.length > 0) {
       dynamicPortfolioItems = data.map(item => ({
         title: item.title,
-        category: item.category || "Design",
-        desc: item.category ? `${item.category} Creative` : "Creative Design",
+        category: item.category || "Other",
+        desc: `${item.category || "Design"} Creative`,
         image: item.image_url
       }));
     }
@@ -111,7 +232,6 @@ function updateContact() {
 
 loadSettings();
 
-// Admin Panel मध्ये एकही फोटो नसेल तरच हे 01, 02 चे डिफॉल्ट बॉक्सेस दिसतील
 const defaultPortfolioItems = [
   {title:"Business Design", category:"Business", desc:"Business / Branding Creative", image:""},
   {title:"Social Media Creative", category:"Social Media", desc:"Instagram / Facebook Post", image:""},
@@ -195,28 +315,49 @@ function renderPortfolio(category="All"){
   const grid=$("#portfolioGrid");
   if (!grid) return;
 
-  // Admin Panel मधून डेटा आला असेल तर तो वापरा, नाहीतर Default बॉक्सेस दाखवा
-  const currentItems = dynamicPortfolioItems.length > 0 ? dynamicPortfolioItems : defaultPortfolioItems;
+  const defaultCats = ["Business", "Social Media", "Festival", "Political", "Personal", "Other"];
+  const dynamicCats = dynamicPortfolioItems.map(x=>x.category).filter(Boolean);
+  const allCats = ["All", ...new Set([...defaultCats, ...dynamicCats])];
 
-  const cats=["All",...new Set(currentItems.map(x=>x.category))];
   const filtersEl = $("#filters");
   if (filtersEl) {
-    filtersEl.innerHTML=cats.map(c=>`<button class="filter-btn ${c===category?'active':''}" data-category="${c}">${c==="All"?"All":c}</button>`).join("");
-  }
-  
-  let filteredItems = currentItems.filter(x=>category==="All"||x.category===category);
-  if (category === "All" && dynamicPortfolioItems.length === 0) {
-    filteredItems = filteredItems.slice(0, 6);
+    filtersEl.innerHTML = allCats.map(c => 
+      `<button class="filter-btn ${c===category?'active':''}" data-category="${c}">${c}</button>`
+    ).join("");
   }
 
-  grid.innerHTML=filteredItems.map((x,i)=>`
-    <article class="portfolio-card">
-      <div class="portfolio-visual" ${x.image?`style="background-image:url('${x.image}');background-size:cover;background-position:center"`:""}>
-        ${x.image?"":`<span>${String(i+1).padStart(2,"0")}</span>`}
-      </div>
-      <div class="portfolio-info"><span class="tag">${x.category}</span><h3>${x.title}</h3><p>${x.desc}</p></div>
-    </article>`).join("");
-  $$(".filter-btn").forEach(b=>b.onclick=()=>renderPortfolio(b.dataset.category));
+  const currentItems = dynamicPortfolioItems.length > 0 ? dynamicPortfolioItems : defaultPortfolioItems;
+  let filteredItems = currentItems.filter(x => category==="All" || x.category.toLowerCase() === category.toLowerCase());
+
+  grid.innerHTML = filteredItems.map((x, i) => {
+    const hasImage = Boolean(x.image && x.image.trim() !== "");
+    return `
+      <article class="portfolio-card">
+        <div class="portfolio-visual ${hasImage ? 'has-img' : ''}" ${hasImage ? `onclick="openModal('${x.image}', '${x.title}')"` : ''}>
+          ${hasImage ? 
+            `<img src="${x.image}" alt="${x.title}">` : 
+            `<span>${String(i+1).padStart(2,"0")}</span>`
+          }
+        </div>
+        <div class="portfolio-info">
+          <span class="tag">${x.category}</span>
+          <h3>${x.title}</h3>
+          <p>${x.desc || ''}</p>
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  $$(".filter-btn").forEach(b => b.onclick = () => renderPortfolio(b.dataset.category));
+}
+
+function setupBeforeAfterClick() {
+  document.querySelectorAll(".before-after img, #beforeAfter img, .before-after-img").forEach(img => {
+    img.classList.add("before-after-img");
+    img.onclick = () => {
+      openModal(img.src, "Before / After Design Preview");
+    };
+  });
 }
 
 function renderServices(){
@@ -283,27 +424,28 @@ function applyLanguage(lang){
 
 // Main Initialization Function
 async function initApp() {
-  // 1. Hide Loader
   const loader = document.getElementById("loader");
   if (loader) {
     loader.classList.add("hide");
     loader.style.display = "none";
   }
 
-  // 2. Load Dynamic Portfolio Data from Cloudflare API
+  // Setup Popup/Modal System
+  setupModal();
+
+  // Load API Data
   await loadPortfolioData();
 
-  // 3. Render Page Elements
   try { renderPortfolio(); } catch(e) {}
   try { renderServices(); } catch(e) {}
   try { renderWhy(); } catch(e) {}
   try { renderReviews(); } catch(e) {}
   try { updateContact(); } catch(e) {}
+  try { setupBeforeAfterClick(); } catch(e) {}
   try { applyLanguage(localStorage.getItem("dv-lang") || "mr"); } catch(e) {}
 
   if ($("#year")) $("#year").textContent = new Date().getFullYear();
 
-  // 4. Menu Toggle
   const menuBtn = $("#menuToggle");
   if (menuBtn) {
     menuBtn.onclick = () => {
@@ -312,12 +454,10 @@ async function initApp() {
     };
   }
 
-  // 5. Language Selector
   $$(".language-menu button").forEach(b => {
     b.onclick = () => applyLanguage(b.dataset.lang);
   });
 
-  // 6. Contact Form Handler
   const contactForm = $("#contactForm");
   if (contactForm) {
     contactForm.onsubmit = e => {
@@ -337,7 +477,6 @@ async function initApp() {
     };
   }
 
-  // 7. Client Feedback Button Handler
   const feedbackBtn = document.getElementById("giveFeedbackBtn");
   if (feedbackBtn) {
     feedbackBtn.onclick = () => {
@@ -356,11 +495,8 @@ async function initApp() {
   }
 }
 
-// Trigger setup safely
 if (document.readyState === "complete" || document.readyState === "interactive") {
-  setTimeout(initApp, 500);
+  initApp();
 } else {
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(initApp, 500);
-  });
+  document.addEventListener("DOMContentLoaded", initApp);
 }
