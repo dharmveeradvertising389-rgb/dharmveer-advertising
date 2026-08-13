@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (PORTFOLIO & FILTERS FULL FIX)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (ORANGE COLOR & DUP FIX)
    ========================================================= */
 
 let CONTACT = {
@@ -15,7 +15,7 @@ const API_BASE = "https://falling-tree-3813.dharmveeradvertising389.workers.dev"
 // Admin Panel मधून आलेले फोटो साठवण्यासाठी
 let dynamicPortfolioItems = [];
 
-// १. फोटोची लिंक कोणत्याही नावा खाली असो, ती शोधणारा फंक्शन
+// १. फोटोची लिंक शोधणारा फंक्शन
 function getImageUrl(item) {
   if (!item) return "";
   let url = item.image_url || item.imageUrl || item.image || item.photo || item.photo_url || item.url || item.img || item.src || "";
@@ -29,12 +29,27 @@ function getImageUrl(item) {
   return url;
 }
 
-// २. ऑटो CSS स्टाइल इंजेक्ट (इमेज + फिल्टर बटन्स सक्तीने दाखवण्यासाठी)
+// २. कॅटेगरीच्या नावातील डबल ऑप्शन्स घालवण्यासाठी नॅचरल मॅपिंग
+function cleanCategoryName(cat) {
+  if (!cat) return "Other";
+  let c = cat.trim();
+  let lower = c.toLowerCase();
+  
+  if (lower.includes("festival")) return "Festival";
+  if (lower.includes("business")) return "Business";
+  if (lower.includes("social")) return "Social Media";
+  if (lower.includes("political")) return "Political";
+  if (lower.includes("personal")) return "Personal";
+  
+  return c;
+}
+
+// ३. ऑटो CSS स्टाइल इंजेक्ट (ऑरेंज कलर सक्तीने लागू करणे)
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
   style.innerHTML = `
-    /* फिल्टर बटन्सची स्टाइल */
+    /* फिल्टर बटन्सची ऑरेंज स्टाइल */
     #filters {
       display: flex !important;
       flex-wrap: wrap !important;
@@ -60,11 +75,12 @@ if (!document.getElementById("portfolio-custom-styles")) {
       display: inline-block !important;
     }
 
+    /* Active आणि Hover वर ऑरेंज रंग (Orange Color Glow) */
     .filter-btn:hover, .filter-btn.active {
-      background: #e63946 !important;
+      background: #ff6600 !important;
       color: #ffffff !important;
-      border-color: #e63946 !important;
-      box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3) !important;
+      border-color: #ff6600 !important;
+      box-shadow: 0 4px 15px rgba(255, 102, 0, 0.5) !important;
     }
 
     /* इमेज आणि पोर्टफोलिओ कार्ड स्टाइल */
@@ -228,10 +244,11 @@ async function loadPortfolioData() {
     if (Array.isArray(data) && data.length > 0) {
       dynamicPortfolioItems = data.map(item => {
         const imgUrl = getImageUrl(item);
+        const rawCat = item.category || "Other";
         return {
           title: item.title || "Untitled Design",
-          category: item.category || "Other",
-          desc: item.desc || item.description || `${item.category || "Design"} Creative`,
+          category: cleanCategoryName(rawCat),
+          desc: item.desc || item.description || `${cleanCategoryName(rawCat)} Creative`,
           image: imgUrl
         };
       });
@@ -355,16 +372,18 @@ const translations = {
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 
-// पोर्टफोलिओ व फिल्टर्स रेंडरिंग फिक्स
+// पोर्टफोलिओ व फिल्टर्स रेंडरिंग (ड्युप्लिकेट रिमूव्ह व ऑरेंज बटन्स)
 function renderPortfolio(category="All"){
   const grid=$("#portfolioGrid");
   if (!grid) return;
 
   const currentItems = dynamicPortfolioItems.length > 0 ? dynamicPortfolioItems : defaultPortfolioItems;
   
-  // नेहमी कायम राहणाऱ्या मुख्य कॅटेगरीज + Admin Panel मधून आलेल्या नवीन कॅटेगरीज
+  // युनिक आणि स्वच्छ कॅटेगरीज गोळा करणे
   const defaultCats = ["Business", "Social Media", "Festival", "Political", "Personal", "Other"];
   const dynamicCats = currentItems.map(x => x.category).filter(Boolean);
+  
+  // डुप्लिकेट ऑप्शन्स पूर्णपणे बंद करणे
   const allCats = ["All", ...new Set([...defaultCats, ...dynamicCats])];
 
   const filtersEl = $("#filters");
