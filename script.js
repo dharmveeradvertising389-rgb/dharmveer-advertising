@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (FIXED)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (API PORTFOLIO FIXED)
    ========================================================= */
 
 let CONTACT = {
@@ -11,6 +11,9 @@ let CONTACT = {
 };
 
 const API_BASE = "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
+
+// Admin Panel मधून जोडलेले फोटो साठवण्यासाठी Dynamic Array
+let dynamicPortfolioItems = [];
 
 async function loadSettings() {
   try {
@@ -30,7 +33,7 @@ async function loadSettings() {
 
       updateContact();
 
-      // Logo
+      // Logo Update
       if (CONTACT.logo_url) {
         document.querySelectorAll(
           ".about-logo img, .brand img, .hero-logo, .footer-brand img"
@@ -39,7 +42,7 @@ async function loadSettings() {
         });
       }
 
-      // About
+      // About Text Update
       if (CONTACT.about) {
         const aboutText = document.querySelector("#about [data-i18n='aboutText']");
         if (aboutText) {
@@ -49,6 +52,27 @@ async function loadSettings() {
     }
   } catch (error) {
     console.error("Settings error:", error);
+  }
+}
+
+// Admin Panel मधून Portfolio Designs API द्वारे आणणे
+async function loadPortfolioData() {
+  try {
+    const response = await fetch(API_BASE + "/api/portfolio?t=" + Date.now(), {
+      cache: "no-store"
+    });
+    const data = await response.json();
+
+    if (Array.isArray(data) && data.length > 0) {
+      dynamicPortfolioItems = data.map(item => ({
+        title: item.title,
+        category: item.category || "Design",
+        desc: item.category ? `${item.category} Creative` : "Creative Design",
+        image: item.image_url
+      }));
+    }
+  } catch (error) {
+    console.error("Portfolio fetch error:", error);
   }
 }
 
@@ -87,7 +111,8 @@ function updateContact() {
 
 loadSettings();
 
-const portfolioItems = [
+// Admin Panel मध्ये एकही फोटो नसेल तरच हे 01, 02 चे डिफॉल्ट बॉक्सेस दिसतील
+const defaultPortfolioItems = [
   {title:"Business Design", category:"Business", desc:"Business / Branding Creative", image:""},
   {title:"Social Media Creative", category:"Social Media", desc:"Instagram / Facebook Post", image:""},
   {title:"Festival Design", category:"Festival", desc:"Festival & Special Occasion", image:""},
@@ -169,14 +194,18 @@ const $$ = s => document.querySelectorAll(s);
 function renderPortfolio(category="All"){
   const grid=$("#portfolioGrid");
   if (!grid) return;
-  const cats=["All",...new Set(portfolioItems.map(x=>x.category))];
+
+  // Admin Panel मधून डेटा आला असेल तर तो वापरा, नाहीतर Default बॉक्सेस दाखवा
+  const currentItems = dynamicPortfolioItems.length > 0 ? dynamicPortfolioItems : defaultPortfolioItems;
+
+  const cats=["All",...new Set(currentItems.map(x=>x.category))];
   const filtersEl = $("#filters");
   if (filtersEl) {
     filtersEl.innerHTML=cats.map(c=>`<button class="filter-btn ${c===category?'active':''}" data-category="${c}">${c==="All"?"All":c}</button>`).join("");
   }
   
-  let filteredItems = portfolioItems.filter(x=>category==="All"||x.category===category);
-  if (category === "All") {
+  let filteredItems = currentItems.filter(x=>category==="All"||x.category===category);
+  if (category === "All" && dynamicPortfolioItems.length === 0) {
     filteredItems = filteredItems.slice(0, 6);
   }
 
@@ -252,8 +281,8 @@ function applyLanguage(lang){
   localStorage.setItem("dv-lang",lang);
 }
 
-// Main Initialization Function (Runs safely when page is ready)
-function initApp() {
+// Main Initialization Function
+async function initApp() {
   // 1. Hide Loader
   const loader = document.getElementById("loader");
   if (loader) {
@@ -261,7 +290,10 @@ function initApp() {
     loader.style.display = "none";
   }
 
-  // 2. Render Page Elements
+  // 2. Load Dynamic Portfolio Data from Cloudflare API
+  await loadPortfolioData();
+
+  // 3. Render Page Elements
   try { renderPortfolio(); } catch(e) {}
   try { renderServices(); } catch(e) {}
   try { renderWhy(); } catch(e) {}
@@ -271,7 +303,7 @@ function initApp() {
 
   if ($("#year")) $("#year").textContent = new Date().getFullYear();
 
-  // 3. Menu Toggle
+  // 4. Menu Toggle
   const menuBtn = $("#menuToggle");
   if (menuBtn) {
     menuBtn.onclick = () => {
@@ -280,12 +312,12 @@ function initApp() {
     };
   }
 
-  // 4. Language Selector
+  // 5. Language Selector
   $$(".language-menu button").forEach(b => {
     b.onclick = () => applyLanguage(b.dataset.lang);
   });
 
-  // 5. Contact Form Handler
+  // 6. Contact Form Handler
   const contactForm = $("#contactForm");
   if (contactForm) {
     contactForm.onsubmit = e => {
@@ -305,7 +337,7 @@ function initApp() {
     };
   }
 
-  // 6. Client Feedback Button Handler
+  // 7. Client Feedback Button Handler
   const feedbackBtn = document.getElementById("giveFeedbackBtn");
   if (feedbackBtn) {
     feedbackBtn.onclick = () => {
@@ -324,81 +356,11 @@ function initApp() {
   }
 }
 
-// Trigger setup safely after 1.2 seconds
+// Trigger setup safely
 if (document.readyState === "complete" || document.readyState === "interactive") {
-  setTimeout(initApp, 1200);
+  setTimeout(initApp, 500);
 } else {
   document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(initApp, 1200);
+    setTimeout(initApp, 500);
   });
 }
-// Admin Panel मधून जोडलेल्या डिझाईन्स मुख्य वेबसाईटवर दाखवण्यासाठी कोड
-function loadPortfolioDesigns() {
-  const portfolioGrid = document.querySelector('.portfolio-grid');
-  if (!portfolioGrid) return;
-
-  // Admin Panel कडून लोकल स्टोरेजमध्ये सेव्ह केलेला डेटा मिळवणे
-  const savedPosters = JSON.parse(localStorage.getItem('admin_posters') || localStorage.getItem('posters') || '[]');
-
-  // जर Admin Panel मध्ये नवीन डिझाईन्स असतील, तरच जुने 01, 02, 03 बॉक्सेस काढून नवीन दाखवा
-  if (savedPosters.length > 0) {
-    portfolioGrid.innerHTML = ''; // जुने 01, 02, 03 चे बॉक्सेस हटवणे
-
-    savedPosters.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'portfolio-card';
-      if (item.category) card.setAttribute('data-category', item.category.toLowerCase());
-
-      card.innerHTML = `
-        <img src="${item.image}" alt="${item.title}">
-        <div class="portfolio-info">
-          <span class="tag">${item.category || 'DESIGN'}</span>
-          <h3>${item.title}</h3>
-        </div>
-      `;
-      portfolioGrid.appendChild(card);
-    });
-  }
-}
-
-// पेज लोड झाल्यावर पोर्टफोलिओ अपडेट करणे
-document.addEventListener('DOMContentLoaded', loadPortfolioDesigns);
-// Cloudflare API मधून Portfolio / Designs मुख्य वेबसाईटवर आणणारा कोड
-const API_URL = "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
-
-async function loadWebsitePortfolio() {
-  const portfolioGrid = document.querySelector('.portfolio-grid');
-  if (!portfolioGrid) return;
-
-  try {
-    const res = await fetch(API_URL + "/api/portfolio");
-    const data = await res.json();
-
-    // जर Admin Panel मध्ये डिझाईन्स असतील, तरच जुने 01, 02, 03 चे बॉक्सेस हटवून नवीन दाखवा
-    if (Array.isArray(data) && data.length > 0) {
-      portfolioGrid.innerHTML = ''; // जुने बॉक्सेस डिलीट करणे
-
-      data.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'portfolio-card';
-        if (item.category) {
-          card.setAttribute('data-category', item.category.toLowerCase());
-        }
-
-        card.innerHTML = `
-          <img src="${item.image_url}" alt="${item.title}">
-          <div class="portfolio-info">
-            <span class="tag">${item.category || 'DESIGN'}</span>
-            <h3>${item.title}</h3>
-          </div>
-        `;
-        portfolioGrid.appendChild(card);
-      });
-    }
-  } catch (error) {
-    console.error("Portfolio load problem:", error);
-  }
-}
-
-// पेज उघडल्यावर पोर्टफोलिओ आपोआप लोड करणे
-document.addEventListener('DOMContentLoaded', loadWebsitePortfolio);
