@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (ULTIMATE IMAGE FIX)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (FILTER & IMAGE ALL-FIX)
    ========================================================= */
 
 let CONTACT = {
@@ -15,23 +15,32 @@ const API_BASE = "https://falling-tree-3813.dharmveeradvertising389.workers.dev"
 // Admin Panel मधून आलेले फोटो साठवण्यासाठी
 let dynamicPortfolioItems = [];
 
-// १. ऑटो CSS स्टाइल इंजेक्ट (काळा लेयर पूर्ण नष्ट करणे)
+// १. फोटोची लिंक कोणत्याही नावा खाली असो, ती शोधणारा फंक्शन
+function getImageUrl(item) {
+  if (!item) return "";
+  let url = item.image_url || item.imageUrl || item.image || item.photo || item.photo_url || item.url || item.img || item.src || "";
+  if (typeof url === 'string') {
+    url = url.trim();
+    if (url === "null" || url === "undefined") return "";
+    if (url.startsWith("/")) {
+      url = API_BASE + url;
+    }
+  }
+  return url;
+}
+
+// २. ऑटो CSS स्टाइल इंजेक्ट (इमेज सक्तीने दाखवणे + काळा ओव्हरले हटवणे)
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
   style.innerHTML = `
-    /* काळा ओव्हरले आणि जुन्या चौकटी पूर्ण बंद करणे */
     .portfolio-visual::before,
     .portfolio-visual::after,
     .portfolio-card::before,
-    .portfolio-card::after,
-    .portfolio-visual *::before,
-    .portfolio-visual *::after {
+    .portfolio-card::after {
       display: none !important;
       opacity: 0 !important;
-      visibility: hidden !important;
       content: none !important;
-      background: none !important;
     }
     
     .portfolio-visual {
@@ -39,32 +48,30 @@ if (!document.getElementById("portfolio-custom-styles")) {
       overflow: hidden !important;
       height: 280px !important;
       border-radius: 12px !important;
-      background-color: #111 !important;
+      background-color: #1a1a1a !important;
     }
 
     .portfolio-visual.has-img {
       cursor: pointer;
     }
 
-    /* इमेज सक्तीने दाखवण्यासाठी */
     .portfolio-visual img {
-      position: absolute !important;
-      top: 0 !important;
-      left: 0 !important;
       width: 100% !important;
       height: 100% !important;
       object-fit: cover !important;
       display: block !important;
       opacity: 1 !important;
       visibility: visible !important;
-      z-index: 99 !important;
+      position: relative !important;
+      z-index: 10 !important;
+      transition: transform 0.3s ease !important;
     }
 
     .portfolio-card:hover .portfolio-visual img {
       transform: scale(1.05) !important;
     }
 
-    /* Full View Lightbox Modal (फोटोवर क्लिक केल्यावर मोठा दिसण्यासाठी) */
+    /* Lightbox Modal (फोटोवर क्लिक केल्यावर मोठा दिसण्यासाठी) */
     .img-modal {
       display: none;
       position: fixed;
@@ -111,21 +118,10 @@ if (!document.getElementById("portfolio-custom-styles")) {
       font-weight: 500;
       text-align: center;
     }
-
-    /* Before-After Section Styling */
-    .before-after-img {
-      cursor: pointer;
-      border-radius: 8px;
-      transition: transform 0.2s ease;
-    }
-    .before-after-img:hover {
-      transform: scale(1.02);
-    }
   `;
   document.head.appendChild(style);
 }
 
-// २. Full Screen View (Modal) HTML तयार करणे
 function setupModal() {
   if (document.getElementById("imgModal")) return;
   const modalHTML = `
@@ -160,14 +156,11 @@ function openModal(imageSrc, title) {
 
 async function loadSettings() {
   try {
-    const response = await fetch(API_BASE + "/api/settings?t=" + Date.now(), {
-      cache: "no-store"
-    });
+    const response = await fetch(API_BASE + "/api/settings?t=" + Date.now(), { cache: "no-store" });
     const data = await response.json();
 
     if (Array.isArray(data) && data.length > 0) {
       const settings = data[0];
-
       CONTACT.whatsapp = settings.whatsapp || "";
       CONTACT.instagram = settings.instagram || "";
       CONTACT.email = settings.email || "";
@@ -177,18 +170,14 @@ async function loadSettings() {
       updateContact();
 
       if (CONTACT.logo_url) {
-        document.querySelectorAll(
-          ".about-logo img, .brand img, .hero-logo, .footer-brand img"
-        ).forEach(img => {
+        document.querySelectorAll(".about-logo img, .brand img, .hero-logo, .footer-brand img").forEach(img => {
           img.src = CONTACT.logo_url;
         });
       }
 
       if (CONTACT.about) {
         const aboutText = document.querySelector("#about [data-i18n='aboutText']");
-        if (aboutText) {
-          aboutText.textContent = CONTACT.about;
-        }
+        if (aboutText) aboutText.textContent = CONTACT.about;
       }
     }
   } catch (error) {
@@ -199,24 +188,17 @@ async function loadSettings() {
 // API द्वारे डिझाईन्स लोड करणे
 async function loadPortfolioData() {
   try {
-    const response = await fetch(API_BASE + "/api/portfolio?t=" + Date.now(), {
-      cache: "no-store"
-    });
+    const response = await fetch(API_BASE + "/api/portfolio?t=" + Date.now(), { cache: "no-store" });
     const data = await response.json();
 
     if (Array.isArray(data) && data.length > 0) {
       dynamicPortfolioItems = data.map(item => {
-        let rawImg = item.image_url || item.image || item.img || "";
-        
-        if (rawImg && rawImg.startsWith("/")) {
-          rawImg = API_BASE + rawImg;
-        }
-
+        const imgUrl = getImageUrl(item);
         return {
           title: item.title || "Untitled Design",
           category: item.category || "Other",
-          desc: `${item.category || "Design"} Creative`,
-          image: rawImg
+          desc: item.desc || item.description || `${item.category || "Design"} Creative`,
+          image: imgUrl
         };
       });
     }
@@ -339,38 +321,40 @@ const translations = {
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 
+// पोर्टफोलिओ व फिल्टर्स रेंडरिंग फिक्स
 function renderPortfolio(category="All"){
   const grid=$("#portfolioGrid");
   if (!grid) return;
 
-  const defaultCats = ["Business", "Social Media", "Festival", "Political", "Personal", "Other"];
-  const dynamicCats = dynamicPortfolioItems.map(x=>x.category).filter(Boolean);
-  const allCats = ["All", ...new Set([...defaultCats, ...dynamicCats])];
+  const currentItems = dynamicPortfolioItems.length > 0 ? dynamicPortfolioItems : defaultPortfolioItems;
+  
+  // सर्व युनिक कॅटेगरीज गोळा करणे
+  const dynamicCats = currentItems.map(x => x.category).filter(Boolean);
+  const allCats = ["All", ...new Set(dynamicCats)];
 
   const filtersEl = $("#filters");
   if (filtersEl) {
     filtersEl.innerHTML = allCats.map(c => 
-      `<button class="filter-btn ${c===category?'active':''}" data-category="${c}">${c}</button>`
+      `<button class="filter-btn ${c.toLowerCase()===category.toLowerCase()?'active':''}" data-category="${c}">${c}</button>`
     ).join("");
   }
 
-  const currentItems = dynamicPortfolioItems.length > 0 ? dynamicPortfolioItems : defaultPortfolioItems;
-  let filteredItems = currentItems.filter(x => category==="All" || x.category.toLowerCase() === category.toLowerCase());
+  let filteredItems = currentItems.filter(x => 
+    category === "All" || (x.category && x.category.toLowerCase() === category.toLowerCase())
+  );
 
   grid.innerHTML = filteredItems.map((x, i) => {
-    const hasImage = Boolean(x.image && String(x.image).trim() !== "" && x.image !== "null" && x.image !== "undefined");
-    
-    // ड्युअल रेंडर (Background Image + <img> Tag दोन्ही एकत्र)
+    const imgUrl = getImageUrl(x);
+    const hasImage = Boolean(imgUrl);
+
     return `
       <article class="portfolio-card">
         <div class="portfolio-visual ${hasImage ? 'has-img' : ''}" 
-             style="${hasImage ? `background-image: url('${x.image}'); background-size: cover; background-position: center;` : ''}"
-             ${hasImage ? `onclick="openModal('${x.image}', '${x.title}')"` : ''}>
+             style="${hasImage ? `background-image: url('${imgUrl}') !important; background-size: cover !important; background-position: center !important;` : ''}"
+             ${hasImage ? `onclick="openModal('${imgUrl}', '${x.title}')"` : ''}>
           ${hasImage ? 
-            `<img src="${x.image}" alt="${x.title}" 
-                  style="width:100% !important; height:100% !important; object-fit:cover !important; display:block !important; z-index:99 !important;"
-                  onerror="console.error('Image failed to load link:', this.src); this.style.display='none';">` : 
-            `<span>${String(i+1).padStart(2,"0")}</span>`
+            `<img src="${imgUrl}" alt="${x.title}" style="width:100% !important; height:100% !important; object-fit:cover !important; display:block !important; position:relative !important; z-index:10 !important;">` : 
+            `<span style="color:#888;">${String(i+1).padStart(2,"0")}</span>`
           }
         </div>
         <div class="portfolio-info">
