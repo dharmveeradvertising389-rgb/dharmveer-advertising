@@ -363,3 +363,42 @@ function loadPortfolioDesigns() {
 
 // पेज लोड झाल्यावर पोर्टफोलिओ अपडेट करणे
 document.addEventListener('DOMContentLoaded', loadPortfolioDesigns);
+// Cloudflare API मधून Portfolio / Designs मुख्य वेबसाईटवर आणणारा कोड
+const API_URL = "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
+
+async function loadWebsitePortfolio() {
+  const portfolioGrid = document.querySelector('.portfolio-grid');
+  if (!portfolioGrid) return;
+
+  try {
+    const res = await fetch(API_URL + "/api/portfolio");
+    const data = await res.json();
+
+    // जर Admin Panel मध्ये डिझाईन्स असतील, तरच जुने 01, 02, 03 चे बॉक्सेस हटवून नवीन दाखवा
+    if (Array.isArray(data) && data.length > 0) {
+      portfolioGrid.innerHTML = ''; // जुने बॉक्सेस डिलीट करणे
+
+      data.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'portfolio-card';
+        if (item.category) {
+          card.setAttribute('data-category', item.category.toLowerCase());
+        }
+
+        card.innerHTML = `
+          <img src="${item.image_url}" alt="${item.title}">
+          <div class="portfolio-info">
+            <span class="tag">${item.category || 'DESIGN'}</span>
+            <h3>${item.title}</h3>
+          </div>
+        `;
+        portfolioGrid.appendChild(card);
+      });
+    }
+  } catch (error) {
+    console.error("Portfolio load problem:", error);
+  }
+}
+
+// पेज उघडल्यावर पोर्टफोलिओ आपोआप लोड करणे
+document.addEventListener('DOMContentLoaded', loadWebsitePortfolio);
