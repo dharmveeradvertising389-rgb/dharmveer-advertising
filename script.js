@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (IMAGE DISPLAY FIXED)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (IMAGE FIX UPDATED)
    ========================================================= */
 
 let CONTACT = {
@@ -15,19 +15,23 @@ const API_BASE = "https://falling-tree-3813.dharmveeradvertising389.workers.dev"
 // Admin Panel मधून आलेले फोटो साठवण्यासाठी
 let dynamicPortfolioItems = [];
 
-// १. ऑटो CSS स्टाइल इंजेक्ट (फोटो सक्तीने दाखवणे + मोठे बॉक्सेस + फुल स्क्रीन व्ह्यू)
+// १. ऑटो CSS स्टाइल इंजेक्ट (काळा ओव्हरले घालवणे आणि इमेज सक्तीने वर आणणे)
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
   style.innerHTML = `
-    /* तिरपी चौकट घालवणे */
+    /* तिरपी चौकट व काळा लेयर पूर्ण बंद करणे */
     .portfolio-visual::before,
     .portfolio-visual::after,
+    .portfolio-card::before,
+    .portfolio-card::after,
     .portfolio-visual.has-img::before,
     .portfolio-visual.has-img::after {
       display: none !important;
       opacity: 0 !important;
+      visibility: hidden !important;
       content: none !important;
+      background: none !important;
     }
     
     .portfolio-visual {
@@ -35,20 +39,25 @@ if (!document.getElementById("portfolio-custom-styles")) {
       overflow: hidden !important;
       height: 280px !important;
       border-radius: 12px !important;
-      background-color: #1a1a1a !important;
+      background-color: #222 !important;
     }
 
     .portfolio-visual.has-img {
       cursor: pointer;
     }
 
+    /* इमेज १००% दिसावी म्हणून z-index आणि पोजिशन फिक्स */
     .portfolio-visual img {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
       width: 100% !important;
       height: 100% !important;
       object-fit: cover !important;
       display: block !important;
       opacity: 1 !important;
       visibility: visible !important;
+      z-index: 10 !important;
       transition: transform 0.3s ease !important;
     }
 
@@ -189,7 +198,7 @@ async function loadSettings() {
   }
 }
 
-// API द्वारे डिझाईन्स लोड करणे
+// API द्वारे डिझाईन्स लोड करणे (इमेज URL ऑटो-फिक्ससह)
 async function loadPortfolioData() {
   try {
     const response = await fetch(API_BASE + "/api/portfolio?t=" + Date.now(), {
@@ -198,12 +207,21 @@ async function loadPortfolioData() {
     const data = await response.json();
 
     if (Array.isArray(data) && data.length > 0) {
-      dynamicPortfolioItems = data.map(item => ({
-        title: item.title || "Untitled Design",
-        category: item.category || "Other",
-        desc: `${item.category || "Design"} Creative`,
-        image: item.image_url || item.image || ""
-      }));
+      dynamicPortfolioItems = data.map(item => {
+        let rawImg = item.image_url || item.image || item.img || "";
+        
+        // जर Admin Panel वरून अर्धी लिंक येत असेल तर ती पूर्ण करणे
+        if (rawImg && rawImg.startsWith("/")) {
+          rawImg = API_BASE + rawImg;
+        }
+
+        return {
+          title: item.title || "Untitled Design",
+          category: item.category || "Other",
+          desc: `${item.category || "Design"} Creative`,
+          image: rawImg
+        };
+      });
     }
   } catch (error) {
     console.error("Portfolio fetch error:", error);
@@ -347,10 +365,9 @@ function renderPortfolio(category="All"){
     return `
       <article class="portfolio-card">
         <div class="portfolio-visual ${hasImage ? 'has-img' : ''}" 
-             style="${hasImage ? `background-image: url('${x.image}'); background-size: cover; background-position: center;` : ''}"
              ${hasImage ? `onclick="openModal('${x.image}', '${x.title}')"` : ''}>
           ${hasImage ? 
-            `<img src="${x.image}" alt="${x.title}" style="width:100% !important; height:100% !important; object-fit:cover !important; display:block !important; opacity:1 !important; visibility:visible !important; border-radius:12px;">` : 
+            `<img src="${x.image}" alt="${x.title}" loading="lazy">` : 
             `<span>${String(i+1).padStart(2,"0")}</span>`
           }
         </div>
