@@ -332,3 +332,34 @@ if (document.readyState === "complete" || document.readyState === "interactive")
     setTimeout(initApp, 1200);
   });
 }
+// Admin Panel मधून जोडलेल्या डिझाईन्स मुख्य वेबसाईटवर दाखवण्यासाठी कोड
+function loadPortfolioDesigns() {
+  const portfolioGrid = document.querySelector('.portfolio-grid');
+  if (!portfolioGrid) return;
+
+  // Admin Panel कडून लोकल स्टोरेजमध्ये सेव्ह केलेला डेटा मिळवणे
+  const savedPosters = JSON.parse(localStorage.getItem('admin_posters') || localStorage.getItem('posters') || '[]');
+
+  // जर Admin Panel मध्ये नवीन डिझाईन्स असतील, तरच जुने 01, 02, 03 बॉक्सेस काढून नवीन दाखवा
+  if (savedPosters.length > 0) {
+    portfolioGrid.innerHTML = ''; // जुने 01, 02, 03 चे बॉक्सेस हटवणे
+
+    savedPosters.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'portfolio-card';
+      if (item.category) card.setAttribute('data-category', item.category.toLowerCase());
+
+      card.innerHTML = `
+        <img src="${item.image}" alt="${item.title}">
+        <div class="portfolio-info">
+          <span class="tag">${item.category || 'DESIGN'}</span>
+          <h3>${item.title}</h3>
+        </div>
+      `;
+      portfolioGrid.appendChild(card);
+    });
+  }
+}
+
+// पेज लोड झाल्यावर पोर्टफोलिओ अपडेट करणे
+document.addEventListener('DOMContentLoaded', loadPortfolioDesigns);
