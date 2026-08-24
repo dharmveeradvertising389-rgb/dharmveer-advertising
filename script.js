@@ -373,7 +373,7 @@ const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 
 // पोर्टफोलिओ व फिल्टर्स रेंडरिंग (ड्युप्लिकेट रिमूव्ह व ऑरेंज बटन्स)
-function renderPortfolio(category="All"){
+function renderPortfolio(category="Personal"){
   const grid=$("#portfolioGrid");
   if (!grid) return;
 
@@ -511,7 +511,7 @@ async function initApp() {
 
   await loadPortfolioData();
 
-  try { renderPortfolio(); } catch(e) {}
+  try { renderPortfolio("Personal"); } catch(e) {}
   try { renderServices(); } catch(e) {}
   try { renderWhy(); } catch(e) {}
   try { renderReviews(); } catch(e) {}
