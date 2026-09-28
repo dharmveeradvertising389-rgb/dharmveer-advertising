@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (PORTFOLIO SHOW MORE & DUP FIX)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (PORTFOLIO SHOW MORE, ANIMATION & DUP FIX)
    ========================================================= */
 
 let CONTACT = {
@@ -395,7 +395,7 @@ const translations = {
   }
 };
 
-const $ = s => document.querySelector(s);  const $$ = s => document.querySelectorAll(s);
+const $ = s => document.querySelector(s); const $$ = s => document.querySelectorAll(s);
 
 // पोर्टफोलिओ व फिल्टर्स रेंडरिंग (सुरुवातीला २ डिझाईन्स + 'अधिक पहा' बटण)
 function renderPortfolio(category="Personal", isExpanded = false){
@@ -466,7 +466,7 @@ function renderPortfolio(category="Personal", isExpanded = false){
 
   grid.innerHTML = cardsHTML;
 
-  // 'अधिक पहा' बटणाचा क्लिक इव्हент
+  // 'अधिक पहा' बटणाचा क्लिक इव्हेंट
   const toggleBtn = $("#toggleShowMoreBtn");   if (toggleBtn) {     toggleBtn.onclick = () => {       renderPortfolio(category, !isExpanded);       if (isExpanded) {         grid.scrollIntoView({ behavior: 'smooth' });       }     };   }    // फिल्टर बटन्सचा क्लिक इव्हेंट   $$(".filter-btn").forEach(b => {
     b.onclick = () => renderPortfolio(b.dataset.category, false);
   });
@@ -543,6 +543,17 @@ function applyLanguage(lang){
   localStorage.setItem("dv-lang",lang);
 }
 
+// लोडर Smoothly गायब करणारा फंक्शन (ॲनिमेशन टिकवण्यासाठी)
+function removeLoader() {
+  const loader = document.getElementById("loader");
+  if (loader && !loader.classList.contains("hide")) {
+    loader.classList.add("hide");
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 600); // 0.6 सेकंद smooth transition साठी
+  }
+}
+
 // Main Initialization Function
 async function initApp() {
   setupModal();
@@ -603,12 +614,8 @@ async function initApp() {
     };
   }
 
-  // डेटा लोड झाल्यावर लोडर नक्की बंद करणे
-  const loader = document.getElementById("loader");
-  if (loader) {
-    loader.classList.add("hide");
-    loader.style.display = "none";
-  }
+  // डेटा तयार झाल्यावर लोडर Smoothly Fade-Out करणे
+  removeLoader();
 }
 
 if (document.readyState === "complete" || document.readyState === "interactive") {
@@ -616,3 +623,6 @@ if (document.readyState === "complete" || document.readyState === "interactive")
 } else {
   document.addEventListener("DOMContentLoaded", initApp);
 }
+
+// सेफ्टी बॅकअप: नेटवर्क स्लो असल्यास जास्तीत जास्त २ सेकंदांत लोडर स्मूथली काढून टाकणे
+setTimeout(removeLoader, 2000);
