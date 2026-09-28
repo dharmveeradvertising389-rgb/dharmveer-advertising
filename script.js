@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (ORANGE COLOR & DUP FIX)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (ORANGE COLOR, DUP FIX & SHOW MORE/LESS)
    ========================================================= */
 
 let CONTACT = {
@@ -40,11 +40,12 @@ function cleanCategoryName(cat) {
   if (lower.includes("social")) return "Social Media";
   if (lower.includes("political")) return "Political";
   if (lower.includes("personal")) return "Personal";
+  if (lower.includes("other")) return "Other";
   
   return c;
 }
 
-// ३. ऑटो CSS स्टाइल इंजेक्ट (ऑरेंज कलर सक्तीने लागू करणे)
+// ३. ऑटो CSS स्टाइल इंजेक्ट (ऑरेंज कलर व Show More/Less बटण स्टाइल)
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
@@ -81,6 +82,27 @@ if (!document.getElementById("portfolio-custom-styles")) {
       color: #ffffff !important;
       border-color: #ff6600 !important;
       box-shadow: 0 4px 15px rgba(255, 102, 0, 0.5) !important;
+    }
+
+    /* "अधिक पहा / कमी पहा" बटण स्टाइल */
+    .toggle-portfolio-btn {
+      display: inline-block !important;
+      margin: 30px auto 10px auto !important;
+      padding: 10px 25px !important;
+      background: #ff6600 !important;
+      color: #ffffff !important;
+      border: none !important;
+      border-radius: 25px !important;
+      font-size: 15px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4) !important;
+      transition: all 0.3s ease !important;
+    }
+    .toggle-portfolio-btn:hover {
+      background: #e65c00 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 102, 0, 0.6) !important;
     }
 
     /* इमेज आणि पोर्टफोलिओ कार्ड स्टाइल */
@@ -369,11 +391,10 @@ const translations = {
   }
 };
 
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
+const $ = s => document.querySelector(s); const $$ = s => document.querySelectorAll(s);
 
-// पोर्टफोलिओ व फिल्टर्स रेंडरिंग (ड्युप्लिकेट रिमूव्ह व ऑरेंज बटन्स)
-function renderPortfolio(category="Personal"){
+// पोर्टफोलिओ व फिल्टर्स रेंडरिंग (अधिक पहा / कमी पहा टोगल व ड्युप्लिकेट फिक्ससह)
+function renderPortfolio(category="Personal", isExpanded=false){
   const grid=$("#portfolioGrid");
   if (!grid) return;
 
@@ -381,10 +402,18 @@ function renderPortfolio(category="Personal"){
   
   // युनिक आणि स्वच्छ कॅटेगरीज गोळा करणे
   const defaultCats = ["Business", "Social Media", "Festival", "Political", "Personal", "Other"];
-  const dynamicCats = currentItems.map(x => x.category).filter(Boolean);
+  const dynamicCats = currentItems.map(x => cleanCategoryName(x.category)).filter(Boolean);
   
-  // डुप्लिकेट ऑप्शन्स पूर्णपणे बंद करणे
-  const allCats = ["All", ...new Set([...defaultCats, ...dynamicCats])];
+  // डुप्लिकेट ऑप्शन्स पूर्णपणे बंद करणे (Unique Categories)
+  const uniqueCategoryList = [];
+  [...defaultCats, ...dynamicCats].forEach(cat => {
+    const clean = cleanCategoryName(cat);
+    if (!uniqueCategoryList.includes(clean)) {
+      uniqueCategoryList.push(clean);
+    }
+  });
+
+  const allCats = ["All", ...uniqueCategoryList];
 
   const filtersEl = $("#filters");
   if (filtersEl) {
@@ -398,10 +427,19 @@ function renderPortfolio(category="Personal"){
     return x.category && x.category.toLowerCase() === category.toLowerCase();
   });
 
+  // जुने 'अधिक पहा' बटण जर आधीच असेल तर काढणे
+  const existingToggleBtn = document.getElementById("portfolioToggleBtn");
+  if (existingToggleBtn) {
+    existingToggleBtn.remove();
+  }
+
   if (filteredItems.length === 0 && category !== "All") {
     grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px; font-size: 16px;">या कॅटेगरीमध्ये सध्या डिझाईन जोडलेले नाही.</div>`;
   } else {
-    grid.innerHTML = filteredItems.map((x, i) => {
+    // जर अन-एक्सपांडेड (isExpanded == false) असेल तर फक्त पहिले २ आयटम दाखवणे
+    const itemsToDisplay = isExpanded ? filteredItems : filteredItems.slice(0, 2);
+
+    grid.innerHTML = itemsToDisplay.map((x, i) => {
       const imgUrl = getImageUrl(x);
       const hasImage = Boolean(imgUrl);
 
@@ -423,9 +461,29 @@ function renderPortfolio(category="Personal"){
         </article>
       `;
     }).join("");
+
+    // जर २ पेक्षा जास्त डिझाईन्स असतील, तरच "अधिक पहा / कमी पहा" बटण दाखवा
+    if (filteredItems.length > 2) {
+      const toggleBtn = document.createElement("button");
+      toggleBtn.id = "portfolioToggleBtn";
+      toggleBtn.className = "toggle-portfolio-btn";
+      toggleBtn.innerText = isExpanded ? "कमी पहा" : "अधिक पहा";
+
+      toggleBtn.onclick = () => {
+        renderPortfolio(category, !isExpanded);
+      };
+
+      // बटण पोर्टफोलिओ ग्रीडच्या खाली सेंटरमध्ये जोडणे
+      if (grid.parentNode) {
+        grid.parentNode.insertBefore(toggleBtn, grid.nextSibling);
+      }
+    }
   }
 
-  $$(".filter-btn").forEach(b => b.onclick = () => renderPortfolio(b.dataset.category));
+  // फिल्टर बटन्स क्लिक इव्हेंट सेट करणे (नवीन कॅटेगरी निवडल्यावर ५ किंवा जास्त डिझाईन्स न दिसता परत फक्त २ च दिसतील)
+  $$(".filter-btn").forEach(b => {
+    b.onclick = () => renderPortfolio(b.dataset.category, false);
+  });
 }
 
 function setupBeforeAfterClick() {
@@ -511,7 +569,7 @@ async function initApp() {
 
   await loadPortfolioData();
 
-  try { renderPortfolio("Personal"); } catch(e) {}
+  try { renderPortfolio("Personal", false); } catch(e) {}
   try { renderServices(); } catch(e) {}
   try { renderWhy(); } catch(e) {}
   try { renderReviews(); } catch(e) {}
@@ -524,12 +582,7 @@ async function initApp() {
   const menuBtn = $("#menuToggle");
   if (menuBtn) {
     menuBtn.onclick = () => {
-      const mainNav = $("#mainNav");
-      if (mainNav) mainNav.classList.toggle("open");
-    };
-  }
-
-  $$(".language-menu button").forEach(b => {
+      const mainNav = $("#mainNav");       if (mainNav) mainNav.classList.toggle("open");     };   }    $$(".language-menu button").forEach(b => {
     b.onclick = () => applyLanguage(b.dataset.lang);
   });
 
