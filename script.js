@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (ORANGE COLOR & DUP FIX)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (PORTFOLIO SHOW MORE & DUP FIX)
    ========================================================= */
 
 let CONTACT = {
@@ -40,11 +40,12 @@ function cleanCategoryName(cat) {
   if (lower.includes("social")) return "Social Media";
   if (lower.includes("political")) return "Political";
   if (lower.includes("personal")) return "Personal";
+  if (lower === "other" || lower.includes("poster")) return "Other";
   
   return c;
 }
 
-// ३. ऑटो CSS स्टाइल इंजेक्ट (ऑरेंज कलर सक्तीने लागू करणे)
+// ३. ऑटो CSS स्टाइल इंजेक्ट (ऑरेंज कलर + 'अधिक पहा' बटणाची स्टाइल)
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
@@ -119,6 +120,31 @@ if (!document.getElementById("portfolio-custom-styles")) {
 
     .portfolio-card:hover .portfolio-visual img {
       transform: scale(1.05) !important;
+    }
+
+    /* 'अधिक पहा / कमी पहा' बटणाची स्टाइल */
+    .show-more-container {
+      grid-column: 1 / -1;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .show-more-btn {
+      background: #ff6600 !important;
+      color: #ffffff !important;
+      border: none !important;
+      padding: 10px 24px !important;
+      border-radius: 25px !important;
+      font-size: 15px !important;
+      font-weight: bold !important;
+      cursor: pointer !important;
+      box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4) !important;
+      transition: all 0.3s ease !important;
+    }
+
+    .show-more-btn:hover {
+      background: #e65c00 !important;
+      transform: translateY(-2px);
     }
 
     /* Lightbox Modal (फोटोवर क्लिक केल्यावर मोठा दिसण्यासाठी) */
@@ -369,22 +395,20 @@ const translations = {
   }
 };
 
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
+const $ = s => document.querySelector(s); const $$ = s => document.querySelectorAll(s);
 
-// पोर्टफोलिओ व फिल्टर्स रेंडरिंग (ड्युप्लिकेट रिमूव्ह व ऑरेंज बटन्स)
-function renderPortfolio(category="Personal"){
-  const grid=$("#portfolioGrid");
+// पोर्टफोलिओ व फिल्टर्स रेंडरिंग (सुरुवातीला २ डिझाईन्स + 'अधिक पहा' बटण)
+function renderPortfolio(category="Personal", isExpanded = false){
+  const grid = $("#portfolioGrid");
   if (!grid) return;
 
   const currentItems = dynamicPortfolioItems.length > 0 ? dynamicPortfolioItems : defaultPortfolioItems;
   
-  // युनिक आणि स्वच्छ कॅटेगरीज गोळा करणे
+  // युनिक आणि स्वच्छ कॅटेगरीज गोळा करणे (डुप्लिकेट 'Other' काढण्यासाठी Set चा वापर)
   const defaultCats = ["Business", "Social Media", "Festival", "Political", "Personal", "Other"];
   const dynamicCats = currentItems.map(x => x.category).filter(Boolean);
   
-  // डुप्लिकेट ऑप्शन्स पूर्णपणे बंद करणे
-  const allCats = ["All", ...new Set([...defaultCats, ...dynamicCats])];
+  const allCats = ["All", ...new Set([...defaultCats, ...dynamicCats].map(c => cleanCategoryName(c)))];
 
   const filtersEl = $("#filters");
   if (filtersEl) {
@@ -400,32 +424,52 @@ function renderPortfolio(category="Personal"){
 
   if (filteredItems.length === 0 && category !== "All") {
     grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px; font-size: 16px;">या कॅटेगरीमध्ये सध्या डिझाईन जोडलेले नाही.</div>`;
-  } else {
-    grid.innerHTML = filteredItems.map((x, i) => {
-      const imgUrl = getImageUrl(x);
-      const hasImage = Boolean(imgUrl);
-
-      return `
-        <article class="portfolio-card">
-          <div class="portfolio-visual ${hasImage ? 'has-img' : ''}" 
-               style="${hasImage ? `background-image: url('${imgUrl}') !important; background-size: cover !important; background-position: center !important;` : ''}"
-               ${hasImage ? `onclick="openModal('${imgUrl}', '${x.title}')"` : ''}>
-            ${hasImage ? 
-              `<img src="${imgUrl}" alt="${x.title}" style="width:100% !important; height:100% !important; object-fit:cover !important; display:block !important; position:relative !important; z-index:10 !important;">` : 
-              `<span style="color:#888;">${String(i+1).padStart(2,"0")}</span>`
-            }
-          </div>
-          <div class="portfolio-info">
-            <span class="tag">${x.category || 'Design'}</span>
-            <h3>${x.title}</h3>
-            <p>${x.desc || ''}</p>
-          </div>
-        </article>
-      `;
-    }).join("");
+    return;
   }
 
-  $$(".filter-btn").forEach(b => b.onclick = () => renderPortfolio(b.dataset.category));
+  // २ डिझाईन्स दाखवायचे की सगळे ते ठरवणे
+  const itemsToDisplay = isExpanded ? filteredItems : filteredItems.slice(0, 2);
+
+  let cardsHTML = itemsToDisplay.map((x, i) => {
+    const imgUrl = getImageUrl(x);
+    const hasImage = Boolean(imgUrl);
+
+    return `
+      <article class="portfolio-card">
+        <div class="portfolio-visual ${hasImage ? 'has-img' : ''}" 
+             style="${hasImage ? `background-image: url('${imgUrl}') !important; background-size: cover !important; background-position: center !important;` : ''}"
+             ${hasImage ? `onclick="openModal('${imgUrl}', '${x.title}')"` : ''}>
+          ${hasImage ? 
+            `<img src="${imgUrl}" alt="${x.title}" style="width:100% !important; height:100% !important; object-fit:cover !important; display:block !important; position:relative !important; z-index:10 !important;">` : 
+            `<span style="color:#888;">${String(i+1).padStart(2,"0")}</span>`
+          }
+        </div>
+        <div class="portfolio-info">
+          <span class="tag">${x.category || 'Design'}</span>
+          <h3>${x.title}</h3>
+          <p>${x.desc || ''}</p>
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  // जर डिझाईन्स २ पेक्षा जास्त असतील तर 'अधिक पहा / कमी पहा' बटण जोडणे
+  if (filteredItems.length > 2) {
+    cardsHTML += `
+      <div class="show-more-container">
+        <button id="toggleShowMoreBtn" class="show-more-btn">
+          ${isExpanded ? 'कमी पहा &uarr;' : 'अधिक पहा &rarr;'}
+        </button>
+      </div>
+    `;
+  }
+
+  grid.innerHTML = cardsHTML;
+
+  // 'अधिक पहा' बटणाचा क्लिक इव्हेंट
+  const toggleBtn = $("#toggleShowMoreBtn");   if (toggleBtn) {     toggleBtn.onclick = () => {       renderPortfolio(category, !isExpanded);       if (isExpanded) {         // 'कमी पहा' केल्यावर स्क्रोल वर घेण्यासाठी         grid.scrollIntoView({ behavior: 'smooth' });       }     };   }    // फिल्टर बटन्सचा क्लिक इव्हेंट   $$(".filter-btn").forEach(b => {
+    b.onclick = () => renderPortfolio(b.dataset.category, false);
+  });
 }
 
 function setupBeforeAfterClick() {
@@ -511,7 +555,7 @@ async function initApp() {
 
   await loadPortfolioData();
 
-  try { renderPortfolio("Personal"); } catch(e) {}
+  try { renderPortfolio("Personal", false); } catch(e) {}
   try { renderServices(); } catch(e) {}
   try { renderWhy(); } catch(e) {}
   try { renderReviews(); } catch(e) {}
@@ -524,12 +568,7 @@ async function initApp() {
   const menuBtn = $("#menuToggle");
   if (menuBtn) {
     menuBtn.onclick = () => {
-      const mainNav = $("#mainNav");
-      if (mainNav) mainNav.classList.toggle("open");
-    };
-  }
-
-  $$(".language-menu button").forEach(b => {
+      const mainNav = $("#mainNav");       if (mainNav) mainNav.classList.toggle("open");     };   }    $$(".language-menu button").forEach(b => {
     b.onclick = () => applyLanguage(b.dataset.lang);
   });
 
