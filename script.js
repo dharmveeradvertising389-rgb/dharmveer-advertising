@@ -212,10 +212,12 @@ function setupModal() {
   const modal = document.getElementById("imgModal");
   const closeBtn = document.getElementById("closeModalBtn");
 
-  closeBtn.onclick = () => modal.classList.remove("active");
-  modal.onclick = (e) => {
-    if (e.target === modal) modal.classList.remove("active");
-  };
+  if (closeBtn) closeBtn.onclick = () => modal.classList.remove("active");
+  if (modal) {
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.classList.remove("active");
+    };
+  }
 }
 
 function openModal(imageSrc, title) {
@@ -225,7 +227,7 @@ function openModal(imageSrc, title) {
   const modalCaption = document.getElementById("imgModalCaption");
   if (modal && modalImg) {
     modalImg.src = imageSrc;
-    modalCaption.textContent = title || "";
+    if (modalCaption) modalCaption.textContent = title || "";
     modal.classList.add("active");
   }
 }
@@ -317,8 +319,6 @@ function updateContact() {
   }
 }
 
-loadSettings();
-
 const defaultPortfolioItems = [
   {title:"Business Design", category:"Business", desc:"Business / Branding Creative", image:""},
   {title:"Social Media Creative", category:"Social Media", desc:"Instagram / Facebook Post", image:""},
@@ -395,7 +395,7 @@ const translations = {
   }
 };
 
-const $ = s => document.querySelector(s); const $$ = s => document.querySelectorAll(s);
+const $ = s => document.querySelector(s);  const $$ = s => document.querySelectorAll(s);
 
 // पोर्टफोलिओ व फिल्टर्स रेंडरिंग (सुरुवातीला २ डिझाईन्स + 'अधिक पहा' बटण)
 function renderPortfolio(category="Personal", isExpanded = false){
@@ -404,7 +404,7 @@ function renderPortfolio(category="Personal", isExpanded = false){
 
   const currentItems = dynamicPortfolioItems.length > 0 ? dynamicPortfolioItems : defaultPortfolioItems;
   
-  // युनिक आणि स्वच्छ कॅटेगरीज गोळा करणे (डुप्लिकेट 'Other' काढण्यासाठी Set चा वापर)
+  // युनिक आणि स्वच्छ कॅटेगरीज गोळा करणे
   const defaultCats = ["Business", "Social Media", "Festival", "Political", "Personal", "Other"];
   const dynamicCats = currentItems.map(x => x.category).filter(Boolean);
   
@@ -466,8 +466,8 @@ function renderPortfolio(category="Personal", isExpanded = false){
 
   grid.innerHTML = cardsHTML;
 
-  // 'अधिक पहा' बटणाचा क्लिक इव्हेंट
-  const toggleBtn = $("#toggleShowMoreBtn");   if (toggleBtn) {     toggleBtn.onclick = () => {       renderPortfolio(category, !isExpanded);       if (isExpanded) {         // 'कमी पहा' केल्यावर स्क्रोल वर घेण्यासाठी         grid.scrollIntoView({ behavior: 'smooth' });       }     };   }    // फिल्टर बटन्सचा क्लिक इव्हेंट   $$(".filter-btn").forEach(b => {
+  // 'अधिक पहा' बटणाचा क्लिक इव्हент
+  const toggleBtn = $("#toggleShowMoreBtn");   if (toggleBtn) {     toggleBtn.onclick = () => {       renderPortfolio(category, !isExpanded);       if (isExpanded) {         grid.scrollIntoView({ behavior: 'smooth' });       }     };   }    // फिल्टर बटन्सचा क्लिक इव्हेंट   $$(".filter-btn").forEach(b => {
     b.onclick = () => renderPortfolio(b.dataset.category, false);
   });
 }
@@ -545,15 +545,10 @@ function applyLanguage(lang){
 
 // Main Initialization Function
 async function initApp() {
-  const loader = document.getElementById("loader");
-  if (loader) {
-    loader.classList.add("hide");
-    loader.style.display = "none";
-  }
-
   setupModal();
 
-  await loadPortfolioData();
+  // सर्व एपीआय डेटा एकाच वेळी फेच करणे
+  await Promise.allSettled([loadSettings(), loadPortfolioData()]);
 
   try { renderPortfolio("Personal", false); } catch(e) {}
   try { renderServices(); } catch(e) {}
@@ -606,6 +601,13 @@ async function initApp() {
         }
       }
     };
+  }
+
+  // डेटा लोड झाल्यावर लोडर नक्की बंद करणे
+  const loader = document.getElementById("loader");
+  if (loader) {
+    loader.classList.add("hide");
+    loader.style.display = "none";
   }
 }
 
