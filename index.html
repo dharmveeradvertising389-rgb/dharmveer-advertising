@@ -1,186 +1,726 @@
-<!DOCTYPE html>
-<html lang="mr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="धर्मवीर ॲडव्हर्टायझिंग — Graphics Design & Digital Marketing">
-  <title>धर्मवीर ॲडव्हर्टायझिंग | Graphics Design & Digital Marketing</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="loader" class="loader">
-    <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग">
-    <div class="loader-line"></div>
-    <p>धर्मवीर ॲडव्हर्टायझिंग</p>
-  </div>
+/* =========================================================
+   Dharmveer Advertising - Main JavaScript Script
+   ========================================================= */
 
-  <header class="site-header">
-    <a class="brand" href="#home" aria-label="Home">
-      <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग Logo">
-      <span>धर्मवीर ॲडव्हर्टायझिंग<small>Graphics • Marketing</small></span>
-    </a>
+// Configuration & Contact Details
+const CONTACT = {
+  whatsapp: "919000000000", // Tumcha WhatsApp number yenar
+  instagram: "@dharmveer_advertising",
+  email: "dharmveer@gmail.com",
+  logo_url: "assets/logo.png"
+};
 
-    <nav id="mainNav">
-      <a href="#home" data-i18n="navHome">Home</a>
-      <a href="#portfolio" data-i18n="navPortfolio">Portfolio</a>
-      <a href="#services" data-i18n="navServices">Services</a>
-      <a href="#about" data-i18n="navAbout">About</a>
-      <a href="#reviews" data-i18n="navReviews">Reviews</a>
-      <a href="#contact" data-i18n="navContact">Contact</a>
-      <div class="language">
-        <button id="languageBtn">भाषा ▾</button>
-        <div class="language-menu">
-          <button data-lang="mr">मराठी</button>
-          <button data-lang="en">English</button>
-          <button data-lang="hi">हिन्दी</button>
+// Initial State Variables
+let currentLang = 'mr';
+let activeCategory = 'All';
+let expandedCategories = {};
+
+// Translation Data
+const translations = {
+  mr: {
+    navHome: "Home",
+    navPortfolio: "Portfolio",
+    navServices: "Services",
+    navAbout: "About",
+    navReviews: "Reviews",
+    navContact: "Contact",
+    viewWork: "माझं काम पाहा",
+    startProject: "कामाबद्दल बोला →",
+    eyebrow: "CREATIVE DESIGN • DIGITAL MARKETING",
+    heroTitle: "तुमच्या ब्रँडला<br><span>वेगळी ओळख</span> देऊया.",
+    heroText: "आकर्षक Graphics Design, Social Media Creatives आणि Digital Marketing — तुमच्या कामासाठी एकाच ठिकाणी.",
+    stat1: "Creative Focus",
+    stat2: "Design Possibilities",
+    stat3: "Digital Presence",
+    creative: "Creative",
+    branding: "Branding",
+    marketing: "Marketing",
+    portfolioTitle: "निवडक <span>काम</span>",
+    portfolioText: "तुमच्या गरजेनुसार तयार केलेल्या creative designs ची झलक.",
+    beforeTitle: "Design मध्ये <span>फरक</span> दिसला पाहिजे.",
+    beforeText: "तुमच्या जुन्या creative ला अधिक clean, premium आणि attention-grabbing look देण्याचा प्रयत्न.",
+    servicesTitle: "तुमच्यासाठी <span>काय करू शकतो?</span>",
+    whyTitle: "फक्त design नाही,<br><span>ओळख तयार करूया.</span>",
+    whyText: "प्रत्येक creative मध्ये तुमचा brand, audience आणि purpose लक्षात घेऊन काम करण्याचा प्रयत्न.",
+    reviewsTitle: "Client <span>Reviews</span>",
+    reviewsText: "तुमच्या feedback ला आमच्यासाठी विशेष महत्त्व आहे.",
+    aboutTitle: "धर्मवीर ॲडव्हर्टायझिंग",
+    aboutText: "Graphics Design आणि Digital Marketing साठी creative आणि practical solutions देण्याचा आमचा प्रयत्न.",
+    contactTitle: "तुमच्या project बद्दल <span>बोलूया.</span>",
+    contactText: "Design, poster, social media किंवा digital marketing — कामाची माहिती पाठवा.",
+    nameLabel: "नाव",
+    phoneLabel: "मोबाईल नंबर",
+    workLabel: "कामाचा प्रकार",
+    messageLabel: "संदेश",
+    sendMessage: "Message तयार करा →"
+  },
+  en: {
+    navHome: "Home",
+    navPortfolio: "Portfolio",
+    navServices: "Services",
+    navAbout: "About",
+    navReviews: "Reviews",
+    navContact: "Contact",
+    viewWork: "View Work",
+    startProject: "Let's Talk →",
+    eyebrow: "CREATIVE DESIGN • DIGITAL MARKETING",
+    heroTitle: "Let's Give Your Brand<br><span>A Distinct Identity</span>.",
+    heroText: "Stunning Graphics Design, Social Media Creatives, and Digital Marketing — all in one place.",
+    stat1: "Creative Focus",
+    stat2: "Design Possibilities",
+    stat3: "Digital Presence",
+    creative: "Creative",
+    branding: "Branding",
+    marketing: "Marketing",
+    portfolioTitle: "Selected <span>Work</span>",
+    portfolioText: "A glimpse of creative designs tailored to your needs.",
+    beforeTitle: "Design Should <span>Make A Difference</span>.",
+    beforeText: "Transforming old creatives into clean, premium, and attention-grabbing designs.",
+    servicesTitle: "What Can I <span>Do For You?</span>",
+    whyTitle: "Not Just Design,<br><span>Creating An Identity.</span>",
+    whyText: "Every creative focuses on your brand, audience, and ultimate business goal.",
+    reviewsTitle: "Client <span>Reviews</span>",
+    reviewsText: "Your feedback is highly valued and matters to us.",
+    aboutTitle: "Dharmveer Advertising",
+    aboutText: "Providing creative and practical solutions for Graphics Design and Digital Marketing.",
+    contactTitle: "Let's Talk About <span>Your Project.</span>",
+    contactText: "Design, poster, social media, or digital marketing — send your requirements.",
+    nameLabel: "Name",
+    phoneLabel: "Mobile Number",
+    workLabel: "Type of Work",
+    messageLabel: "Message",
+    sendMessage: "Send Message →"
+  },
+  hi: {
+    navHome: "Home",
+    navPortfolio: "Portfolio",
+    navServices: "Services",
+    navAbout: "About",
+    navReviews: "Reviews",
+    navContact: "Contact",
+    viewWork: "मेरा काम देखें",
+    startProject: "काम की बात करें →",
+    eyebrow: "CREATIVE DESIGN • DIGITAL MARKETING",
+    heroTitle: "आपके ब्रांड को<br><span>अलग पहचान</span> दें।",
+    heroText: "आकर्षक Graphics Design, Social Media Creatives और Digital Marketing — आपके काम के लिए एक ही जगह।",
+    stat1: "Creative Focus",
+    stat2: "Design Possibilities",
+    stat3: "Digital Presence",
+    creative: "Creative",
+    branding: "Branding",
+    marketing: "Marketing",
+    portfolioTitle: "चुनिंदा <span>काम</span>",
+    portfolioText: "आपकी ज़रूरत के अनुसार तैयार किए गए क्रिएटिव डिज़ाइनों की झलक।",
+    beforeTitle: "Design में <span>फ़र्क़</span> दिखना चाहिए।",
+    beforeText: "आपके पुराने डिज़ाइनों को स्वच्छ, प्रीमियम और आकर्षक लुक देने का प्रयास।",
+    servicesTitle: "आपके लिए <span>क्या कर सकते हैं?</span>",
+    whyTitle: "सिर्फ डिजाइन नहीं,<br><span>पहचान बनाते हैं।</span>",
+    whyText: "हर क्रिएटिव में आपके ब्रांड, ऑडियंस और उद्देश्य का ध्यान रखा जाता है।",
+    reviewsTitle: "Client <span>Reviews</span>",
+    reviewsText: "आपकी प्रतिक्रिया हमारे लिए बेहद महत्वपूर्ण है।",
+    aboutTitle: "धर्मवीर एडवरटाइजिंग",
+    aboutText: "ग्राफ़िक्स डिज़ाइन और डिजिटल मार्केटिंग के लिए क्रिएटिव और व्यावहारिक समाधान।",
+    contactTitle: "अपने प्रोजेक्ट पर <span>बात करें।</span>",
+    contactText: "डिजाइन, पोस्टर, सोशल मीडिया या डिजिटल मार्केटिंग — जानकारी भेजें।",
+    nameLabel: "नाम",
+    phoneLabel: "मोबाइल नंबर",
+    workLabel: "काम का प्रकार",
+    messageLabel: "संदेश",
+    sendMessage: "मैसेज भेजें →"
+  }
+};
+
+// Portfolio Data
+const portfolioData = [
+  { id: 1, category: "Personal", title: "cinematic", tag: "Personal Creative", image: "assets/portfolio/p1.jpg" },
+  { id: 2, category: "Personal", title: "Birthday Abhar design", tag: "Personal Creative", image: "assets/portfolio/p2.jpg" },
+  { id: 3, category: "Business", title: "Shop Branding Poster", tag: "Business Banner", image: "assets/portfolio/p3.jpg" },
+  { id: 4, category: "Festival", title: "Ganesh Chaturthi Special", tag: "Festival Post", image: "assets/portfolio/p4.jpg" },
+  { id: 5, category: "Political", title: "Election Banner Design", tag: "Political Campaign", image: "assets/portfolio/p5.jpg" },
+  { id: 6, category: "Social Media", title: "Instagram Offer Reel Cover", tag: "Social Media Ad", image: "assets/portfolio/p6.jpg" }
+];
+
+// Services Data
+const servicesData = [
+  { title: "Poster Design", desc: "सोशल मीडिया, फेस्टिव्हल आणि इव्हेंटसाठी आकर्षक पोस्टर्स.", icon: "🎨" },
+  { title: "Branding & Logo", desc: "तुमच्या व्यवसायासाठी युनिक आणि प्रीमियम लोगो डिझाइन.", icon: "💎" },
+  { title: "Digital Marketing", desc: "व्यवसाय वाढवण्यासाठी सोशल मीडिया प्रमोशन आणि जाहिराती.", icon: "🚀" },
+  { title: "Social Media Creatives", desc: "Instagram आणि Facebook साठी डेली पोस्ट्स आणि स्टोरीज.", icon: "📱" }
+];
+
+// Reviews Data
+const reviewsData = [
+  { name: "अमित पाटील", role: "Business Owner", comment: "खूपच छान काम! डिझाइन क्वालिटी आणि टाइमिंग एकदम परफेक्ट आहे.", stars: "⭐⭐⭐⭐⭐" },
+  { name: "शुभम कांबळे", role: "Event Manager", comment: "धर्मवीर ॲडव्हर्टायझिंगचे पोस्टर्स नेहमीच अ‍ॅक्ट्रॅक्टिव्ह असतात.", stars: "⭐⭐⭐⭐⭐" }
+];
+
+// Normalize Category Names to avoid duplications
+function cleanCategoryName(cat) {
+  if (!cat) return "Other";
+  const str = cat.toString().trim();
+  const lower = str.toLowerCase();
+  
+  if (lower.includes("business")) return "Business";
+  if (lower.includes("personal")) return "Personal";
+  if (lower.includes("social")) return "Social Media";
+  if (lower.includes("fest")) return "Festival";
+  if (lower.includes("politi")) return "Political";
+  
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// App Initialization
+document.addEventListener("DOMContentLoaded", () => {
+  initApp();
+});
+
+function initApp() {
+  // Hide Loader
+  setTimeout(() => {
+    const loader = document.getElementById("loader");
+    if (loader) {
+      loader.style.opacity = "0";
+      setTimeout(() => loader.style.display = "none", 500);
+    }
+  }, 600);
+
+  // Set Year
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  // Load Initial UI Elements
+  renderFilters();
+  renderPortfolio(activeCategory);
+  renderServices();
+  renderReviews();
+  setupContactInfo();
+  setupEventListeners();
+  setupLightboxModal();
+  
+  // Inject Matching Welcome Popup
+  injectCategoryPopup();
+}
+
+// Render Filters
+function renderFilters() {
+  const container = document.getElementById("filters");
+  if (!container) return;
+
+  const rawCategories = ["All", ...portfolioData.map(item => cleanCategoryName(item.category))];
+  const categories = [...new Set(rawCategories)];
+
+  container.innerHTML = categories.map(cat => `
+    <button class="filter-btn ${cat === activeCategory ? 'active' : ''}" onclick="filterPortfolio('${cat}')">
+      ${cat}
+    </button>
+  `).join("");
+}
+
+// Filter Portfolio Trigger
+function filterPortfolio(cat) {
+  activeCategory = cat;
+  renderFilters();
+  renderPortfolio(cat);
+}
+
+// Render Portfolio Cards with Expand (Show More/Less)
+function renderPortfolio(cat) {
+  const grid = document.getElementById("portfolioGrid");
+  if (!grid) return;
+
+  let filtered = cat === "All" ? portfolioData : portfolioData.filter(item => cleanCategoryName(item.category) === cat);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #888;">कोणतेही काम उपलब्ध नाही.</p>`;
+    return;
+  }
+
+  // Group by Categories when "All" is selected
+  let html = "";
+  if (cat === "All") {
+    const categoriesGrouped = {};
+    filtered.forEach(item => {
+      const c = cleanCategoryName(item.category);
+      if (!categoriesGrouped[c]) categoriesGrouped[c] = [];
+      categoriesGrouped[c].push(item);
+    });
+
+    for (const categoryName in categoriesGrouped) {
+      const items = categoriesGrouped[categoryName];
+      const isExpanded = expandedCategories[categoryName] || false;
+      const visibleItems = isExpanded ? items : items.slice(0, 2);
+
+      html += `
+        <div class="portfolio-category-group" style="grid-column: 1/-1; margin-top: 20px;">
+          <h3 style="color: #ff6600; font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px;">${categoryName}</h3>
+          <div class="portfolio-grid-inner" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+            ${visibleItems.map(item => createCardHTML(item)).join('')}
+          </div>
+          ${items.length > 2 ? `
+            <div style="text-align: center; margin-top: 15px;">
+              <button class="btn-show-more" onclick="toggleShowMore('${categoryName}')">
+                ${isExpanded ? "कमी पहा" : "अधिक पहा"}
+              </button>
+            </div>
+          ` : ''}
         </div>
-      </div>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#contact" data-i18n="viewWork">कामाबद्दल बोला →</a>
-        <a class="btn btn-ghost" href="#portfolio" data-i18n="startProject">माझं काम पाहा</a>
-      </div>
-    </nav>
-    <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
-  </header>
+      `;
+    }
+  } else {
+    html = `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; grid-column: 1/-1;">
+      ${filtered.map(item => createCardHTML(item)).join('')}
+    </div>`;
+  }
 
-  <main>
-    <section id="home" class="hero section">
-      <div class="hero-content">
-        <p class="eyebrow" data-i18n="eyebrow">CREATIVE DESIGN • DIGITAL MARKETING</p>
-        <h1 data-i18n="heroTitle">तुमच्या ब्रँडला<br><span>वेगळी ओळख</span> देऊया.</h1>
-        <p class="hero-text" data-i18n="heroText">
-          आकर्षक Graphics Design, Social Media Creatives आणि Digital Marketing — तुमच्या कामासाठी एकाच ठिकाणी.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#portfolio" data-i18n="viewWork">माझं काम पाहा</a>
-          <a class="btn btn-ghost" href="#contact" data-i18n="startProject">कामाबद्दल बोला →</a>
-        </div>
-        <div class="hero-stats">
-          <div><strong>100%</strong><span data-i18n="stat1">Creative Focus</span></div>
-          <div><strong>∞</strong><span data-i18n="stat2">Design Possibilities</span></div>
-          <div><strong>24/7</strong><span data-i18n="stat3">Digital Presence</span></div>
-        </div>
-      </div>
-      <div class="hero-art">
-        <div class="glow"></div>
-        <img src="assets/logo.png" alt="" class="hero-logo">
-        <div class="floating-card card-one">✦ <span data-i18n="creative">Creative</span></div>
-        <div class="floating-card card-two">◈ <span data-i18n="branding">Branding</span></div>
-        <div class="floating-card card-three">↗ <span data-i18n="marketing">Marketing</span></div>
-      </div>
-    </section>
+  grid.innerHTML = html;
+}
 
-    <section class="marquee" aria-label="Services">
-      <div>GRAPHICS DESIGN &nbsp; ✦ &nbsp; SOCIAL MEDIA &nbsp; ✦ &nbsp; BRANDING &nbsp; ✦ &nbsp; DIGITAL MARKETING &nbsp; ✦ &nbsp; GRAPHICS DESIGN &nbsp; ✦ &nbsp;</div>
-    </section>
-
-    <section id="portfolio" class="section">
-      <div class="section-heading">
-        <p class="eyebrow">02 — PORTFOLIO</p>
-        <h2 data-i18n="portfolioTitle">निवडक <span>काम</span></h2>
-        <p data-i18n="portfolioText">तुमच्या गरजेनुसार तयार केलेल्या creative designs ची झलक.</p>
+// Individual Portfolio Card Template
+function createCardHTML(item) {
+  return `
+    <div class="portfolio-card" onclick="openLightbox('${item.image}', '${item.title}')">
+      <div class="portfolio-img-box">
+        <img src="${item.image}" alt="${item.title}" onerror="this.src='assets/logo.png'">
       </div>
-
-      <div class="filters" id="filters"></div>
-      <div class="portfolio-grid" id="portfolioGrid"></div>
-    </section>
-
-    <section id="before-after" class="section split-section">
-      <div>
-        <p class="eyebrow">03 — BEFORE / AFTER</p>
-        <h2 data-i18n="beforeTitle">Design मध्ये <span>फरक</span> दिसला पाहिजे.</h2>
-        <p data-i18n="beforeText">तुमच्या जुन्या creative ला अधिक clean, premium आणि attention-grabbing look देण्याचा प्रयत्न.</p>
+      <div class="portfolio-info">
+        <span class="portfolio-tag">${item.category}</span>
+        <h4>${item.title}</h4>
+        <p>${item.tag}</p>
       </div>
-      <div class="comparison">
-        <div class="compare before"><span>BEFORE</span><div class="sample-text">YOUR<br>DESIGN</div></div>
-        <div class="compare after"><span>AFTER</span><div class="sample-text">YOUR<br><b>BRAND</b></div></div>
-      </div>
-    </section>
-
-    <section id="services" class="section">
-      <div class="section-heading">
-        <p class="eyebrow">04 — SERVICES</p>
-        <h2 data-i18n="servicesTitle">तुमच्यासाठी <span>काय करू शकतो?</span></h2>
-      </div>
-      <div class="services-grid" id="servicesGrid"></div>
-    </section>
-
-    <section id="why" class="section why-section">
-      <div class="why-copy">
-        <p class="eyebrow">05 — WHY CHOOSE US</p>
-        <h2 data-i18n="whyTitle">फक्त design नाही,<br><span>ओळख तयार करूया.</span></h2>
-        <p data-i18n="whyText">प्रत्येक creative मध्ये तुमचा brand, audience आणि purpose लक्षात घेऊन काम करण्याचा प्रयत्न.</p>
-      </div>
-      <div class="why-list" id="whyList"></div>
-    </section>
-
-    <section id="reviews" class="section">
-      <div class="section-heading">
-        <p class="eyebrow">06 — REVIEWS</p>
-        <h2 data-i18n="reviewsTitle">Client <span>Reviews</span></h2>
-        <p data-i18n="reviewsText">तुमच्या feedback ला आमच्यासाठी विशेष महत्त्व आहे.</p>
-      </div>
-      <div class="reviews-grid" id="reviewsGrid"></div>
-      <div style="text-align: center; margin-top: 25px;">
-        <button id="giveFeedbackBtn" class="btn btn-primary">प्रतिक्रिया द्या (Give Feedback) →</button>
-      </div>
-    </section>
-
-    <section id="about" class="section about-section">
-      <div class="about-logo"><img src="assets/logo.png" alt="Logo"></div>
-      <div>
-        <p class="eyebrow">07 — ABOUT</p>
-        <h2 data-i18n="aboutTitle">धर्मवीर ॲडव्हर्टायझिंग</h2>
-        <p data-i18n="aboutText">Graphics Design आणि Digital Marketing साठी creative आणि practical solutions देण्याचा आमचा प्रयत्न. सध्या आम्ही घरून काम करतो; भविष्यात office सुरू झाल्यावर location इथे जोडता येईल.</p>
-      </div>
-    </section>
-
-    <section id="contact" class="section contact-section">
-      <div class="contact-copy">
-        <p class="eyebrow">08 — CONTACT</p>
-        <h2 data-i18n="contactTitle">तुमच्या project बद्दल <span>बोलूया.</span></h2>
-        <p data-i18n="contactText">Design, poster, social media किंवा digital marketing — कामाची माहिती पाठवा.</p>
-        <div class="contact-placeholder">
-          <span>WhatsApp</span><strong id="whatsappDisplay">नंतर जोडू</strong>
-        </div>
-        <div class="contact-placeholder">
-          <span>Instagram</span><strong id="instagramDisplay">नंतर जोडू</strong>
-        </div>
-        <div class="contact-placeholder">
-          <span>Email</span><strong id="emailDisplay">नंतर जोडू</strong>
-        </div>
-      </div>
-
-      <form class="contact-form" id="contactForm">
-        <label data-i18n="nameLabel">नाव<input required name="name" placeholder="तुमचे नाव"></label>
-        <label data-i18n="phoneLabel">मोबाईल नंबर<input required name="phone" placeholder="मोबाईल नंबर"></label>
-        <label data-i18n="workLabel">कामाचा प्रकार
-          <select name="work">
-            <option>Poster Design</option>
-            <option>Social Media Design</option>
-            <option>Logo / Branding</option>
-            <option>Digital Marketing</option>
-            <option>Other</option>
-          </select>
-        </label>
-        <label data-i18n="messageLabel">संदेश<textarea name="message" rows="5" placeholder="तुमच्या कामाबद्दल थोडक्यात लिहा"></textarea></label>
-        <button class="btn btn-primary" type="submit" data-i18n="sendMessage">Message तयार करा →</button>
-      </form>
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer-brand">
-      <img src="assets/logo.png" alt="">
-      <div><strong>धर्मवीर ॲडव्हर्टायझिंग</strong><span>Graphics Design • Digital Marketing</span></div>
     </div>
-    <p>© <span id="year"></span> धर्मवीर ॲडव्हर्टायझिंग. All rights reserved.</p>
-  </footer>
+  `;
+}
 
-  <div class="toast" id="toast"></div>
-  <script src="script.js"></script>
-</body>
-</html>
+// Toggle Show More/Less Button
+function toggleShowMore(catName) {
+  expandedCategories[catName] = !expandedCategories[catName];
+  renderPortfolio(activeCategory);
+}
+
+// Render Services
+function renderServices() {
+  const container = document.getElementById("servicesGrid");
+  if (!container) return;
+
+  container.innerHTML = servicesData.map(s => `
+    <div class="service-card" onclick="openWhatsAppForService('${s.title}')">
+      <div class="service-icon">${s.icon}</div>
+      <h3>${s.title}</h3>
+      <p>${s.desc}</p>
+      <span class="service-link">चौकशी करा →</span>
+    </div>
+  `).join("");
+}
+
+// Render Reviews
+function renderReviews() {
+  const container = document.getElementById("reviewsGrid");
+  if (!container) return;
+
+  container.innerHTML = reviewsData.map(r => `
+    <div class="review-card">
+      <div class="stars">${r.stars}</div>
+      <p>"${r.comment}"</p>
+      <div class="review-author">
+        <strong>${r.name}</strong>
+        <small>${r.role}</small>
+      </div>
+    </div>
+  `).join("");
+}
+
+// Setup Contact Placeholder Info
+function setupContactInfo() {
+  const wa = document.getElementById("whatsappDisplay");
+  const ig = document.getElementById("instagramDisplay");
+  const em = document.getElementById("emailDisplay");
+
+  if (wa) wa.textContent = CONTACT.whatsapp;
+  if (ig) ig.textContent = CONTACT.instagram;
+  if (em) em.textContent = CONTACT.email;
+}
+
+// Event Listeners Registration
+function setupEventListeners() {
+  // Mobile Nav Toggle
+  const toggle = document.getElementById("menuToggle");
+  const nav = document.getElementById("mainNav");
+  if (toggle && nav) {
+    toggle.addEventListener("click", () => {
+      nav.classList.toggle("open");
+    });
+  }
+
+  // Language Menu Dropdown
+  const langBtn = document.getElementById("languageBtn");
+  const langMenu = document.querySelector(".language-menu");
+  if (langBtn && langMenu) {
+    langBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      langMenu.classList.toggle("show");
+    });
+
+    document.addEventListener("click", () => langMenu.classList.remove("show"));
+
+    langMenu.querySelectorAll("button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const lang = btn.getAttribute("data-lang");
+        changeLanguage(lang);
+      });
+    });
+  }
+
+  // Contact Form Submission to WhatsApp
+  const form = document.getElementById("contactForm");
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const name = formData.get("name");
+      const phone = formData.get("phone");
+      const work = formData.get("work");
+      const msg = formData.get("message");
+
+      const text = `*नवीन चौकशी (Website)*%0A%0A*नाव:* ${name}%0A*मोबाईल:* ${phone}%0A*कामाचा प्रकार:* ${work}%0A*संदेश:* ${msg}`;
+      window.open(`https://wa.me/${CONTACT.whatsapp}?text=${text}`, "_blank");
+    });
+  }
+
+  // Feedback Button Event
+  const feedbackBtn = document.getElementById("giveFeedbackBtn");
+  if (feedbackBtn) {
+    feedbackBtn.addEventListener("click", () => {
+      const text = encodeURIComponent("नमस्कार, मला धर्मवीर ॲडव्हर्टायझिंगबद्दल फीडबॅक द्यायचा आहे:");
+      window.open(`https://wa.me/${CONTACT.whatsapp}?text=${text}`, "_blank");
+    });
+  }
+}
+
+// Change Language Strategy
+function changeLanguage(lang) {
+  if (!translations[lang]) return;
+  currentLang = lang;
+
+  const elements = document.querySelectorAll("[data-i18n]");
+  elements.forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (translations[lang][key]) {
+      el.innerHTML = translations[lang][key];
+    }
+  });
+
+  const langBtn = document.getElementById("languageBtn");
+  if (langBtn) {
+    langBtn.textContent = lang === 'mr' ? 'मराठी ▾' : lang === 'en' ? 'English ▾' : 'हिन्दी ▾';
+  }
+}
+
+// Open Service inquiry directly on WhatsApp
+function openWhatsAppForService(serviceName) {
+  const text = encodeURIComponent(`नमस्कार! मला ${serviceName} बद्दल अधिक माहिती हवी आहे.`);
+  window.open(`https://wa.me/${CONTACT.whatsapp}?text=${text}`, "_blank");
+}
+
+/* =========================================================
+   LIGHTBOX MODAL FOR IMAGES
+   ========================================================= */
+function setupLightboxModal() {
+  const modalHTML = `
+    <div id="lightboxModal" class="lightbox-modal" onclick="closeLightbox()">
+      <span class="lightbox-close">&times;</span>
+      <img class="lightbox-content" id="lightboxImg">
+      <div id="lightboxCaption" class="lightbox-caption"></div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+function openLightbox(src, title) {
+  const modal = document.getElementById("lightboxModal");
+  const img = document.getElementById("lightboxImg");
+  const caption = document.getElementById("lightboxCaption");
+  
+  if (modal && img) {
+    modal.style.display = "flex";
+    img.src = src;
+    if (caption) caption.textContent = title;
+  }
+}
+
+function closeLightbox() {
+  const modal = document.getElementById("lightboxModal");
+  if (modal) modal.style.display = "none";
+}
+
+/* =========================================================
+   LOGO POPUP WITH CHOICE CATEGORIES (MATCHING WEBSITE THEME)
+   ========================================================= */
+function injectCategoryPopup() {
+  if (document.getElementById("welcome-popup")) return;
+
+  const popupStyle = document.createElement("style");
+  popupStyle.innerHTML = `
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .popup-card {
+      background: #121212;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 30px 25px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255, 102, 0, 0.15);
+      color: #ffffff;
+      font-family: inherit;
+    }
+
+    .popup-logo-img {
+      max-height: 60px;
+      width: auto;
+      margin-bottom: 15px;
+      object-fit: contain;
+    }
+
+    .popup-card h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .popup-toggle-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .popup-radio-btn {
+      flex: 1;
+      position: relative;
+    }
+
+    .popup-radio-btn input {
+      display: none;
+    }
+
+    .popup-radio-btn span {
+      display: block;
+      padding: 10px 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      color: #ccc;
+    }
+
+    .popup-radio-btn input:checked + span {
+      background: #ff6600;
+      color: #fff;
+      border-color: #ff6600;
+      box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4);
+    }
+
+    .popup-categories {
+      display: none;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .popup-categories p {
+      font-size: 13px;
+      color: #ff6600;
+      margin-bottom: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .category-options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .cat-checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #ddd;
+      cursor: pointer;
+    }
+
+    .cat-checkbox-item input {
+      accent-color: #ff6600;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .popup-submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: #ff6600;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .popup-submit-btn:hover {
+      background: #e65c00;
+      transform: translateY(-2px);
+    }
+
+    .btn-show-more {
+      background: transparent;
+      border: 1px solid #ff6600;
+      color: #ff6600;
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-show-more:hover {
+      background: #ff6600;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+    }
+
+    .lightbox-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(255, 102, 0, 0.3);
+    }
+
+    .lightbox-caption {
+      color: #fff;
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  `;
+  document.head.appendChild(popupStyle);
+
+  const popupHTML = `
+    <div id="welcome-popup" class="popup-overlay">
+      <div class="popup-card">
+        <img src="${CONTACT.logo_url}" alt="धर्मवीर ॲडव्हर्टायझिंग" class="popup-logo-img" onerror="this.style.display='none'">
+        <h2>काय पाहायला आवडेल?</h2>
+        
+        <div class="popup-toggle-group">
+          <label class="popup-radio-btn">
+            <input type="radio" name="popup_main_choice" value="all" checked onchange="togglePopupCategories(false)">
+            <span>All</span>
+          </label>
+          <label class="popup-radio-btn">
+            <input type="radio" name="popup_main_choice" value="choice" onchange="togglePopupCategories(true)">
+            <span>Choice</span>
+          </label>
+        </div>
+
+        <div id="popupCategoriesBox" class="popup-categories">
+          <p>कॅटेगरी निवडा:</p>
+          <div class="category-options-grid">
+            <label class="cat-checkbox-item"><input type="checkbox" class="popup-cat-check" value="Business"> Business</label>
+            <label class="cat-checkbox-item"><input type="checkbox" class="popup-cat-check" value="Festival"> Festival</label>
+            <label class="cat-checkbox-item"><input type="checkbox" class="popup-cat-check" value="Political"> Political</label>
+            <label class="cat-checkbox-item"><input type="checkbox" class="popup-cat-check" value="Personal"> Personal</label>
+            <label class="cat-checkbox-item"><input type="checkbox" class="popup-cat-check" value="Social Media"> Social Media</label>
+          </div>
+        </div>
+
+        <button class="popup-submit-btn" onclick="applyPopupSelection()">वेबसाईट पहा →</button>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', popupHTML);
+}
+
+function togglePopupCategories(show) {
+  const box = document.getElementById("popupCategoriesBox");
+  if (box) {
+    box.style.display = show ? "block" : "none";
+  }
+}
+
+function applyPopupSelection() {
+  const selectedMain = document.querySelector('input[name="popup_main_choice"]:checked').value;
+  
+  if (selectedMain === "all") {
+    filterPortfolio("All");
+  } else {
+    const checkedBoxes = document.querySelectorAll(".popup-cat-check:checked");
+    if (checkedBoxes.length === 0) {
+      alert("कृपया कमीत कमी एक कॅटेगरी निवडा!");
+      return;
+    }
+    const firstSelected = checkedBoxes[0].value;
+    filterPortfolio(firstSelected);
+  }
+
+  const popup = document.getElementById("welcome-popup");
+  if (popup) {
+    popup.style.opacity = "0";
+    popup.style.transition = "opacity 0.25s ease";
+    setTimeout(() => popup.remove(), 250);
+  }
+}
