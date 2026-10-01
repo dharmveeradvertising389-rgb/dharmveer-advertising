@@ -657,7 +657,7 @@ const translations = {
   }
 };
 
-const $ = s => document.querySelector(s);  const $$ = s => document.querySelectorAll(s);
+const $ = s => document.querySelector(s); const $$ = s => document.querySelectorAll(s);
 
 // पोर्टफोलिओ व फिल्टर्स रेंडरिंग
 function renderPortfolio(category="All", isExpanded=false){
@@ -851,29 +851,28 @@ function initApp() {
       const work = fd.get("work") || "";
       const message = fd.get("message") || "";
 
-      const formattedMsg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aनाव: ${encodeURIComponent(name)}%0Aमोबाईल: ${encodeURIComponent(phone)}%0Aकामाचा प्रकार: ${encodeURIComponent(work)}%0Aसंदेश: ${encodeURIComponent(message)}`;
-
-      if (CONTACT.whatsapp) {
-        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${formattedMsg}`, "_blank");
-      } else {
+      if (!CONTACT.whatsapp) {
         const toast = $("#toast");
         if (toast) {
-          toast.textContent = "Admin Panel मध्ये आधी WhatsApp Number सेव्ह करा.";
+          toast.textContent = "Admin Panel मध्ये WhatsApp Number सेव्ह करा.";
           toast.classList.add("show");
           setTimeout(() => toast.classList.remove("show"), 3000);
-        } else {
-          alert("Admin Panel मध्ये आधी WhatsApp Number सेव्ह करा.");
         }
+        return;
       }
+
+      const formattedText = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,\n\nनाव: ${name}\nमोबाईल: ${phone}\nकामाचा प्रकार: ${work}\nसंदेश: ${message}`;
+      const waUrl = `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(formattedText)}`;
+      window.open(waUrl, "_blank");
     };
   }
 
-  // Fetch API Settings & Portfolio from Cloudflare Workers
+  // Load Cloud Flare / API backend data
   loadSettings();
   loadPortfolioData();
 }
 
-// Start application when DOM is ready
+// Document Ready trigger
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initApp);
 } else {
