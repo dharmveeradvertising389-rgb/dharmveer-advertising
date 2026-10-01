@@ -196,7 +196,7 @@ if (!document.getElementById("portfolio-custom-styles")) {
       text-align: center;
     }
 
-    /* --- Transparent PNG Logo Container (No Circular Background) --- */
+    /* --- Transparent PNG Logo Container --- */
     #dv-splash-screen {
       position: fixed;
       inset: 0;
@@ -657,7 +657,7 @@ const translations = {
   }
 };
 
-const $ = s => document.querySelector(s); const $$ = s => document.querySelectorAll(s);
+const $ = s => document.querySelector(s);  const $$ = s => document.querySelectorAll(s);
 
 // पोर्टफोलिओ व फिल्टर्स रेंडरिंग
 function renderPortfolio(category="All", isExpanded=false){
@@ -846,24 +846,36 @@ function initApp() {
     contactForm.onsubmit = e => {
       e.preventDefault();
       const fd = new FormData(e.currentTarget);
-      const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aनाव: ${fd.get("name")}%0Aमोबाईल: ${fd.get("phone")}%0Aकामाचा प्रकार: ${fd.get("work")}%0Aसंदेश: ${fd.get("message") || "-"}`;
+      const name = fd.get("name") || "";
+      const phone = fd.get("phone") || "";
+      const work = fd.get("work") || "";
+      const message = fd.get("message") || "";
+
+      const formattedMsg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aनाव: ${encodeURIComponent(name)}%0Aमोबाईल: ${encodeURIComponent(phone)}%0Aकामाचा प्रकार: ${encodeURIComponent(work)}%0Aसंदेश: ${encodeURIComponent(message)}`;
+
       if (CONTACT.whatsapp) {
-        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
+        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${formattedMsg}`, "_blank");
       } else {
         const toast = $("#toast");
         if (toast) {
           toast.textContent = "Admin Panel मध्ये आधी WhatsApp Number सेव्ह करा.";
           toast.classList.add("show");
           setTimeout(() => toast.classList.remove("show"), 3000);
+        } else {
+          alert("Admin Panel मध्ये आधी WhatsApp Number सेव्ह करा.");
         }
       }
     };
   }
 
-  // Non-blocking APIs
+  // Fetch API Settings & Portfolio from Cloudflare Workers
   loadSettings();
   loadPortfolioData();
 }
 
-// ॲप चालू करणे
-document.addEventListener("DOMContentLoaded", initApp);
+// Start application when DOM is ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
