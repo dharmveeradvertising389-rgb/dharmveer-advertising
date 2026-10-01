@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (UPDATED FULL CODE)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (ORIGINAL FULL CODE)
    ========================================================= */
 
 let CONTACT = {
@@ -263,7 +263,7 @@ function setupIntroAndModal() {
   `;
   document.body.insertAdjacentHTML('beforeend', introHTML);
 
-  // Logo Pop-up 3.8 सेकंदांनंतर (2 सेकंद जास्त) गायब होईल आणि थेट वेबसाईट दिसेल
+  // १ला लोगो ३.८ सेकंद (3800ms) दिसेल आणि मग थेट वेबसाईट ओपन होईल
   setTimeout(() => {
     const splash = document.getElementById("dv-splash-screen");
     
