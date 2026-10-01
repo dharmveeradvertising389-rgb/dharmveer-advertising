@@ -12,6 +12,9 @@ let CONTACT = {
 
 const API_BASE = "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
 
+// Local default logo path
+const DEFAULT_LOGO = "assets/logo.png";
+
 // Admin Panel मधून आलेले फोटो साठवण्यासाठी
 let dynamicPortfolioItems = [];
 
@@ -45,7 +48,7 @@ function cleanCategoryName(cat) {
   return c;
 }
 
-// ३. ऑटो CSS स्टाइल इंजेक्ट (Intro Pop-up, Choice Modal, Orange Filter v Show More/Less)
+// ३. ऑटो CSS स्टाइल इंजेक्ट
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
@@ -347,12 +350,13 @@ if (!document.getElementById("portfolio-custom-styles")) {
   document.head.appendChild(style);
 }
 
-// Intro Splash aani Option Modal Inject karnaare Function
+// Intro Splash आणि Choice Modal Inject करणारा फंक्शन
 function setupIntroAndModal() {
   if (document.getElementById("dv-splash-screen")) return;
 
-  const logoSrc = CONTACT.logo_url || "";
-  const logoHTML = logoSrc ? `<img src="${logoSrc}" alt="Logo">` : `<span class="dv-logo-text">LOGO</span>`;
+  // Admin Panel मधील लोगो असल्यास तो वापरा, अन्यथा assets/logo.png वापरा
+  const logoSrc = CONTACT.logo_url || DEFAULT_LOGO;
+  const logoHTML = `<img src="${logoSrc}" id="splashLogoImg" alt="Logo" onerror="this.onerror=null; this.src='${DEFAULT_LOGO}';">`;
 
   const introHTML = `
     <!-- 1. Logo Pop-up Splash -->
@@ -402,7 +406,7 @@ function setupIntroAndModal() {
   `;
   document.body.insertAdjacentHTML('beforeend', introHTML);
 
-  // Logo Pop-up 1.8 सेकंद दिसल्यावर modal उघडा
+  // Logo Pop-up 1.8 सेकंद दिसल्यावर Choice Modal उघडा
   setTimeout(() => {
     const splash = document.getElementById("dv-splash-screen");
     const modal = document.getElementById("dv-selection-modal");
@@ -487,11 +491,11 @@ async function loadSettings() {
 
       updateContact();
 
-      if (CONTACT.logo_url) {
-        document.querySelectorAll(".about-logo img, .brand img, .hero-logo, .footer-brand img, .dv-logo-circle img").forEach(img => {
-          img.src = CONTACT.logo_url;
-        });
-      }
+      // जर Admin Panel मधून logo_url मिळाला तर तो वापरा, नाहीतर assets/logo.png वापरा
+      const activeLogo = CONTACT.logo_url || DEFAULT_LOGO;
+      document.querySelectorAll(".about-logo img, .brand img, .hero-logo, .footer-brand img, .dv-logo-circle img, #splashLogoImg").forEach(img => {
+        img.src = activeLogo;
+      });
 
       if (CONTACT.about) {
         const aboutText = document.querySelector("#about [data-i18n='aboutText']");
@@ -643,7 +647,7 @@ const translations = {
   }
 };
 
-const $= s => document.querySelector(s); const$$ = s => document.querySelectorAll(s);
+const $ = s => document.querySelector(s); const $$ = s => document.querySelectorAll(s);
 
 // पोर्टफोलिओ व फिल्टर्स रेंडरिंग
 function renderPortfolio(category="Personal", isExpanded=false){
@@ -843,24 +847,7 @@ async function initApp() {
       } else {
         const toast = $("#toast");
         if (toast) {
-          toast.textContent = "WhatsApp number नंतर Admin Panel मध्ये जोडा.";
-          toast.classList.add("show");
-          setTimeout(() => toast.classList.remove("show"), 3000);
-        }
-      }
-    };
-  }
-
-  const feedbackBtn = document.getElementById("giveFeedbackBtn");
-  if (feedbackBtn) {
-    feedbackBtn.onclick = () => {
-      const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aमला माझी प्रतिक्रिया (Review) द्यायची आहे:%0A%0Aरेटिंग: ⭐⭐⭐⭐⭐%0Aनाव: %0Aप्रतिक्रिया: `;
-      if (CONTACT.whatsapp) {
-        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
-      } else {
-        const toast = $("#toast");
-        if (toast) {
-          toast.textContent = "WhatsApp number नंतर Admin Panel मध्ये जोडा.";
+          toast.textContent = "Admin Panel मध्ये आधी WhatsApp Number सेव्ह करा.";
           toast.classList.add("show");
           setTimeout(() => toast.classList.remove("show"), 3000);
         }
@@ -869,8 +856,5 @@ async function initApp() {
   }
 }
 
-if (document.readyState === "complete" || document.readyState === "interactive") {
-  initApp();
-} else {
-  document.addEventListener("DOMContentLoaded", initApp);
-}
+// ॲप चालू करणे
+document.addEventListener("DOMContentLoaded", initApp);
