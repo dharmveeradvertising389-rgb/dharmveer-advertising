@@ -657,7 +657,7 @@ const translations = {
   }
 };
 
-const $= s => document.querySelector(s); const$$ = s => document.querySelectorAll(s);
+const $ = s => document.querySelector(s);  const $$ = s => document.querySelectorAll(s);
 
 // पोर्टफोलिओ व फिल्टर्स रेंडरिंग
 function renderPortfolio(category="All", isExpanded=false){
@@ -851,28 +851,25 @@ function initApp() {
       const work = fd.get("work") || "";
       const message = fd.get("message") || "";
 
-      const text = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,\n\nनाव: ${name}\nमोबाईल: ${phone}\nकामाचा प्रकार: ${work}\nसंदेश: ${message}`;
-      const encodedText = encodeURIComponent(text);
+      const text = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,\n\nमी वेबसाईट वरून मेसेज करत आहे:\n\n*नाव:* ${name}\n*मोबाईल नंबर:* ${phone}\n*कामाचा प्रकार:* ${work}\n*संदेश:* ${message}`;
 
       if (CONTACT.whatsapp) {
-        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${encodedText}`, "_blank");
+        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(text)}`, "_blank");
       } else {
         const toast = $("#toast");
         if (toast) {
           toast.textContent = "Admin Panel मध्ये आधी WhatsApp Number सेव्ह करा.";
           toast.classList.add("show");
           setTimeout(() => toast.classList.remove("show"), 3000);
-        } else {
-          alert("कृपया Admin Panel मध्ये आधी WhatsApp Number सेव्ह करा.");
         }
       }
     };
   }
-
-  // API वरून नवीन डेटा लोड करा
-  loadSettings();
-  loadPortfolioData();
 }
 
-// DOM तयार झाल्यावर ॲप रन करा
-document.addEventListener("DOMContentLoaded", initApp);
+// DOM load झाल्यावर डेटा आणि अ‍ॅप सुरू करा
+document.addEventListener("DOMContentLoaded", async () => {
+  initApp();
+  await loadSettings();
+  await loadPortfolioData();
+});
