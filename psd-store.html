@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PSD Store | धर्मवीर ॲडव्हर्टायझिंग</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #0b0b0b;
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    /* Top Custom Header */
+    .store-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 5%;
+      background: rgba(15, 15, 15, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .store-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .store-brand img {
+      height: 42px;
+      width: auto;
+    }
+
+    .store-brand-text strong {
+      display: block;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .store-brand-text small {
+      color: #888;
+      font-size: 11px;
+    }
+
+    .back-btn {
+      background: rgba(255, 102, 0, 0.15);
+      color: #ff6600;
+      border: 1px solid #ff6600;
+      padding: 8px 18px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: #ff6600;
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4);
+    }
+
+    /* Section Title */
+    .store-hero {
+      text-align: center;
+      padding: 40px 20px 20px;
+    }
+
+    .store-hero h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .store-hero h1 span {
+      color: #ff6600;
+    }
+
+    .store-hero p {
+      color: #aaa;
+      font-size: 15px;
+    }
+
+    /* PSD Grid & Smooth Lift Animation */
+    .psd-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px 60px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .psd-card {
+      background: #141414;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+      position: relative;
+    }
+
+    /* Touch/Hover Lift Effect */
+    .psd-card:hover, .psd-card:active {
+      transform: translateY(-8px);
+      border-color: #ff6600;
+      box-shadow: 0 12px 30px rgba(255, 102, 0, 0.3);
+    }
+
+    .psd-img-box {
+      height: 260px;
+      width: 100%;
+      overflow: hidden;
+      cursor: pointer;
+      background: #1e1e1e;
+      position: relative;
+    }
+
+    .psd-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .psd-card:hover .psd-img-box img {
+      transform: scale(1.05);
+    }
+
+    .psd-details {
+      padding: 18px;
+    }
+
+    .psd-details h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .psd-details p {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 16px;
+    }
+
+    /* Price Box */
+    .price-tag {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 102, 0, 0.1);
+      border: 1px solid rgba(255, 102, 0, 0.3);
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .price-tag:hover {
+      background: #ff6600;
+    }
+
+    .price-tag span {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ff6600;
+    }
+
+    .price-tag:hover span, .price-tag:hover small {
+      color: #ffffff;
+    }
+
+    .price-tag small {
+      font-size: 13px;
+      font-weight: 600;
+      color: #ddd;
+    }
+
+    /* Image Lightbox Modal */
+    .img-modal {
+      display: none;
+      position: fixed;
+      z-index: 999999;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .img-modal.active { display: flex; }
+
+    .img-modal img {
+      max-width: 90%;
+      max-height: 85vh;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px; right: 30px;
+      font-size: 35px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* Payment Modal */
+    .pay-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000000;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pay-modal.active { display: flex; }
+
+    .pay-card {
+      background: #181818;
+      border: 1px solid #ff6600;
+      padding: 25px;
+      border-radius: 16px;
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(255, 102, 0, 0.3);
+    }
+
+    .pay-card h3 { color: #ff6600; margin-bottom: 10px; }
+    .pay-card p { font-size: 14px; color: #ccc; margin-bottom: 20px; }
+    
+    .pay-btn-wa {
+      display: block;
+      width: 100%;
+      background: #25D366;
+      color: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .pay-btn-close {
+      background: transparent;
+      color: #888;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Brand Header -->
+  <header class="store-header">
+    <a href="index.html" class="store-brand">
+      <img src="assets/logo.png" alt="Logo">
+      <div class="store-brand-text">
+        <strong>धर्मवीर ॲडव्हर्टायझिंग</strong>
+        <small>Graphics • Marketing</small>
+      </div>
+    </a>
+    <a href="index.html" class="back-btn">← Back to Home</a>
+  </header>
+
+  <!-- Store Title -->
+  <div class="store-hero">
+    <h1>प्रीमियम <span>PSD Store</span></h1>
+    <p>रेडिमेड हाय-क्वालिटी PSD फाईल्स विकत घ्या.</p>
+  </div>
+
+  <!-- PSD Items Container -->
+  <div class="psd-container">
+
+    <!-- Card 1 -->
+    <div class="psd-card">
+      <div class="psd-img-box" onclick="showFullImg('assets/logo.png')">
+        <img src="assets/logo.png" alt="Festival PSD" onerror="this.src='https://via.placeholder.com/400x300/181818/ff6600?text=PSD+Design+Preview'">
+      </div>
+      <div class="psd-details">
+        <h3>Festival Banner PSD</h3>
+        <p>Fully Editable Layers • HD Quality</p>
+        <div class="price-tag" onclick="buyPsd('Festival Banner PSD', '₹199')">
+          <span>₹199</span>
+          <small>Buy PSD →</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="psd-card">
+      <div class="psd-img-box" onclick="showFullImg('assets/logo.png')">
+        <img src="assets/logo.png" alt="Political PSD" onerror="this.src='https://via.placeholder.com/400x300/181818/ff6600?text=PSD+Design+Preview'">
+      </div>
+      <div class="psd-details">
+        <h3>Political Poster PSD</h3>
+        <p>High Resolution • Ready to Print</p>
+        <div class="price-tag" onclick="buyPsd('Political Poster PSD', '₹299')">
+          <span>₹299</span>
+          <small>Buy PSD →</small>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Full Image Preview Modal -->
+  <div class="img-modal" id="imgModal">
+    <span class="close-modal" onclick="hideFullImg()">&times;</span>
+    <img id="fullImgSrc" src="" alt="PSD Full View">
+  </div>
+
+  <!-- Payment Modal Popup -->
+  <div class="pay-modal" id="payModal">
+    <div class="pay-card">
+      <h3 id="payTitle">PSD Name</h3>
+      <p>किंमत: <strong id="payPrice" style="color:#ff6600;">₹0</strong></p>
+      <p>ही PSD फाईल मिळवण्यासाठी खालील बटणावर क्लिक करून WhatsApp वर संपर्क करा:</p>
+      <a id="waLink" href="#" target="_blank" class="pay-btn-wa">WhatsApp Payment / Order →</a>
+      <button class="pay-btn-close" onclick="closePayModal()">रद्द करा</button>
+    </div>
+  </div>
+
+  <script>
+    function showFullImg(src) {
+      document.getElementById('fullImgSrc').src = src;
+      document.getElementById('imgModal').classList.add('active');
+    }
+
+    function hideFullImg() {
+      document.getElementById('imgModal').classList.remove('active');
+    }
+
+    function buyPsd(title, price) {
+      document.getElementById('payTitle').innerText = title;
+      document.getElementById('payPrice').innerText = price;
+      
+      const msg = encodeURIComponent(`नमस्कार धर्मवीर ॲडव्हर्टायझिंग, मला "${title}" (${price}) ही PSD फाईल विकत घ्यायची आहे.`);
+      
+      // Admin WhatsApp Link (Set number here)
+      const waNum = "919000000000"; // Tumcha WhatsApp Number ithe taka
+      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${msg}`;
+
+      document.getElementById('payModal').classList.add('active');
+    }
+
+    function closePayModal() {
+      document.getElementById('payModal').classList.remove('active');
+    }
+  </script>
+
+</body>
+</html>
