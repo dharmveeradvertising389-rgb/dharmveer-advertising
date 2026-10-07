@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PSD Store Admin Panel | धर्मवीर ॲडव्हर्टायझिंग</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans Devanagari', sans-serif; }
+    body { background-color: #0d0d0d; color: #fff; padding: 20px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { color: #ff6600; margin-bottom: 20px; text-align: center; }
+    
+    .card { background: #181818; border: 1px solid rgba(255,102,0,0.3); border-radius: 12px; padding: 20px; margin-bottom: 25px; }
+    .card h2 { font-size: 18px; color: #ff6600; margin-bottom: 15px; }
+    
+    label { display: block; margin: 10px 0 5px; font-size: 13px; color: #ccc; }
+    input, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; background: #0b0b0b; color: #fff; outline: none; }
+    input:focus { border-color: #ff6600; }
+    
+    .btn { background: #ff6600; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 15px; }
+    .btn:hover { background: #e65c00; }
+    .btn-danger { background: #d9534f; margin-left: 10px; }
+    
+    .section-block { background: #111; border-left: 4px solid #ff6600; padding: 15px; margin-bottom: 20px; border-radius: 6px; }
+    .item-list { margin-top: 10px; padding-left: 15px; }
+    .item-row { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 8px 12px; margin-bottom: 6px; border-radius: 6px; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>PSD Store ॲडमिन पॅनेल</h1>
+
+  <!-- १. नवीन लहान/मोठा सेक्शन तयार करणे -->
+  <div class="card">
+    <h2>१. नवीन सेक्‍शन (Sector) तयार करा</h2>
+    <label>सेक्शनचे नाव (उदा. NAVRATRI SPECIAL PSD / AIR FORCE DAY):</label>
+    <input type="text" id="newSectionTitle" placeholder="उदा. NAVRATRI SPECIAL PSD">
+    <button class="btn" onclick="addSection()">+ सेक्शन जोडा</button>
+  </div>
+
+  <!-- २. PSD फाईल जोडणे -->
+  <div class="card">
+    <h2>२. सेक्‍शनमध्ये नवीन PSD जोडा</h2>
+    <label>सेक्शन निवडा:</label>
+    <select id="sectionSelect"></select>
+
+    <label>PSD शीर्षक (Title):</label>
+    <input type="text" id="psdTitle" placeholder="उदा. Navratri Utsav 7 Premium PSD Pack">
+
+    <label>फोटोची लिंक (Image URL):</label>
+    <input type="text" id="psdImg" placeholder="assets/logo.png किंवा इमेज लिंक">
+
+    <label>ऑफर किंमत (₹):</label>
+    <input type="number" id="psdPrice" placeholder="229">
+
+    <label>जुनी किंमत / Cut Price (₹):</label>
+    <input type="number" id="psdOriginalPrice" placeholder="799">
+
+    <label>गूगल ड्राईव्ह डाऊनलोड लिंक:</label>
+    <input type="text" id="psdDownloadUrl" placeholder="https://drive.google.com/...">
+
+    <button class="btn" onclick="addPsdItem()">+ PSD जोडा</button>
+  </div>
+
+  <!-- ३. सेव्ह करणे -->
+  <div class="card">
+    <h2>३. सध्याचे सेक्शन्स व PSDs</h2>
+    <div id="sectionsPreview">लोड होत आहे...</div>
+    <button class="btn" style="background: #25D366; font-size: 16px; width: 100%;" onclick="saveDataToCloud()">💾 बदल सेव्ह करा (Publish to Store)</button>
+  </div>
+</div>
+
+<script>
+  let psdStoreData = [];
+
+  async function loadData() {
+    try {
+      const res = await fetch('/api/psd-store');
+      psdStoreData = await res.json();
+      renderAdminView();
+    } catch (e) {
+      alert("डेटा लोड करताना एरर आली: " + e.message);
+    }
+  }
+
+  function renderAdminView() {
+    const select = document.getElementById('sectionSelect');
+    const preview = document.getElementById('sectionsPreview');
+    
+    select.innerHTML = '';
+    preview.innerHTML = '';
+
+    psdStoreData.forEach((sec, secIdx) => {
+      const opt = document.createElement('option');
+      opt.value = secIdx;
+      opt.innerText = sec.sectionTitle;
+      select.appendChild(opt);
+
+      let itemsHtml = '';
+      sec.items.forEach((item, itemIdx) => {
+        itemsHtml += `
+          <div class="item-row">
+            <span><strong>${item.title}</strong> - ₹${item.price} (जुनी ₹${item.originalPrice})</span>
+            <button class="btn btn-danger" style="padding:4px 8px; margin:0;" onclick="deleteItem(${secIdx}, ${itemIdx})">डिलीट</button>
+          </div>
+        `;
+      });
+
+      preview.innerHTML += `
+        <div class="section-block">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>${sec.sectionTitle}</h3>
+            <button class="btn btn-danger" style="padding:4px 8px; margin:0;" onclick="deleteSection(${secIdx})">सेक्शन डिलीट</button>
+          </div>
+          <div class="item-list">${itemsHtml || '<small style="color:#777">या सेक्शनमध्ये फाईल नाही.</small>'}</div>
+        </div>
+      `;
+    });
+  }
+
+  function addSection() {
+    const title = document.getElementById('newSectionTitle').value.trim();
+    if (!title) return alert("कृपया नाव टाका!");
+    
+    const id = title.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    psdStoreData.push({ sectionId: id, sectionTitle: title, items: [] });
+    document.getElementById('newSectionTitle').value = '';
+    renderAdminView();
+  }
+
+  function addPsdItem() {
+    const secIdx = document.getElementById('sectionSelect').value;
+    if (secIdx === "") return alert("सेक्शन निवडा!");
+
+    const title = document.getElementById('psdTitle').value.trim();
+    const img = document.getElementById('psdImg').value.trim();
+    const price = document.getElementById('psdPrice').value.trim();
+    const origPrice = document.getElementById('psdOriginalPrice').value.trim();
+    const download = document.getElementById('psdDownloadUrl').value.trim();
+
+    if (!title || !price) return alert("माहिती पूर्ण भरा!");
+
+    const newItem = {
+      id: title.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+      title: title,
+      previewImg: img || 'assets/logo.png',
+      price: price,
+      originalPrice: origPrice || price,
+      downloadUrl: download
+    };
+
+    psdStoreData[secIdx].items.push(newItem);
+    
+    document.getElementById('psdTitle').value = '';
+    document.getElementById('psdImg').value = '';
+    document.getElementById('psdPrice').value = '';
+    document.getElementById('psdOriginalPrice').value = '';
+    document.getElementById('psdDownloadUrl').value = '';
+
+    renderAdminView();
+  }
+
+  function deleteItem(secIdx, itemIdx) {
+    psdStoreData[secIdx].items.splice(itemIdx, 1);
+    renderAdminView();
+  }
+
+  function deleteSection(secIdx) {
+    if (confirm("हा संपूर्ण सेक्शन डिलीट करायचा आहे का?")) {
+      psdStoreData.splice(secIdx, 1);
+      renderAdminView();
+    }
+  }
+
+  async function saveDataToCloud() {
+    try {
+      const res = await fetch('/api/psd-store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ psdData: psdStoreData })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("बदल यशस्वीरित्या सेव्ह झाले!");
+      } else {
+        alert("सेव्ह करताना अडचण आली.");
+      }
+    } catch (e) {
+      alert("Error: " + e.message);
+    }
+  }
+
+  window.onload = loadData;
+</script>
+</body>
+</html>
