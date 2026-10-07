@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (WITH INTRO SPLASH & SELECTION MODAL)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (ORANGE COLOR, DUP FIX & SHOW MORE/LESS)
    ========================================================= */
 
 let CONTACT = {
@@ -45,12 +45,12 @@ function cleanCategoryName(cat) {
   return c;
 }
 
-// ३. ऑटो CSS स्टाइल इंजेक्ट (Intro Pop-up, Choice Modal, Orange Filter v Show More/Less)
+// ३. ऑटो CSS स्टाइल इंजेक्ट (ऑरेंज कलर व Show More/Less बटण स्टाइल)
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
   style.innerHTML = `
-    /* Filter Buttons Orange Style */
+    /* फिल्टर बटन्सची ऑरेंज स्टाइल */
     #filters {
       display: flex !important;
       flex-wrap: wrap !important;
@@ -76,6 +76,7 @@ if (!document.getElementById("portfolio-custom-styles")) {
       display: inline-block !important;
     }
 
+    /* Active आणि Hover वर ऑरेंज रंग (Orange Color Glow) */
     .filter-btn:hover, .filter-btn.active {
       background: #ff6600 !important;
       color: #ffffff !important;
@@ -83,7 +84,7 @@ if (!document.getElementById("portfolio-custom-styles")) {
       box-shadow: 0 4px 15px rgba(255, 102, 0, 0.5) !important;
     }
 
-    /* Show More/Less Button Style */
+    /* "अधिक पहा / कमी पहा" बटण स्टाइल */
     .toggle-portfolio-btn {
       display: inline-block !important;
       margin: 30px auto 10px auto !important;
@@ -104,7 +105,7 @@ if (!document.getElementById("portfolio-custom-styles")) {
       box-shadow: 0 6px 20px rgba(255, 102, 0, 0.6) !important;
     }
 
-    /* Image & Portfolio Card */
+    /* इमेज आणि पोर्टफोलिओ कार्ड स्टाइल */
     .portfolio-visual::before,
     .portfolio-visual::after,
     .portfolio-card::before,
@@ -142,7 +143,7 @@ if (!document.getElementById("portfolio-custom-styles")) {
       transform: scale(1.05) !important;
     }
 
-    /* Lightbox Modal */
+    /* Lightbox Modal (फोटोवर क्लिक केल्यावर मोठा दिसण्यासाठी) */
     .img-modal {
       display: none;
       position: fixed;
@@ -189,255 +190,8 @@ if (!document.getElementById("portfolio-custom-styles")) {
       font-weight: 500;
       text-align: center;
     }
-
-    /* --- Splash Screen Pop-up --- */
-    #dv-splash-screen {
-      position: fixed;
-      inset: 0;
-      background: #0b0f17;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999999;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
-    }
-    #dv-splash-screen.fade-out {
-      opacity: 0;
-      visibility: hidden;
-    }
-    .dv-logo-box {
-      text-align: center;
-      animation: dvPulse 1.2s infinite alternate;
-    }
-    .dv-logo-circle {
-      width: 90px;
-      height: 90px;
-      background: linear-gradient(135deg, #ff6600, #ff8800);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 15px;
-      box-shadow: 0 0 25px rgba(255, 102, 0, 0.6);
-      overflow: hidden;
-    }
-    .dv-logo-circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .dv-logo-text {
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 1rem;
-    }
-    @keyframes dvPulse {
-      0% { transform: scale(0.95); opacity: 0.8; }
-      100% { transform: scale(1.05); opacity: 1; }
-    }
-
-    /* --- Selection Modal Overlay --- */
-    #dv-selection-modal {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(5, 7, 10, 0.88);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999998;
-      padding: 20px;
-      transition: opacity 0.3s ease;
-    }
-    #dv-selection-modal.hidden {
-      display: none !important;
-    }
-    .dv-modal-card {
-      background-color: #121824;
-      border: 1px solid #2a3447;
-      border-radius: 16px;
-      max-width: 460px;
-      width: 100%;
-      padding: 28px 22px;
-      text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
-      color: #ffffff;
-    }
-    .dv-modal-card h2 {
-      margin: 0 0 8px;
-      font-size: 1.3rem;
-      color: #fff;
-    }
-    .dv-modal-card p {
-      color: #94a3b8;
-      font-size: 0.88rem;
-      margin-bottom: 22px;
-    }
-    .dv-option-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .dv-btn-option {
-      border: none;
-      padding: 12px 16px;
-      border-radius: 12px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: all 0.2s ease;
-    }
-    .dv-btn-option.primary {
-      background: linear-gradient(135deg, #ff6600, #e65c00);
-      color: #fff;
-      box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
-    }
-    .dv-btn-option.secondary {
-      background-color: #1a2332;
-      border: 1px solid #334155;
-      color: #fff;
-    }
-    .dv-btn-option:hover {
-      transform: translateY(-2px);
-    }
-    .dv-btn-title {
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
-    .dv-btn-sub {
-      font-size: 0.78rem;
-      opacity: 0.8;
-      margin-top: 2px;
-    }
-    .dv-category-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 18px;
-    }
-    .dv-cat-pill {
-      background-color: #1a2332;
-      border: 1px solid #334155;
-      color: #e2e8f0;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .dv-cat-pill:hover {
-      background-color: #ff6600;
-      border-color: #ff6600;
-      color: #fff;
-    }
-    .dv-btn-back {
-      background: transparent;
-      border: none;
-      color: #94a3b8;
-      cursor: pointer;
-      font-size: 0.82rem;
-      text-decoration: underline;
-    }
-    .dv-modal-step.hidden {
-      display: none !important;
-    }
   `;
   document.head.appendChild(style);
-}
-
-// Intro Splash aani Option Modal Inject karnaare Function
-function setupIntroAndModal() {
-  if (document.getElementById("dv-splash-screen")) return;
-
-  const logoSrc = CONTACT.logo_url || "";
-  const logoHTML = logoSrc ? `<img src="${logoSrc}" alt="Logo">` : `<span class="dv-logo-text">LOGO</span>`;
-
-  const introHTML = `
-    <!-- 1. Logo Pop-up Splash -->
-    <div id="dv-splash-screen">
-      <div class="dv-logo-box">
-        <div class="dv-logo-circle">
-          ${logoHTML}
-        </div>
-        <p style="color:#94a3b8; font-size: 0.9rem;">धर्मवीर ॲडव्हर्टायझिंग</p>
-      </div>
-    </div>
-
-    <!-- 2. Choice Selection Modal -->
-    <div id="dv-selection-modal" class="hidden">
-      <div class="dv-modal-card">
-        <h2>तुम्हाला काय पाहायचे आहे?</h2>
-        <p>खालील पर्यायांपैकी एक निवडा:</p>
-        
-        <!-- Step 1 -->
-        <div id="dv-step-1" class="dv-modal-step">
-          <div class="dv-option-grid">
-            <button type="button" class="dv-btn-option primary" onclick="handleDvMainChoice('all')">
-              <span class="dv-btn-title">🌐 All Designs</span>
-              <span class="dv-btn-sub">सर्व कामे एकत्र पाहा</span>
-            </button>
-            <button type="button" class="dv-btn-option secondary" onclick="handleDvMainChoice('choice')">
-              <span class="dv-btn-title">🎯 Choice / Categories</span>
-              <span class="dv-btn-sub">कॅटेगरीनुसार निवडा</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 2 -->
-        <div id="dv-step-2" class="dv-modal-step hidden">
-          <div class="dv-category-pills">
-            <button type="button" class="dv-cat-pill" onclick="selectDvCategory('Business')">💼 Business</button>
-            <button type="button" class="dv-cat-pill" onclick="selectDvCategory('Festival')">🎉 Festival</button>
-            <button type="button" class="dv-cat-pill" onclick="selectDvCategory('Political')">🗳️ Political</button>
-            <button type="button" class="dv-cat-pill" onclick="selectDvCategory('Personal')">👤 Personal</button>
-            <button type="button" class="dv-cat-pill" onclick="selectDvCategory('Social Media')">📱 Social Media</button>
-            <button type="button" class="dv-cat-pill" onclick="selectDvCategory('Other')">✨ Other</button>
-          </div>
-          <button type="button" class="dv-btn-back" onclick="goBackDvStep1()">← मागे जा</button>
-        </div>
-      </div>
-    </div>
-  `;
-  document.body.insertAdjacentHTML('beforeend', introHTML);
-
-  // Logo Pop-up 1.8 सेकंद दिसल्यावर modal उघडा
-  setTimeout(() => {
-    const splash = document.getElementById("dv-splash-screen");
-    const modal = document.getElementById("dv-selection-modal");
-    if (splash) splash.classList.add("fade-out");
-    setTimeout(() => {
-      if (splash) splash.style.display = "none";
-      if (modal) modal.classList.remove("hidden");
-    }, 500);
-  }, 1800);
-}
-
-// Modal Handlers
-window.handleDvMainChoice = function(choice) {
-  if (choice === 'all') {
-    closeDvModal();
-    renderPortfolio("All", false);
-  } else {
-    document.getElementById("dv-step-1").classList.add("hidden");
-    document.getElementById("dv-step-2").classList.remove("hidden");
-  }
-};
-
-window.goBackDvStep1 = function() {
-  document.getElementById("dv-step-2").classList.add("hidden");
-  document.getElementById("dv-step-1").classList.remove("hidden");
-};
-
-window.selectDvCategory = function(catName) {
-  closeDvModal();
-  renderPortfolio(catName, false);
-};
-
-function closeDvModal() {
-  const modal = document.getElementById("dv-selection-modal");
-  if (modal) modal.classList.add("hidden");
 }
 
 function setupModal() {
@@ -488,7 +242,7 @@ async function loadSettings() {
       updateContact();
 
       if (CONTACT.logo_url) {
-        document.querySelectorAll(".about-logo img, .brand img, .hero-logo, .footer-brand img, .dv-logo-circle img").forEach(img => {
+        document.querySelectorAll(".about-logo img, .brand img, .hero-logo, .footer-brand img").forEach(img => {
           img.src = CONTACT.logo_url;
         });
       }
@@ -643,18 +397,20 @@ const translations = {
   }
 };
 
-const $= s => document.querySelector(s); const$$ = s => document.querySelectorAll(s);
+const $ = s => document.querySelector(s); const $$ = s => document.querySelectorAll(s);
 
-// पोर्टफोलिओ व फिल्टर्स रेंडरिंग
+// पोर्टफोलिओ व फिल्टर्स रेंडरिंग (अधिक पहा / कमी पहा टोगल व ड्युप्लिकेट फिक्ससह)
 function renderPortfolio(category="Personal", isExpanded=false){
   const grid=$("#portfolioGrid");
   if (!grid) return;
 
   const currentItems = dynamicPortfolioItems.length > 0 ? dynamicPortfolioItems : defaultPortfolioItems;
   
+  // युनिक आणि स्वच्छ कॅटेगरीज गोळा करणे
   const defaultCats = ["Business", "Social Media", "Festival", "Political", "Personal", "Other"];
   const dynamicCats = currentItems.map(x => cleanCategoryName(x.category)).filter(Boolean);
   
+  // डुप्लिकेट ऑप्शन्स पूर्णपणे बंद करणे (Unique Categories)
   const uniqueCategoryList = [];
   [...defaultCats, ...dynamicCats].forEach(cat => {
     const clean = cleanCategoryName(cat);
@@ -677,6 +433,7 @@ function renderPortfolio(category="Personal", isExpanded=false){
     return x.category && x.category.toLowerCase() === category.toLowerCase();
   });
 
+  // जुने 'अधिक पहा' बटण जर आधीच असेल तर काढणे
   const existingToggleBtn = document.getElementById("portfolioToggleBtn");
   if (existingToggleBtn) {
     existingToggleBtn.remove();
@@ -685,6 +442,7 @@ function renderPortfolio(category="Personal", isExpanded=false){
   if (filteredItems.length === 0 && category !== "All") {
     grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px; font-size: 16px;">या कॅटेगरीमध्ये सध्या डिझाईन जोडलेले नाही.</div>`;
   } else {
+    // जर अन-एक्सपांडेड (isExpanded == false) असेल तर फक्त पहिले २ आयटम दाखवणे
     const itemsToDisplay = isExpanded ? filteredItems : filteredItems.slice(0, 2);
 
     grid.innerHTML = itemsToDisplay.map((x, i) => {
@@ -710,6 +468,7 @@ function renderPortfolio(category="Personal", isExpanded=false){
       `;
     }).join("");
 
+    // जर २ पेक्षा जास्त डिझाईन्स असतील, तरच "अधिक पहा / कमी पहा" बटण दाखवा
     if (filteredItems.length > 2) {
       const toggleBtn = document.createElement("button");
       toggleBtn.id = "portfolioToggleBtn";
@@ -720,12 +479,14 @@ function renderPortfolio(category="Personal", isExpanded=false){
         renderPortfolio(category, !isExpanded);
       };
 
+      // बटण पोर्टफोलिओ ग्रीडच्या खाली सेंटरमध्ये जोडणे
       if (grid.parentNode) {
         grid.parentNode.insertBefore(toggleBtn, grid.nextSibling);
       }
     }
   }
 
+  // फिल्टर बटन्स क्लिक इव्हेंट सेट करणे (नवीन कॅटेगरी निवडल्यावर ५ किंवा जास्त डिझाईन्स न दिसता परत फक्त २ च दिसतील)
   $$(".filter-btn").forEach(b => {
     b.onclick = () => renderPortfolio(b.dataset.category, false);
   });
@@ -811,7 +572,6 @@ async function initApp() {
   }
 
   setupModal();
-  setupIntroAndModal();
 
   await loadPortfolioData();
 
