@@ -111,14 +111,12 @@
       position: relative;
     }
 
-    /* Touch/Hover Lift Effect */
     .psd-card:hover, .psd-card:active {
       transform: translateY(-8px);
       border-color: #ff6600;
       box-shadow: 0 12px 30px rgba(255, 102, 0, 0.3);
     }
 
-    /* Highlighted Targeted Card */
     .psd-card.highlighted {
       border: 2px solid #ff6600 !important;
       box-shadow: 0 0 35px rgba(255, 102, 0, 0.6) !important;
@@ -252,7 +250,7 @@
       position: fixed;
       z-index: 1000000;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.88);
       align-items: center;
       justify-content: center;
       backdrop-filter: blur(5px);
@@ -263,41 +261,79 @@
     .pay-card {
       background: #181818;
       border: 1px solid #ff6600;
-      padding: 25px;
+      padding: 22px;
       border-radius: 16px;
-      max-width: 400px;
+      max-width: 390px;
       width: 90%;
       text-align: center;
       box-shadow: 0 10px 30px rgba(255, 102, 0, 0.3);
     }
 
-    .pay-card h3 { color: #ff6600; margin-bottom: 8px; }
-    .pay-card p { font-size: 14px; color: #ccc; margin-bottom: 18px; }
+    .pay-card h3 { color: #ff6600; margin-bottom: 4px; font-size: 20px; }
+    .pay-card p { font-size: 13px; color: #ccc; margin-bottom: 12px; }
 
-    .upi-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    /* QR Code Display Box */
+    .qr-container {
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 12px;
+      display: inline-block;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .qr-container img {
+      width: 170px;
+      height: 170px;
+      display: block;
+    }
+
+    .upi-id-box {
+      background: #0b0b0b;
+      border: 1px dashed #ff6600;
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .upi-id-box span {
+      font-size: 13px;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .copy-upi-btn {
+      background: #ff6600;
+      color: #fff;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .upi-options { display: flex; flex-direction: column; gap: 8px; }
+    
     .upi-btn {
       display: flex; align-items: center; justify-content: center; gap: 10px;
-      padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px; color: #fff;
+      padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; color: #fff;
       border: none; cursor: pointer; transition: transform 0.2s;
     }
     .upi-btn:hover { transform: translateY(-2px); }
-    .upi-gpay { background: #4285F4; }
-    .upi-phonepe { background: #5f259f; }
-    .upi-paytm { background: #00baf2; }
     .upi-wa { background: #25D366; }
-
-    .download-btn {
-      display: block; width: 100%; background: #ff6600; color: #fff; padding: 12px;
-      border-radius: 10px; text-decoration: none; font-weight: bold; margin-top: 15px; font-size: 15px;
-    }
+    .upi-direct { background: #333; border: 1px solid rgba(255,255,255,0.2); }
 
     .pay-btn-close {
       background: transparent;
       color: #888;
       border: none;
       cursor: pointer;
-      font-size: 14px;
-      margin-top: 12px;
+      font-size: 13px;
+      margin-top: 10px;
     }
 
     /* Toast Notification */
@@ -342,7 +378,7 @@
         <h3>Festival Banner PSD</h3>
         <p>Fully Editable Layers • HD Quality</p>
         <div class="card-actions">
-          <div class="price-tag" onclick="buyPsd('Festival Banner PSD', '199', 'festival-banner', 'https://drive.google.com/your-psd-link-1')">
+          <div class="price-tag" onclick="buyPsd('Festival Banner PSD', '199', 'festival-banner')">
             <span>₹199</span>
             <small>Buy PSD →</small>
           </div>
@@ -360,7 +396,7 @@
         <h3>Political Poster PSD</h3>
         <p>High Resolution • Ready to Print</p>
         <div class="card-actions">
-          <div class="price-tag" onclick="buyPsd('Political Poster PSD', '299', 'political-poster', 'https://drive.google.com/your-psd-link-2')">
+          <div class="price-tag" onclick="buyPsd('Political Poster PSD', '299', 'political-poster')">
             <span>₹299</span>
             <small>Buy PSD →</small>
           </div>
@@ -377,22 +413,26 @@
     <img id="fullImgSrc" src="" alt="PSD Full View">
   </div>
 
-  <!-- Payment Modal Popup -->
+  <!-- Secure Payment Modal Popup -->
   <div class="pay-modal" id="payModal">
     <div class="pay-card">
       <h3 id="payTitle">PSD Name</h3>
       <p>किंमत: <strong id="payPrice" style="color:#ff6600;">₹0</strong></p>
 
-      <div class="upi-options">
-        <a id="gpayBtn" href="#" class="upi-btn upi-gpay">Google Pay द्वारे भरणा करा</a>
-        <a id="phonepeBtn" href="#" class="upi-btn upi-phonepe">PhonePe द्वारे भरणा करा</a>
-        <a id="paytmBtn" href="#" class="upi-btn upi-paytm">Paytm द्वारे भरणा करा</a>
-        <a id="waLink" href="#" target="_blank" class="upi-btn upi-wa">WhatsApp Order →</a>
+      <!-- Dynamic QR Code -->
+      <div class="qr-container">
+        <img id="qrImage" src="" alt="Scan QR to Pay">
       </div>
 
-      <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-        <p style="font-size: 12px; color: #aaa;">पेमेंट झाल्यावर फाईल लिंक उघडेल:</p>
-        <a id="downloadBtn" href="#" target="_blank" class="download-btn">📥 PSD File Download करा</a>
+      <!-- Copy UPI ID Box -->
+      <div class="upi-id-box">
+        <span id="upiIdText">9309860089@ybl</span>
+        <button class="copy-upi-btn" onclick="copyUpiId()">Copy UPI ID</button>
+      </div>
+
+      <div class="upi-options">
+        <a id="waLink" href="#" target="_blank" class="upi-btn upi-wa">WhatsApp वर स्क्रीनशॉट पाठवा →</a>
+        <a id="directUpiBtn" href="#" class="upi-btn upi-direct">मोबाईल ॲपद्वारे भरणा करा</a>
       </div>
 
       <button class="pay-btn-close" onclick="closePayModal()">रद्द करा</button>
@@ -402,8 +442,8 @@
   <div class="toast" id="toast">लिंक कॉपी झाली!</div>
 
   <script>
-    const waNum = "919309860089"; // तुमचा WhatsApp नंबर
-    const UPI_ID = "9309860089@ybl"; // इथे तुमचा UPI ID टाका (उदा. phonepe/gpay)
+    const waNum = "919309860089"; 
+    const UPI_ID = "9309860089@ybl"; 
 
     function showFullImg(src) {
       document.getElementById('fullImgSrc').src = src;
@@ -414,11 +454,16 @@
       document.getElementById('imgModal').classList.remove('active');
     }
 
-    // 1. Copy Direct Link Feature
     function copyPsdLink(id) {
       const fullUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
       navigator.clipboard.writeText(fullUrl).then(() => {
         showToast("PSD ची लिंक कॉपी झाली!");
+      });
+    }
+
+    function copyUpiId() {
+      navigator.clipboard.writeText(UPI_ID).then(() => {
+        showToast("UPI ID कॉपी झाला!");
       });
     }
 
@@ -429,7 +474,6 @@
       setTimeout(() => toast.classList.remove("show"), 2500);
     }
 
-    // 2. Direct Target Link Handler (इन्स्टाग्राम वरून आल्यावर तीच फाईल सर्वात वर दिसेल)
     window.addEventListener("DOMContentLoaded", () => {
       const urlParams = new URLSearchParams(window.location.search);
       const targetId = urlParams.get('id');
@@ -448,20 +492,21 @@
       }
     });
 
-    // 3. Payment Handler
-    function buyPsd(title, price, id, downloadLink) {
+    function buyPsd(title, price, id) {
       document.getElementById('payTitle').innerText = title;
       document.getElementById('payPrice').innerText = `₹${price}`;
 
-      const upiUrl = `upi://pay?pa=${UPI_ID}&pn=DharmveerAdvertising&am=${price}&cu=INR&tn=${encodeURIComponent(title)}`;
-      document.getElementById('gpayBtn').href = upiUrl;
-      document.getElementById('phonepeBtn').href = upiUrl;
-      document.getElementById('paytmBtn').href = upiUrl;
+      // Dynamic QR Code Generation
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR%26tn=${encodeURIComponent(title)}`;
+      document.getElementById('qrImage').src = qrApiUrl;
 
-      const msg = encodeURIComponent(`नमस्कार धर्मवीर ॲडव्हर्टायझिंग, मला "${title}" (₹${price}) ही PSD फाईल विकत घ्यायची आहे.`);
+      // WhatsApp Link
+      const msg = encodeURIComponent(`नमस्कार धर्मवीर ॲडव्हर्टायझिंग, मी "${title}" (₹${price}) साठी पेमेंट केले आहे. कृपया मला PSD फाईल पाठवा.`);
       document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${msg}`;
 
-      document.getElementById('downloadBtn').href = downloadLink || "#";
+      // Generic UPI Intent URL
+      const upiUrl = `upi://pay?pa=${UPI_ID}&pn=DharmveerAdvertising&am=${price}&cu=INR&tn=${encodeURIComponent(title)}`;
+      document.getElementById('directUpiBtn').href = upiUrl;
 
       document.getElementById('payModal').classList.add('active');
     }
