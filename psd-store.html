@@ -6,515 +6,174 @@
   <title>PSD Store | धर्मवीर ॲडव्हर्टायझिंग</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      background-color: #0b0b0b;
-      color: #ffffff;
-      min-height: 100vh;
-      padding-bottom: 50px;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Devanagari', sans-serif; }
+    body { background-color: #0b0b0b; color: #ffffff; min-height: 100vh; padding-bottom: 50px; }
 
-    /* Top Custom Header */
+    /* Header */
     .store-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 5%;
-      background: rgba(15, 15, 15, 0.95);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
+      display: flex; justify-content: space-between; align-items: center; padding: 15px 5%;
+      background: rgba(15, 15, 15, 0.95); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px);
     }
+    .store-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+    .store-brand img { height: 42px; width: auto; }
+    .back-btn { background: rgba(255, 102, 0, 0.15); color: #ff6600; border: 1px solid #ff6600; padding: 8px 18px; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 600; }
 
-    .store-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: #fff;
+    .store-hero { text-align: center; padding: 30px 20px 10px; }
+    .store-hero h1 { font-size: 30px; }
+    .store-hero h1 span { color: #ff6600; }
+
+    /* Sector Styling */
+    .sector-block { max-width: 1200px; margin: 35px auto; padding: 0 20px; }
+    .sector-title { font-size: 20px; color: #ff6600; margin-bottom: 15px; border-bottom: 1px solid rgba(255,102,0,0.3); padding-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Horizontal Scroll Flex Container */
+    .scroll-grid {
+      display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 10px;
     }
+    .scroll-grid::-webkit-scrollbar { height: 6px; }
+    .scroll-grid::-webkit-scrollbar-thumb { background: #ff6600; border-radius: 10px; }
 
-    .store-brand img {
-      height: 42px;
-      width: auto;
-    }
-
-    .store-brand-text strong {
-      display: block;
-      font-size: 18px;
-      line-height: 1.2;
-    }
-
-    .store-brand-text small {
-      color: #888;
-      font-size: 11px;
-    }
-
-    .back-btn {
-      background: rgba(255, 102, 0, 0.15);
-      color: #ff6600;
-      border: 1px solid #ff6600;
-      padding: 8px 18px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .back-btn:hover {
-      background: #ff6600;
-      color: #fff;
-      box-shadow: 0 4px 15px rgba(255, 102, 0, 0.4);
-    }
-
-    /* Section Title */
-    .store-hero {
-      text-align: center;
-      padding: 40px 20px 20px;
-    }
-
-    .store-hero h1 {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-
-    .store-hero h1 span {
-      color: #ff6600;
-    }
-
-    .store-hero p {
-      color: #aaa;
-      font-size: 15px;
-    }
-
-    /* PSD Grid & Smooth Lift Animation */
-    .psd-container {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 0 20px 60px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
-    }
-
+    /* PSD Cards */
     .psd-card {
-      background: #141414;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      overflow: hidden;
-      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
-      position: relative;
+      min-width: 280px; max-width: 320px; background: #141414; border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; overflow: hidden; flex-shrink: 0; transition: transform 0.3s;
     }
+    .single-card { min-width: 100%; max-width: 100%; } /* Single Item Banner View */
 
-    .psd-card:hover, .psd-card:active {
-      transform: translateY(-8px);
-      border-color: #ff6600;
-      box-shadow: 0 12px 30px rgba(255, 102, 0, 0.3);
-    }
+    .psd-card:hover { transform: translateY(-5px); border-color: #ff6600; }
 
-    .psd-card.highlighted {
-      border: 2px solid #ff6600 !important;
-      box-shadow: 0 0 35px rgba(255, 102, 0, 0.6) !important;
-      transform: scale(1.02);
-    }
+    .psd-img-box { height: 240px; width: 100%; background: #1e1e1e; overflow: hidden; cursor: pointer; }
+    .psd-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-    .psd-img-box {
-      height: 260px;
-      width: 100%;
-      overflow: hidden;
-      cursor: pointer;
-      background: #1e1e1e;
-      position: relative;
-    }
+    .psd-details { padding: 16px; }
+    .psd-details h3 { font-size: 16px; margin-bottom: 8px; color: #fff; }
+    
+    .price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+    .price-main { font-size: 20px; font-weight: bold; color: #ff6600; }
+    .price-orig { font-size: 13px; color: #777; text-decoration: line-through; margin-left: 6px; }
 
-    .psd-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-
-    .psd-card:hover .psd-img-box img {
-      transform: scale(1.05);
-    }
-
-    .psd-details {
-      padding: 18px;
-    }
-
-    .psd-details h3 {
-      font-size: 18px;
-      margin-bottom: 6px;
-      color: #fff;
-    }
-
-    .psd-details p {
-      font-size: 13px;
-      color: #888;
-      margin-bottom: 16px;
-    }
-
-    .card-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    /* Price Box */
-    .price-tag {
-      flex: 1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255, 102, 0, 0.1);
-      border: 1px solid rgba(255, 102, 0, 0.3);
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .price-tag:hover {
-      background: #ff6600;
-    }
-
-    .price-tag span {
-      font-size: 18px;
-      font-weight: 700;
-      color: #ff6600;
-    }
-
-    .price-tag:hover span, .price-tag:hover small {
-      color: #ffffff;
-    }
-
-    .price-tag small {
-      font-size: 13px;
-      font-weight: 600;
-      color: #ddd;
-    }
-
-    .copy-link-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #fff;
-      padding: 10px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 13px;
-      transition: all 0.3s ease;
-    }
-
-    .copy-link-btn:hover {
-      background: #ff6600;
-      border-color: #ff6600;
-    }
-
-    /* Image Lightbox Modal */
-    .img-modal {
-      display: none;
-      position: fixed;
-      z-index: 999999;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.92);
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(5px);
-    }
-
-    .img-modal.active { display: flex; }
-
-    .img-modal img {
-      max-width: 90%;
-      max-height: 85vh;
-      border-radius: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    }
-
-    .close-modal {
-      position: absolute;
-      top: 20px; right: 30px;
-      font-size: 35px;
-      color: #fff;
-      cursor: pointer;
-    }
+    .btn-buy { background: #ff6600; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; }
+    .btn-share { background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; }
 
     /* Payment Modal */
-    .pay-modal {
-      display: none;
-      position: fixed;
-      z-index: 1000000;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.88);
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(5px);
-    }
-
+    .pay-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; z-index: 10000; }
     .pay-modal.active { display: flex; }
-
-    .pay-card {
-      background: #181818;
-      border: 1px solid #ff6600;
-      padding: 22px;
-      border-radius: 16px;
-      max-width: 390px;
-      width: 90%;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(255, 102, 0, 0.3);
-    }
-
-    .pay-card h3 { color: #ff6600; margin-bottom: 4px; font-size: 20px; }
-    .pay-card p { font-size: 13px; color: #ccc; margin-bottom: 12px; }
-
-    /* QR Code Display Box */
-    .qr-container {
-      background: #ffffff;
-      padding: 10px;
-      border-radius: 12px;
-      display: inline-block;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    }
-
-    .qr-container img {
-      width: 170px;
-      height: 170px;
-      display: block;
-    }
-
-    .upi-id-box {
-      background: #0b0b0b;
-      border: 1px dashed #ff6600;
-      padding: 8px 12px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .upi-id-box span {
-      font-size: 13px;
-      color: #fff;
-      font-weight: 600;
-    }
-
-    .copy-upi-btn {
-      background: #ff6600;
-      color: #fff;
-      border: none;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .upi-options { display: flex; flex-direction: column; gap: 8px; }
-    
-    .upi-btn {
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; color: #fff;
-      border: none; cursor: pointer; transition: transform 0.2s;
-    }
-    .upi-btn:hover { transform: translateY(-2px); }
-    .upi-wa { background: #25D366; }
-    .upi-direct { background: #333; border: 1px solid rgba(255,255,255,0.2); }
-
-    .pay-btn-close {
-      background: transparent;
-      color: #888;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-      margin-top: 10px;
-    }
-
-    /* Toast Notification */
-    .toast {
-      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-      background: #ff6600; color: #fff; padding: 10px 20px; border-radius: 20px;
-      font-size: 14px; font-weight: bold; display: none; z-index: 200000;
-    }
-    .toast.show { display: block; animation: fadeInOut 2.5s ease; }
-    @keyframes fadeInOut { 0%{opacity:0;} 15%{opacity:1;} 85%{opacity:1;} 100%{opacity:0;} }
+    .pay-card { background: #181818; border: 1px solid #ff6600; padding: 22px; border-radius: 16px; width: 90%; max-width: 360px; text-align: center; }
   </style>
 </head>
 <body>
 
-  <!-- Top Brand Header -->
   <header class="store-header">
     <a href="index.html" class="store-brand">
-      <img src="assets/logo.png" alt="Logo">
-      <div class="store-brand-text">
-        <strong>धर्मवीर ॲडव्हर्टायझिंग</strong>
-        <small>Graphics • Marketing</small>
-      </div>
+      <img src="assets/logo.png" alt="Logo" onerror="this.style.display='none'">
+      <strong>धर्मवीर ॲडव्हर्टायझिंग</strong>
     </a>
     <a href="index.html" class="back-btn">← Back to Home</a>
   </header>
 
-  <!-- Store Title -->
   <div class="store-hero">
     <h1>प्रीमियम <span>PSD Store</span></h1>
-    <p>रेडिमेड हाय-क्वालिटी PSD फाईल्स विकत घ्या.</p>
   </div>
 
-  <!-- PSD Items Container -->
-  <div class="psd-container" id="psdContainer">
-
-    <!-- Card 1 -->
-    <div class="psd-card" id="festival-banner">
-      <div class="psd-img-box" onclick="showFullImg('assets/logo.png')">
-        <img src="assets/logo.png" alt="Festival PSD" onerror="this.src='https://via.placeholder.com/400x300/181818/ff6600?text=Festival+Banner+PSD'">
-      </div>
-      <div class="psd-details">
-        <h3>Festival Banner PSD</h3>
-        <p>Fully Editable Layers • HD Quality</p>
-        <div class="card-actions">
-          <div class="price-tag" onclick="buyPsd('Festival Banner PSD', '199', 'festival-banner')">
-            <span>₹199</span>
-            <small>Buy PSD →</small>
-          </div>
-          <button class="copy-link-btn" onclick="copyPsdLink('festival-banner')">🔗 Link</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 2 -->
-    <div class="psd-card" id="political-poster">
-      <div class="psd-img-box" onclick="showFullImg('assets/logo.png')">
-        <img src="assets/logo.png" alt="Political PSD" onerror="this.src='https://via.placeholder.com/400x300/181818/ff6600?text=Political+Poster+PSD'">
-      </div>
-      <div class="psd-details">
-        <h3>Political Poster PSD</h3>
-        <p>High Resolution • Ready to Print</p>
-        <div class="card-actions">
-          <div class="price-tag" onclick="buyPsd('Political Poster PSD', '299', 'political-poster')">
-            <span>₹299</span>
-            <small>Buy PSD →</small>
-          </div>
-          <button class="copy-link-btn" onclick="copyPsdLink('political-poster')">🔗 Link</button>
-        </div>
-      </div>
-    </div>
-
+  <div id="mainStoreContent">
+    <p style="text-align:center; padding: 30px; color:#aaa;">स्टोअर लोड होत आहे...</p>
   </div>
 
-  <!-- Full Image Preview Modal -->
-  <div class="img-modal" id="imgModal">
-    <span class="close-modal" onclick="hideFullImg()">&times;</span>
-    <img id="fullImgSrc" src="" alt="PSD Full View">
-  </div>
-
-  <!-- Secure Payment Modal Popup -->
+  <!-- QR Payment Popup -->
   <div class="pay-modal" id="payModal">
     <div class="pay-card">
       <h3 id="payTitle">PSD Name</h3>
-      <p>किंमत: <strong id="payPrice" style="color:#ff6600;">₹0</strong></p>
-
-      <!-- Dynamic QR Code -->
-      <div class="qr-container">
-        <img id="qrImage" src="" alt="Scan QR to Pay">
+      <p style="margin:10px 0; color:#ff6600; font-weight:bold; font-size: 22px;" id="payPrice">₹0</p>
+      
+      <div style="background:#fff; padding:10px; border-radius:10px; display:inline-block;">
+        <img id="qrImage" src="" style="width:170px; height:170px; display:block;">
       </div>
+      
+      <p style="font-size:12px; color:#aaa; margin:12px 0 6px;">QR कोड स्कॅन करा किंवा UPI ID कॉपी करा:</p>
+      <button onclick="navigator.clipboard.writeText('9309860089@ybl'); alert('UPI ID कॉपी झाला!');" style="background:#0b0b0b; color:#fff; border:1px dashed #ff6600; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:13px; width: 100%;">Copy UPI: 9309860089@ybl</button>
 
-      <!-- Copy UPI ID Box -->
-      <div class="upi-id-box">
-        <span id="upiIdText">9309860089@ybl</span>
-        <button class="copy-upi-btn" onclick="copyUpiId()">Copy UPI ID</button>
-      </div>
-
-      <div class="upi-options">
-        <a id="waLink" href="#" target="_blank" class="upi-btn upi-wa">WhatsApp वर स्क्रीनशॉट पाठवा →</a>
-        <a id="directUpiBtn" href="#" class="upi-btn upi-direct">मोबाईल ॲपद्वारे भरणा करा</a>
-      </div>
-
-      <button class="pay-btn-close" onclick="closePayModal()">रद्द करा</button>
+      <a id="waLink" href="#" target="_blank" style="display:block; background:#25D366; color:#fff; padding:10px; border-radius:8px; text-decoration:none; font-weight:bold; margin-top:12px; font-size:14px;">WhatsApp वर स्क्रीनशॉट पाठवा →</a>
+      <button onclick="document.getElementById('payModal').classList.remove('active')" style="background:transparent; color:#888; border:none; margin-top:12px; cursor:pointer; font-size:13px;">रद्द करा</button>
     </div>
   </div>
 
-  <div class="toast" id="toast">लिंक कॉपी झाली!</div>
-
   <script>
-    const waNum = "919309860089"; 
-    const UPI_ID = "9309860089@ybl"; 
+    const waNum = "919309860089";
+    const UPI_ID = "9309860089@ybl";
 
-    function showFullImg(src) {
-      document.getElementById('fullImgSrc').src = src;
-      document.getElementById('imgModal').classList.add('active');
-    }
-
-    function hideFullImg() {
-      document.getElementById('imgModal').classList.remove('active');
-    }
-
-    function copyPsdLink(id) {
-      const fullUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
-      navigator.clipboard.writeText(fullUrl).then(() => {
-        showToast("PSD ची लिंक कॉपी झाली!");
-      });
-    }
-
-    function copyUpiId() {
-      navigator.clipboard.writeText(UPI_ID).then(() => {
-        showToast("UPI ID कॉपी झाला!");
-      });
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById("toast");
-      toast.innerText = msg;
-      toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2500);
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const targetId = urlParams.get('id');
-
-      if (targetId) {
-        const targetCard = document.getElementById(targetId);
-        if (targetCard) {
-          const container = document.getElementById("psdContainer");
-          container.prepend(targetCard);
-          targetCard.classList.add("highlighted");
-
-          setTimeout(() => {
-            targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }, 300);
-        }
+    async function fetchStoreData() {
+      try {
+        const res = await fetch('/api/psd-store');
+        const data = await res.json();
+        renderStore(data);
+      } catch (e) {
+        document.getElementById('mainStoreContent').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
       }
-    });
+    }
 
-    function buyPsd(title, price, id) {
+    function renderStore(data) {
+      const container = document.getElementById('mainStoreContent');
+      container.innerHTML = '';
+
+      if (!data || data.length === 0) {
+        container.innerHTML = "<p style='text-align:center; color:#888;'>सध्या कोणतीही PSD उपलब्ध नाही.</p>";
+        return;
+      }
+
+      data.forEach(sec => {
+        if (!sec.items || sec.items.length === 0) return;
+
+        const secBlock = document.createElement('div');
+        secBlock.className = 'sector-block';
+
+        const isSingle = sec.items.length === 1;
+
+        let cardsHtml = sec.items.map(item => `
+          <div class="psd-card ${isSingle ? 'single-card' : ''}" id="${item.id}">
+            <div class="psd-img-box" onclick="openPay('${item.title}', '${item.price}')">
+              <img src="${item.previewImg}" alt="${item.title}" onerror="this.src='assets/logo.png'">
+            </div>
+            <div class="psd-details">
+              <h3>${item.title}</h3>
+              <div class="price-row">
+                <div>
+                  <span class="price-main">₹${item.price}</span>
+                  <span class="price-orig">₹${item.originalPrice}</span>
+                </div>
+                <div>
+                  <button class="btn-buy" onclick="openPay('${item.title}', '${item.price}')">खरेदी करा →</button>
+                  <button class="btn-share" onclick="copyLink('${item.id}')">🔗</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+        secBlock.innerHTML = `
+          <h2 class="sector-title">${sec.sectionTitle}</h2>
+          <div class="${isSingle ? '' : 'scroll-grid'}">${cardsHtml}</div>
+        `;
+
+        container.appendChild(secBlock);
+      });
+    }
+
+    function openPay(title, price) {
       document.getElementById('payTitle').innerText = title;
       document.getElementById('payPrice').innerText = `₹${price}`;
-
-      // Dynamic QR Code Generation
-      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR%26tn=${encodeURIComponent(title)}`;
-      document.getElementById('qrImage').src = qrApiUrl;
-
-      // WhatsApp Link
-      const msg = encodeURIComponent(`नमस्कार धर्मवीर ॲडव्हर्टायझिंग, मी "${title}" (₹${price}) साठी पेमेंट केले आहे. कृपया मला PSD फाईल पाठवा.`);
-      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${msg}`;
-
-      // Generic UPI Intent URL
-      const upiUrl = `upi://pay?pa=${UPI_ID}&pn=DharmveerAdvertising&am=${price}&cu=INR&tn=${encodeURIComponent(title)}`;
-      document.getElementById('directUpiBtn').href = upiUrl;
-
+      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
+      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.')}`;
       document.getElementById('payModal').classList.add('active');
     }
 
-    function closePayModal() {
-      document.getElementById('payModal').classList.remove('active');
+    function copyLink(id) {
+      navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}?id=${id}`).then(() => alert("लिंक कॉपी झाली!"));
     }
-  </script>
 
+    window.onload = fetchStoreData;
+  </script>
 </body>
 </html>
