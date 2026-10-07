@@ -63,7 +63,8 @@ button:hover{opacity:.85}
   border:1px solid #ddd;
   padding:15px;
   border-radius:10px;
-  margin-top:10px
+  margin-top:10px;
+  background:#fff;
 }
 .item img{
   width:100%;
@@ -89,6 +90,11 @@ nav button.active{background:#e67e22}
   background:#eee
 }
 .small{font-size:13px;color:#666}
+
+/* PSD Store Admin Styles */
+.section-block { background: #f9f9f9; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 6px; }
+.item-row { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px 14px; margin-bottom: 8px; border-radius: 6px; border: 1px solid #eee; font-size: 14px; }
+.action-btns { display: flex; gap: 4px; align-items: center; }
 </style>
 </head>
 
@@ -128,7 +134,8 @@ nav button.active{background:#e67e22}
   </div>
 
   <nav>
-    <button onclick="showSection('home',this)" class="active">🏠 Home</button>
+    <button onclick="showSection('psdstore',this)" class="active">🛒 PSD Store</button>
+    <button onclick="showSection('home',this)">🏠 Home</button>
     <button onclick="showSection('portfolio',this)">🖼️ Portfolio</button>
     <button onclick="showSection('beforeafter',this)">🔄 Before / After</button>
     <button onclick="showSection('services',this)">🛠️ Services</button>
@@ -137,9 +144,51 @@ nav button.active{background:#e67e22}
     <button onclick="showSection('settings',this)">⚙️ Settings</button>
   </nav>
 
+  <!-- PSD STORE SECTION -->
+  <section id="psdstore" class="section active">
+    <!-- १. नवीन सेक्टर / कॅटेगरी -->
+    <div class="card">
+      <h2>१. नवीन Sector (Category) तयार करा</h2>
+      <label>Sector चे नाव (उदा. NAVRATRI SPECIAL PSD / AIR FORCE DAY):</label>
+      <input type="text" id="newSectionTitle" placeholder="उदा. NAVRATRI SPECIAL PSD">
+      <button class="success" onclick="addPsdSection()">+ Sector जोडा</button>
+    </div>
+
+    <!-- २. PSD आयटम जोडणे -->
+    <div class="card">
+      <h2>२. Sector मध्ये PSD जोडा</h2>
+      <label>Sector निवडा:</label>
+      <select id="psdSectionSelect"></select>
+
+      <label>PSD शीर्षक (Title):</label>
+      <input type="text" id="psdTitle" placeholder="उदा. Navratri Utsav 7 Premium PSD Pack">
+
+      <label>फोटोची डायरेक्ट लिंक (Preview Image URL):</label>
+      <input type="text" id="psdImg" placeholder="assets/logo.png किंवा ऑनलाइन फोटो लिंक">
+
+      <label>ऑफर किंमत (₹):</label>
+      <input type="number" id="psdPrice" placeholder="229">
+
+      <label>जुनी किंमत / Cut Price (₹):</label>
+      <input type="number" id="psdOriginalPrice" placeholder="799">
+
+      <label>PSD डाऊनलोड लिंक (WhatsApp वर देणार असल्यास हे रिकामे ठेवा):</label>
+      <input type="text" id="psdDownloadUrl" placeholder="https://drive.google.com/...">
+
+      <button class="success" onclick="addPsdItem()">+ PSD Store मध्ये जोडा</button>
+    </div>
+
+    <!-- ३. सध्याचे सेक्शन्स व सेव्ह करणे -->
+    <div class="card">
+      <h2>३. सध्याचे Sectors व PSDs</h2>
+      <div id="psdSectionsPreview">डेटा लोड होत आहे...</div>
+      <button class="success" style="font-size: 16px; width: 100%; margin-top: 15px; padding: 14px;" onclick="savePsdDataToCloud()">💾 बदल सेव्ह करा (Publish to Store)</button>
+    </div>
+  </section>
+
 
   <!-- HOME -->
-  <section id="home" class="section active">
+  <section id="home" class="section">
     <div class="card">
       <h2>🏠 Home / Website Content</h2>
 
@@ -197,7 +246,7 @@ nav button.active{background:#e67e22}
         Add Design
       </button>
 
-      <div id="portfolioList"></div>
+      <div id="portfolioList" style="margin-top: 20px;"></div>
     </div>
   </section>
 
@@ -352,74 +401,54 @@ nav button.active{background:#e67e22}
 
 <script>
 
-const API_URL =
-"https://falling-tree-3813.dharmveeradvertising389.workers.dev";
-
+const API_URL = "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
 let adminKey = "";
-
+let psdStoreData = [];
+let portfolioData = [];
 
 /* LOGIN */
 
 function login(){
-
-  const password =
-    document.getElementById("adminPassword").value.trim();
+  const password = document.getElementById("adminPassword").value.trim();
 
   if(!password){
-    document.getElementById("loginMessage").textContent =
-      "Password टाका.";
+    document.getElementById("loginMessage").textContent = "Password टाका.";
     return;
   }
 
   adminKey = password;
 
-  document.getElementById("loginBox")
-    .classList.add("hidden");
-
-  document.getElementById("adminPanel")
-    .classList.remove("hidden");
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("adminPanel").classList.remove("hidden");
 
   loadAll();
 }
 
-
 function logout(){
-
   adminKey = "";
-
   document.getElementById("adminPassword").value = "";
-
-  document.getElementById("adminPanel")
-    .classList.add("hidden");
-
-  document.getElementById("loginBox")
-    .classList.remove("hidden");
+  document.getElementById("adminPanel").classList.add("hidden");
+  document.getElementById("loginBox").classList.remove("hidden");
 }
-
 
 /* NAVIGATION */
 
 function showSection(id,btn){
+  document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 
-  document.querySelectorAll(".section")
-    .forEach(x=>x.classList.remove("active"));
-
-  document.getElementById(id)
-    .classList.add("active");
-
-  document.querySelectorAll("nav button")
-    .forEach(x=>x.classList.remove("active"));
-
+  document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
   btn.classList.add("active");
-}
 
+  // टॅब उघडल्यावर ऑटो-डेटा रिफ्रेश
+  if(id === 'portfolio') loadPortfolio();
+  if(id === 'psdstore') loadPsdStoreData();
+}
 
 /* MESSAGE */
 
 function message(text){
-
   const box=document.getElementById("message");
-
   box.textContent=text;
   box.classList.remove("hidden");
 
@@ -428,22 +457,16 @@ function message(text){
   },2500);
 }
 
-
-/* API */
+/* API HELPER */
 
 async function api(path,options={}){
-
   const headers={
     "Content-Type":"application/json",
     "X-Admin-Key":adminKey,
     ...(options.headers||{})
   };
 
-  const response=await fetch(
-    API_URL+path,
-    {...options,headers}
-  );
-
+  const response=await fetch(API_URL+path, {...options,headers});
   const data=await response.json();
 
   if(!response.ok){
@@ -453,13 +476,11 @@ async function api(path,options={}){
   return data;
 }
 
-
-/* LOAD ALL */
+/* LOAD ALL DATA */
 
 async function loadAll(){
-
   try{
-
+    await loadPsdStoreData();
     await loadSettings();
     await loadContent();
     await loadPortfolio();
@@ -467,26 +488,292 @@ async function loadAll(){
     await loadReviews();
     await loadBeforeAfter();
     await loadWhy();
-
   }catch(error){
-
     alert("Data load problem: "+error.message);
   }
+}
+
+/* ==============================================
+   PSD STORE MANAGEMENT (Cloudflare KV API)
+   ============================================== */
+
+async function loadPsdStoreData() {
+  try {
+    const res = await fetch('/api/psd-store');
+    psdStoreData = await res.json();
+    renderPsdAdminView();
+  } catch (e) {
+    console.log("PSD Store data fetch error: ", e.message);
+  }
+}
+
+function renderPsdAdminView() {
+  const select = document.getElementById('psdSectionSelect');
+  const preview = document.getElementById('psdSectionsPreview');
+  
+  if(!select || !preview) return;
+
+  select.innerHTML = '';
+  preview.innerHTML = '';
+
+  if (!Array.isArray(psdStoreData) || psdStoreData.length === 0) {
+    preview.innerHTML = '<p style="color:#888;">एकही Sector उपलब्ध नाही. वरून नवीन Sector तयार करा.</p>';
+    return;
+  }
+
+  psdStoreData.forEach((sec, secIdx) => {
+    const opt = document.createElement('option');
+    opt.value = secIdx;
+    opt.innerText = sec.sectionTitle;
+    select.appendChild(opt);
+
+    let itemsHtml = '';
+    if (sec.items && sec.items.length > 0) {
+      sec.items.forEach((item, itemIdx) => {
+        itemsHtml += `
+          <div class="item-row">
+            <span><strong>${escapeHtml(item.title)}</strong> - ₹${escapeHtml(item.price)} <small style="color:#777;">(जुनी: ₹${escapeHtml(item.originalPrice)})</small></span>
+            <div class="action-btns">
+              <button onclick="movePsdItem(${secIdx}, ${itemIdx}, -1)">⬆️</button>
+              <button onclick="movePsdItem(${secIdx}, ${itemIdx}, 1)">⬇️</button>
+              <button class="danger" style="padding:4px 8px; margin:0;" onclick="deletePsdItem(${secIdx}, ${itemIdx})">Delete</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    preview.innerHTML += `
+      <div class="section-block">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="color:#e67e22;">${escapeHtml(sec.sectionTitle)}</h3>
+          <div>
+            <button onclick="movePsdSection(${secIdx}, -1)">⬆️ Section</button>
+            <button onclick="movePsdSection(${secIdx}, 1)">⬇️ Section</button>
+            <button class="danger" style="padding:4px 8px; margin:0;" onclick="deletePsdSection(${secIdx})">Sector Delete</button>
+          </div>
+        </div>
+        <div style="margin-top:10px;">${itemsHtml || '<small style="color:#777">या Sector मध्ये फोटो/PSD नाही.</small>'}</div>
+      </div>
+    `;
+  });
+}
+
+function addPsdSection() {
+  const title = getValue('newSectionTitle');
+  if (!title) return alert("कृपया Sector चे नाव टाका!");
+  
+  const id = title.toLowerCase().replace(/[^a-z0-9]/g, '-');
+  psdStoreData.push({ sectionId: id, sectionTitle: title, items: [] });
+  setValue('newSectionTitle', '');
+  renderPsdAdminView();
+}
+
+function addPsdItem() {
+  const secIdx = document.getElementById('psdSectionSelect').value;
+  if (secIdx === "") return alert("आधी Sector निवडा!");
+
+  const title = getValue('psdTitle');
+  const img = getValue('psdImg');
+  const price = getValue('psdPrice');
+  const origPrice = getValue('psdOriginalPrice');
+  const download = getValue('psdDownloadUrl');
+
+  if (!title || !price) return alert("शीर्षक आणि ऑफर किंमत टाकावी लागेल!");
+
+  const newItem = {
+    id: title.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+    title: title,
+    previewImg: img || 'assets/logo.png',
+    price: price,
+    originalPrice: origPrice || price,
+    downloadUrl: download || '#'
+  };
+
+  psdStoreData[secIdx].items.push(newItem);
+  
+  setValue('psdTitle', '');
+  setValue('psdImg', '');
+  setValue('psdPrice', '');
+  setValue('psdOriginalPrice', '');
+  setValue('psdDownloadUrl', '');
+
+  renderPsdAdminView();
+}
+
+function deletePsdItem(secIdx, itemIdx) {
+  psdStoreData[secIdx].items.splice(itemIdx, 1);
+  renderPsdAdminView();
+}
+
+function deletePsdSection(secIdx) {
+  if (confirm("हा संपूर्ण Sector आणि त्यातील PSDs डिलीट करायच्या आहेत का?")) {
+    psdStoreData.splice(secIdx, 1);
+    renderPsdAdminView();
+  }
+}
+
+function movePsdItem(secIdx, itemIdx, direction) {
+  const items = psdStoreData[secIdx].items;
+  const newIndex = itemIdx + direction;
+  if (newIndex < 0 || newIndex >= items.length) return;
+  const temp = items[itemIdx];
+  items[itemIdx] = items[newIndex];
+  items[newIndex] = temp;
+  renderPsdAdminView();
+}
+
+function movePsdSection(secIdx, direction) {
+  const newIndex = secIdx + direction;
+  if (newIndex < 0 || newIndex >= psdStoreData.length) return;
+  const temp = psdStoreData[secIdx];
+  psdStoreData[secIdx] = psdStoreData[newIndex];
+  psdStoreData[newIndex] = temp;
+  renderPsdAdminView();
+}
+
+async function savePsdDataToCloud() {
+  try {
+    const res = await fetch('/api/psd-store', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ psdData: psdStoreData })
+    });
+    const data = await res.json();
+    if (data.success) {
+      message("PSD Store Data Successfully Published! ✅");
+    } else {
+      alert("सेव्ह करताना अडचण आली.");
+    }
+  } catch (e) {
+    alert("Error: " + e.message);
+  }
+}
+
+
+/* ==============================================
+   PORTFOLIO MANAGEMENT (Auto-Load, Edit & Reorder)
+   ============================================== */
+
+async function loadPortfolio(){
+  try {
+    portfolioData = await fetch(API_URL+"/api/portfolio").then(r=>r.json());
+    renderPortfolioList();
+  } catch(e) {
+    console.log("Portfolio load error: ", e.message);
+  }
+}
+
+function renderPortfolioList() {
+  const container = document.getElementById("portfolioList");
+  if(!container) return;
+
+  if(!portfolioData || portfolioData.length === 0) {
+    container.innerHTML = "<p style='color:#777;'>कोणतीही डिझाईन उपलब्ध नाही.</p>";
+    return;
+  }
+
+  container.innerHTML = portfolioData.map((item, index) => `
+    <div class="item">
+      <img src="${escapeHtml(item.image_url)}">
+      <div>
+        <label class="small">शीर्षक (Title):</label>
+        <input type="text" value="${escapeHtml(item.title)}" id="port_title_${item.id}">
+        
+        <label class="small">कॅटेगरी (Category):</label>
+        <input type="text" value="${escapeHtml(item.category)}" id="port_cat_${item.id}">
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+        <div>
+          <button class="edit" onclick="updatePortfolio(${item.id})">✏️ Update</button>
+          <button class="danger" onclick="deletePortfolio(${item.id})">🗑️ Delete</button>
+        </div>
+        <div>
+          <button onclick="movePortfolio(${index}, -1)">⬆️ Move Up</button>
+          <button onclick="movePortfolio(${index}, 1)">⬇️ Move Down</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function addPortfolio(){
+  const title=getValue("portfolioTitle");
+  const category=getValue("portfolioCategory");
+  const image_url=getValue("portfolioImage");
+
+  if(!title||!category||!image_url){
+    alert("Title, Category आणि Image URL भरा.");
+    return;
+  }
+
+  try{
+    await api("/api/portfolio",{
+      method:"POST",
+      body:JSON.stringify({ title, category, image_url })
+    });
+
+    setValue("portfolioTitle","");
+    setValue("portfolioCategory","");
+    setValue("portfolioImage","");
+
+    await loadPortfolio();
+    message("Design added ✅");
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+async function updatePortfolio(id) {
+  const newTitle = getValue(`port_title_${id}`);
+  const newCat = getValue(`port_cat_${id}`);
+
+  if (!newTitle || !newCat) return alert("शीर्षक आणि कॅटेगरी रिकामी ठेऊ नका!");
+
+  try {
+    await api("/api/portfolio/" + id, {
+      method: "PUT",
+      body: JSON.stringify({ title: newTitle, category: newCat })
+    });
+    await loadPortfolio();
+    message("Design updated ✅");
+  } catch(e) {
+    alert("Update error: " + e.message);
+  }
+}
+
+async function deletePortfolio(id){
+  if(!confirm("हा design delete करायचा आहे का?")) return;
+  try{
+    await api("/api/portfolio/"+id,{ method:"DELETE" });
+    await loadPortfolio();
+    message("Design deleted ✅");
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+function movePortfolio(index, direction) {
+  const newIndex = index + direction;
+  if (newIndex < 0 || newIndex >= portfolioData.length) return;
+  
+  const temp = portfolioData[index];
+  portfolioData[index] = portfolioData[newIndex];
+  portfolioData[newIndex] = temp;
+  
+  renderPortfolioList();
+  message("क्रम बदलला! बदल सेव्ह करण्यासाठी डिझाईन अपडेट करा.");
 }
 
 
 /* SETTINGS */
 
 async function loadSettings(){
-
-  const data=await fetch(
-    API_URL+"/api/settings"
-  ).then(r=>r.json());
-
+  const data=await fetch(API_URL+"/api/settings").then(r=>r.json());
   if(!data.length)return;
 
   const s=data[0];
-
   setValue("logo_url",s.logo_url);
   setValue("phone",s.phone);
   setValue("whatsapp",s.whatsapp);
@@ -499,15 +786,11 @@ async function loadSettings(){
   setValue("website_title",s.website_title);
 }
 
-
 async function saveSettings(){
-
   try{
-
     await api("/api/settings",{
       method:"PUT",
       body:JSON.stringify({
-
         logo_url:getValue("logo_url"),
         phone:getValue("phone"),
         whatsapp:getValue("whatsapp"),
@@ -518,14 +801,10 @@ async function saveSettings(){
         about:getValue("about"),
         footer_text:getValue("footer_text"),
         website_title:getValue("website_title")
-
       })
     });
-
     message("Settings saved successfully ✅");
-
   }catch(e){
-
     alert(e.message);
   }
 }
@@ -546,32 +825,18 @@ const contentKeys=[
   "marquee_text"
 ];
 
-
 async function loadContent(){
-
-  const data=await fetch(
-    API_URL+"/api/content"
-  ).then(r=>r.json());
-
+  const data=await fetch(API_URL+"/api/content").then(r=>r.json());
   data.forEach(item=>{
-
     if(document.getElementById(item.content_key)){
-      setValue(
-        item.content_key,
-        item.content_value
-      );
+      setValue(item.content_key, item.content_value);
     }
-
   });
 }
 
-
 async function saveHome(){
-
   try{
-
     for(const key of contentKeys){
-
       await api("/api/content",{
         method:"POST",
         body:JSON.stringify({
@@ -579,106 +844,10 @@ async function saveHome(){
           content_value:getValue(key)
         })
       });
-
     }
-
     await saveSettings();
-
     message("Home updated successfully ✅");
-
   }catch(e){
-
-    alert(e.message);
-  }
-}
-
-
-/* PORTFOLIO */
-
-async function loadPortfolio(){
-
-  const data=await fetch(
-    API_URL+"/api/portfolio"
-  ).then(r=>r.json());
-
-  document.getElementById("portfolioList").innerHTML=
-    data.map(item=>`
-
-      <div class="item">
-
-        <img src="${escapeHtml(item.image_url)}">
-
-        <strong>${escapeHtml(item.title)}</strong>
-
-        <p>Category:
-          ${escapeHtml(item.category)}
-        </p>
-
-        <button class="danger"
-          onclick="deletePortfolio(${item.id})">
-          Delete
-        </button>
-
-      </div>
-
-    `).join("");
-}
-
-
-async function addPortfolio(){
-
-  const title=getValue("portfolioTitle");
-  const category=getValue("portfolioCategory");
-  const image_url=getValue("portfolioImage");
-
-  if(!title||!category||!image_url){
-    alert("Title, Category आणि Image URL भरा.");
-    return;
-  }
-
-  try{
-
-    await api("/api/portfolio",{
-      method:"POST",
-      body:JSON.stringify({
-        title,
-        category,
-        image_url
-      })
-    });
-
-    setValue("portfolioTitle","");
-    setValue("portfolioCategory","");
-    setValue("portfolioImage","");
-
-    await loadPortfolio();
-
-    message("Design added ✅");
-
-  }catch(e){
-
-    alert(e.message);
-  }
-}
-
-
-async function deletePortfolio(id){
-
-  if(!confirm("हा design delete करायचा आहे का?"))
-    return;
-
-  try{
-
-    await api("/api/portfolio/"+id,{
-      method:"DELETE"
-    });
-
-    await loadPortfolio();
-
-    message("Design deleted ✅");
-
-  }catch(e){
-
     alert(e.message);
   }
 }
@@ -687,55 +856,33 @@ async function deletePortfolio(id){
 /* SERVICES */
 
 async function loadServices(){
-
-  const data=await fetch(
-    API_URL+"/api/services"
-  ).then(r=>r.json());
-
+  const data=await fetch(API_URL+"/api/services").then(r=>r.json());
   document.getElementById("serviceList").innerHTML=
     data.map(item=>`
-
       <div class="item">
-
         <strong>${escapeHtml(item.title)}</strong>
-
         <p>${escapeHtml(item.description||"")}</p>
-
         <p>Icon: ${escapeHtml(item.icon||"")}</p>
-
-        <button class="danger"
-          onclick="deleteService(${item.id})">
-          Delete
-        </button>
-
+        <button class="danger" onclick="deleteService(${item.id})">Delete</button>
       </div>
-
     `).join("");
 }
 
-
 async function addService(){
-
   const title=getValue("serviceTitle");
-
   if(!title){
     alert("Service title भरा.");
     return;
   }
 
   try{
-
     await api("/api/services",{
       method:"POST",
       body:JSON.stringify({
-
         title,
         description:getValue("serviceDescription"),
         icon:getValue("serviceIcon"),
-        sort_order:Number(
-          getValue("serviceOrder")
-        )||0
-
+        sort_order:Number(getValue("serviceOrder"))||0
       })
     });
 
@@ -744,33 +891,19 @@ async function addService(){
     setValue("serviceIcon","");
 
     await loadServices();
-
     message("Service added ✅");
-
   }catch(e){
-
     alert(e.message);
   }
 }
 
-
 async function deleteService(id){
-
-  if(!confirm("हा service delete करायचा आहे का?"))
-    return;
-
+  if(!confirm("हा service delete करायचा आहे का?")) return;
   try{
-
-    await api("/api/services/"+id,{
-      method:"DELETE"
-    });
-
+    await api("/api/services/"+id,{ method:"DELETE" });
     await loadServices();
-
     message("Service deleted ✅");
-
   }catch(e){
-
     alert(e.message);
   }
 }
@@ -779,35 +912,19 @@ async function deleteService(id){
 /* REVIEWS */
 
 async function loadReviews(){
-
-  const data=await fetch(
-    API_URL+"/api/reviews"
-  ).then(r=>r.json());
-
+  const data=await fetch(API_URL+"/api/reviews").then(r=>r.json());
   document.getElementById("reviewList").innerHTML=
     data.map(item=>`
-
       <div class="item">
-
         <strong>${escapeHtml(item.client_name)}</strong>
-
         <p>${escapeHtml(item.review_text)}</p>
-
         <p>⭐ ${item.rating}/5</p>
-
-        <button class="danger"
-          onclick="deleteReview(${item.id})">
-          Delete
-        </button>
-
+        <button class="danger" onclick="deleteReview(${item.id})">Delete</button>
       </div>
-
     `).join("");
 }
 
-
 async function addReview(){
-
   const client_name=getValue("clientName");
   const review_text=getValue("reviewText");
   const rating=Number(getValue("rating"))||5;
@@ -818,47 +935,28 @@ async function addReview(){
   }
 
   try{
-
     await api("/api/reviews",{
       method:"POST",
-      body:JSON.stringify({
-        client_name,
-        review_text,
-        rating
-      })
+      body:JSON.stringify({ client_name, review_text, rating })
     });
 
     setValue("clientName","");
     setValue("reviewText","");
 
     await loadReviews();
-
     message("Review added ✅");
-
   }catch(e){
-
     alert(e.message);
   }
 }
 
-
 async function deleteReview(id){
-
-  if(!confirm("हा review delete करायचा आहे का?"))
-    return;
-
+  if(!confirm("हा review delete करायचा आहे का?")) return;
   try{
-
-    await api("/api/reviews/"+id,{
-      method:"DELETE"
-    });
-
+    await api("/api/reviews/"+id,{ method:"DELETE" });
     await loadReviews();
-
     message("Review deleted ✅");
-
   }catch(e){
-
     alert(e.message);
   }
 }
@@ -867,37 +965,20 @@ async function deleteReview(id){
 /* BEFORE AFTER */
 
 async function loadBeforeAfter(){
-
-  const data=await fetch(
-    API_URL+"/api/before-after"
-  ).then(r=>r.json());
-
+  const data=await fetch(API_URL+"/api/before-after").then(r=>r.json());
   document.getElementById("beforeAfterList").innerHTML=
     data.map(item=>`
-
       <div class="item">
-
         <img src="${escapeHtml(item.before_image)}">
-
         <img src="${escapeHtml(item.after_image)}">
-
         <strong>${escapeHtml(item.title||"")}</strong>
-
         <p>${escapeHtml(item.description||"")}</p>
-
-        <button class="danger"
-          onclick="deleteBeforeAfter(${item.id})">
-          Delete
-        </button>
-
+        <button class="danger" onclick="deleteBeforeAfter(${item.id})">Delete</button>
       </div>
-
     `).join("");
 }
 
-
 async function addBeforeAfter(){
-
   const before_image=getValue("beforeImage");
   const after_image=getValue("afterImage");
 
@@ -907,21 +988,16 @@ async function addBeforeAfter(){
   }
 
   try{
-
     await api("/api/before-after",{
       method:"POST",
       body:JSON.stringify({
-
         before_image,
         after_image,
         before_label:"BEFORE",
         after_label:"AFTER",
         title:getValue("beforeTitle"),
         description:getValue("beforeDescription"),
-        sort_order:Number(
-          getValue("beforeSort")
-        )||0
-
+        sort_order:Number(getValue("beforeSort"))||0
       })
     });
 
@@ -931,31 +1007,18 @@ async function addBeforeAfter(){
     setValue("beforeDescription","");
 
     await loadBeforeAfter();
-
     message("Before / After added ✅");
-
   }catch(e){
-
     alert(e.message);
   }
 }
 
-
 async function deleteBeforeAfter(id){
-
-  if(!confirm("हा Before / After delete करायचा आहे का?"))
-    return;
-
+  if(!confirm("हा Before / After delete करायचा आहे का?")) return;
   try{
-
-    await api("/api/before-after/"+id,{
-      method:"DELETE"
-    });
-
+    await api("/api/before-after/"+id,{ method:"DELETE" });
     await loadBeforeAfter();
-
   }catch(e){
-
     alert(e.message);
   }
 }
@@ -964,56 +1027,32 @@ async function deleteBeforeAfter(id){
 /* WHY CHOOSE */
 
 async function loadWhy(){
-
-  const data=await fetch(
-    API_URL+"/api/why-choose"
-  ).then(r=>r.json());
-
+  const data=await fetch(API_URL+"/api/why-choose").then(r=>r.json());
   document.getElementById("whyList").innerHTML=
     data.map(item=>`
-
       <div class="item">
-
-        <strong>
-          ${escapeHtml(item.number||"")}
-          ${escapeHtml(item.title)}
-        </strong>
-
+        <strong>${escapeHtml(item.number||"")} ${escapeHtml(item.title)}</strong>
         <p>${escapeHtml(item.description||"")}</p>
-
-        <button class="danger"
-          onclick="deleteWhy(${item.id})">
-          Delete
-        </button>
-
+        <button class="danger" onclick="deleteWhy(${item.id})">Delete</button>
       </div>
-
     `).join("");
 }
 
-
 async function addWhy(){
-
   const title=getValue("whyTitle");
-
   if(!title){
     alert("Title भरा.");
     return;
   }
 
   try{
-
     await api("/api/why-choose",{
       method:"POST",
       body:JSON.stringify({
-
         number:getValue("whyNumber"),
         title,
         description:getValue("whyDescription"),
-        sort_order:Number(
-          getValue("whyOrder")
-        )||0
-
+        sort_order:Number(getValue("whyOrder"))||0
       })
     });
 
@@ -1022,31 +1061,18 @@ async function addWhy(){
     setValue("whyDescription","");
 
     await loadWhy();
-
     message("Point added ✅");
-
   }catch(e){
-
     alert(e.message);
   }
 }
 
-
 async function deleteWhy(id){
-
-  if(!confirm("हा point delete करायचा आहे का?"))
-    return;
-
+  if(!confirm("हा point delete करायचा आहे का?")) return;
   try{
-
-    await api("/api/why-choose/"+id,{
-      method:"DELETE"
-    });
-
+    await api("/api/why-choose/"+id,{ method:"DELETE" });
     await loadWhy();
-
   }catch(e){
-
     alert(e.message);
   }
 }
@@ -1055,23 +1081,16 @@ async function deleteWhy(id){
 /* HELPERS */
 
 function getValue(id){
-
   const el=document.getElementById(id);
-
   return el ? el.value.trim() : "";
 }
 
-
 function setValue(id,value){
-
   const el=document.getElementById(id);
-
   if(el) el.value=value||"";
 }
 
-
 function escapeHtml(value){
-
   return String(value??"")
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
