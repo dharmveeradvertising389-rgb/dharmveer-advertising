@@ -1,268 +1,268 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PSD Store | धर्मवीर ॲडव्हर्टायझिंग</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Devanagari', sans-serif; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PSD Store | धर्मवीर ॲडव्हर्टायझिंग</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Devanagari', sans-serif; }
 
-    /* Background Texture & Theme */
-    body {
-      background-color: #0a0e17;
-      background-image: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.2) 0px, rgba(0, 0, 0, 0.2) 2px, transparent 2px, transparent 8px);
-      color: #ffffff;
-      min-height: 100vh;
-      padding: 20px 10px;
-    }
+    /* Background Texture & Theme */
+    body {
+      background-color: #0a0e17;
+      background-image: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.2) 0px, rgba(0, 0, 0, 0.2) 2px, transparent 2px, transparent 8px);
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 20px 10px;
+    }
 
-    /* Main Container (PC: 2 Columns Layout) */
-    .store-layout {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 30px;
-    }
+    /* Main Container (PC: 2 Columns Layout) */
+    .store-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 30px;
+    }
 
-    /* Left Profile Sidebar (PC) */
-    .profile-sidebar {
-      position: sticky;
-      top: 20px;
-      height: fit-content;
-      text-align: center;
-      padding: 30px 20px;
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 102, 0, 0.2);
-      border-radius: 24px;
-    }
+    /* Left Profile Sidebar (PC) */
+    .profile-sidebar {
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 102, 0, 0.2);
+      border-radius: 24px;
+    }
 
-    .profile-avatar {
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid #ff6600;
-      margin: 0 auto 15px;
-      box-shadow: 0 8px 25px rgba(255, 102, 0, 0.3);
-      background: #111;
-    }
+    .profile-avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #ff6600;
+      margin: 0 auto 15px;
+      box-shadow: 0 8px 25px rgba(255, 102, 0, 0.3);
+      background: #111;
+    }
 
-    .profile-name { font-size: 22px; font-weight: 800; color: #ffffff; margin-bottom: 8px; }
-    .profile-tagline { font-size: 14px; color: #ff6600; font-weight: 600; margin-bottom: 6px; }
-    .profile-desc { font-size: 13px; color: #cbd5e1; line-height: 1.5; }
+    .profile-name { font-size: 22px; font-weight: 800; color: #ffffff; margin-bottom: 8px; }
+    .profile-tagline { font-size: 14px; color: #ff6600; font-weight: 600; margin-bottom: 6px; }
+    .profile-desc { font-size: 13px; color: #cbd5e1; line-height: 1.5; }
 
-    /* Right Products Section */
-    .products-container { width: 100%; min-width: 0; }
+    /* Right Products Section */
+    .products-container { width: 100%; min-width: 0; }
 
-    .sector-block { margin-bottom: 40px; }
-    .sector-title {
-      font-size: 22px;
-      font-weight: 800;
-      color: #ff6600;
-      margin-bottom: 18px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .sector-block { margin-bottom: 40px; }
+    .sector-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ff6600;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-    /* Smart Dynamic Cards Grid */
-    /* Multiple items (2-3 or more): Horizontal Scroll / Grid */
-    .multi-grid {
-      display: flex;
-      gap: 18px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding-bottom: 12px;
-    }
-    .multi-grid::-webkit-scrollbar { height: 6px; }
-    .multi-grid::-webkit-scrollbar-thumb { background: #ff6600; border-radius: 10px; }
+    /* Smart Dynamic Cards Grid */
+    /* Multiple items (2-3 or more): Horizontal Scroll / Grid */
+    .multi-grid {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 12px;
+    }
+    .multi-grid::-webkit-scrollbar { height: 6px; }
+    .multi-grid::-webkit-scrollbar-thumb { background: #ff6600; border-radius: 10px; }
 
-    .small-card {
-      min-width: 260px;
-      max-width: 280px;
-      background: #0f172a;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      overflow: hidden;
-      flex-shrink: 0;
-      transition: transform 0.3s, border-color 0.3s;
-    }
-    .small-card:hover { transform: translateY(-5px); border-color: #ff6600; }
+    .small-card {
+      min-width: 260px;
+      max-width: 280px;
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .small-card:hover { transform: translateY(-5px); border-color: #ff6600; }
 
-    .small-card .img-box { height: 220px; width: 100%; background: #1e293b; overflow: hidden; }
-    .small-card .img-box img { width: 100%; height: 100%; object-fit: cover; }
+    .small-card .img-box { height: 220px; width: 100%; background: #1e293b; overflow: hidden; }
+    .small-card .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Single Item: Large Banner View */
-    .single-banner {
-      width: 100%;
-      background: #0f172a;
-      border: 1px solid rgba(255, 102, 0, 0.3);
-      border-radius: 20px;
-      overflow: hidden;
-      transition: transform 0.3s;
-    }
-    .single-banner .img-box { height: 380px; width: 100%; background: #1e293b; overflow: hidden; }
-    .single-banner .img-box img { width: 100%; height: 100%; object-fit: cover; }
+    /* Single Item: Large Banner View */
+    .single-banner {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid rgba(255, 102, 0, 0.3);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .single-banner .img-box { height: 380px; width: 100%; background: #1e293b; overflow: hidden; }
+    .single-banner .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-    .card-details { padding: 18px; }
-    .card-details h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .card-details { padding: 18px; }
+    .card-details h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
 
-    .price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
-    .price-main { font-size: 22px; font-weight: 800; color: #ff6600; }
-    .price-orig { font-size: 13px; color: #64748b; text-decoration: line-through; margin-left: 6px; }
-    .off-badge { background: rgba(255, 102, 0, 0.15); color: #ff6600; font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight:bold; }
+    .price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+    .price-main { font-size: 22px; font-weight: 800; color: #ff6600; }
+    .price-orig { font-size: 13px; color: #64748b; text-decoration: line-through; margin-left: 6px; }
+    .off-badge { background: rgba(255, 102, 0, 0.15); color: #ff6600; font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight:bold; }
 
-    .btn-get {
-      background: #ff6600;
-      color: #fff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.2s;
-    }
-    .btn-get:hover { background: #e65c00; }
+    .btn-get {
+      background: #ff6600;
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-get:hover { background: #e65c00; }
 
-    /* Payment Modal Popup */
-    .pay-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; z-index: 10000; }
-    .pay-modal.active { display: flex; }
-    .pay-card { background: #0f172a; border: 1px solid #ff6600; padding: 25px; border-radius: 20px; width: 90%; max-width: 380px; text-align: center; }
+    /* Payment Modal Popup */
+    .pay-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; z-index: 10000; }
+    .pay-modal.active { display: flex; }
+    .pay-card { background: #0f172a; border: 1px solid #ff6600; padding: 25px; border-radius: 20px; width: 90%; max-width: 380px; text-align: center; }
 
-    /* Mobile Responsive View */
-    @media (max-width: 768px) {
-      .store-layout { grid-template-columns: 1fr; gap: 20px; }
-      .profile-sidebar { position: relative; top: 0; border-radius: 18px; padding: 20px 15px; }
-      .profile-avatar { width: 100px; height: 100px; }
-      .profile-name { font-size: 20px; }
-      .single-banner .img-box { height: 260px; }
-    }
-  </style>
+    /* Mobile Responsive View */
+    @media (max-width: 768px) {
+      .store-layout { grid-template-columns: 1fr; gap: 20px; }
+      .profile-sidebar { position: relative; top: 0; border-radius: 18px; padding: 20px 15px; }
+      .profile-avatar { width: 100px; height: 100px; }
+      .profile-name { font-size: 20px; }
+      .single-banner .img-box { height: 260px; }
+    }
+  </style>
 </head>
 <body>
 
-  <div class="store-layout">
-    
-    <!-- Left Sidebar / Profile Header -->
-    <aside class="profile-sidebar">
-      <img src="assets/logo.png" alt="Logo" class="profile-avatar" onerror="this.src='https://via.placeholder.com/130?text=Logo'">
-      <h1 class="profile-name">धर्मवीर ॲडव्हर्टायझिंग</h1>
-      <p class="profile-tagline">🎨 Premium PSD Templates</p>
-      <p class="profile-desc">उच्च दर्जाचे ग्राफिक डिझाईन्स, फ्लेक्स बॅनर, उत्सव व बिझनेस PSD टेम्पलेट्स.</p>
-    </aside>
+  <div class="store-layout">
+    
+    <!-- Left Sidebar / Profile Header -->
+    <aside class="profile-sidebar">
+      <img src="assets/logo.png" alt="Logo" class="profile-avatar" onerror="this.src='https://via.placeholder.com/130?text=Logo'">
+      <h1 class="profile-name">धर्मवीर ॲडव्हर्टायझिंग</h1>
+      <p class="profile-tagline">🎨 Premium PSD Templates</p>
+      <p class="profile-desc">उच्च दर्जाचे ग्राफिक डिझाईन्स, फ्लेक्स बॅनर, उत्सव व बिझनेस PSD टेम्पलेट्स.</p>
+    </aside>
 
-    <!-- Right Products Area -->
-    <main class="products-container" id="mainStoreContent">
-      <p style="text-align:center; padding: 40px; color:#94a3b8;">PSD Store लोड होत आहे...</p>
-    </main>
+    <!-- Right Products Area -->
+    <main class="products-container" id="mainStoreContent">
+      <p style="text-align:center; padding: 40px; color:#94a3b8;">PSD Store लोड होत आहे...</p>
+    </main>
 
-  </div>
+  </div>
 
-  <!-- QR Payment Modal -->
-  <div class="pay-modal" id="payModal">
-    <div class="pay-card">
-      <h3 id="payTitle" style="font-size:17px;">PSD Name</h3>
-      <p style="margin:10px 0; color:#ff6600; font-weight:800; font-size: 24px;" id="payPrice">₹0</p>
-      
-      <div style="background:#fff; padding:10px; border-radius:12px; display:inline-block; margin: 5px 0;">
-        <img id="qrImage" src="" style="width:180px; height:180px; display:block;">
-      </div>
-      
-      <p style="font-size:12px; color:#94a3b8; margin:10px 0 6px;">QR कोड स्कॅन करा किंवा UPI ID कॉपी करा:</p>
-      <button onclick="navigator.clipboard.writeText('9309860089@ybl'); alert('UPI ID कॉपी झाला!');" style="background:#1e293b; color:#fff; border:1px dashed #ff6600; padding:8px 14px; border-radius:8px; cursor:pointer; font-size:13px; width: 100%;">Copy UPI: 9309860089@ybl</button>
+  <!-- QR Payment Modal -->
+  <div class="pay-modal" id="payModal">
+    <div class="pay-card">
+      <h3 id="payTitle" style="font-size:17px;">PSD Name</h3>
+      <p style="margin:10px 0; color:#ff6600; font-weight:800; font-size: 24px;" id="payPrice">₹0</p>
+      
+      <div style="background:#fff; padding:10px; border-radius:12px; display:inline-block; margin: 5px 0;">
+        <img id="qrImage" src="" style="width:180px; height:180px; display:block;">
+      </div>
+      
+      <p style="font-size:12px; color:#94a3b8; margin:10px 0 6px;">QR कोड स्कॅन करा किंवा UPI ID कॉपी करा:</p>
+      <button onclick="navigator.clipboard.writeText('9309860089@ybl'); alert('UPI ID कॉपी झाला!');" style="background:#1e293b; color:#fff; border:1px dashed #ff6600; padding:8px 14px; border-radius:8px; cursor:pointer; font-size:13px; width: 100%;">Copy UPI: 9309860089@ybl</button>
 
-      <a id="waLink" href="#" target="_blank" style="display:block; background:#25D366; color:#fff; padding:12px; border-radius:10px; text-decoration:none; font-weight:bold; margin-top:12px; font-size:14px;">WhatsApp वर स्क्रीनशॉट पाठवा →</a>
-      <button onclick="document.getElementById('payModal').classList.remove('active')" style="background:transparent; color:#94a3b8; border:none; margin-top:12px; cursor:pointer; font-size:13px;">रद्द करा</button>
-    </div>
-  </div>
+      <a id="waLink" href="#" target="_blank" style="display:block; background:#25D366; color:#fff; padding:12px; border-radius:10px; text-decoration:none; font-weight:bold; margin-top:12px; font-size:14px;">WhatsApp वर स्क्रीनशॉट पाठवा →</a>
+      <button onclick="document.getElementById('payModal').classList.remove('active')" style="background:transparent; color:#94a3b8; border:none; margin-top:12px; cursor:pointer; font-size:13px;">रद्द करा</button>
+    </div>
+  </div>
 
-  <script>
-    const waNum = "919309860089";
-    const UPI_ID = "9309860089@ybl";
+  <script>
+    const waNum = "919309860089";
+    const UPI_ID = "9309860089@ybl";
 
-    async function fetchStoreData() {
-      try {
-        const res = await fetch('/api/psd-store');
-        const data = await res.json();
-        renderStore(data);
-      } catch (e) {
-        document.getElementById('mainStoreContent').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
-      }
-    }
+    async function fetchStoreData() {
+      try {
+        const res = await fetch('/api/psd-store');
+        const data = await res.json();
+        renderStore(data);
+      } catch (e) {
+        document.getElementById('mainStoreContent').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
+      }
+    }
 
-    function renderStore(data) {
-      const container = document.getElementById('mainStoreContent');
-      container.innerHTML = '';
+    function renderStore(data) {
+      const container = document.getElementById('mainStoreContent');
+      container.innerHTML = '';
 
-      if (!data || data.length === 0) {
-        container.innerHTML = "<p style='text-align:center; color:#94a3b8;'>सध्या कोणतीही PSD उपलब्ध नाही.</p>";
-        return;
-      }
+      if (!data || data.length === 0) {
+        container.innerHTML = "<p style='text-align:center; color:#94a3b8;'>सध्या कोणतीही PSD उपलब्ध नाही.</p>";
+        return;
+      }
 
-      data.forEach(sec => {
-        if (!sec.items || sec.items.length === 0) return;
+      data.forEach(sec => {
+        if (!sec.items || sec.items.length === 0) return;
 
-        const secBlock = document.createElement('div');
-        secBlock.className = 'sector-block';
+        const secBlock = document.createElement('div');
+        secBlock.className = 'sector-block';
 
-        const isSingle = sec.items.length === 1;
+        const isSingle = sec.items.length === 1;
 
-        let cardsHtml = sec.items.map(item => {
-          const discount = item.originalPrice && Number(item.originalPrice) > Number(item.price)
-            ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) + '% OFF'
-            : '';
+        let cardsHtml = sec.items.map(item => {
+          const discount = item.originalPrice && Number(item.originalPrice) > Number(item.price)
+            ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) + '% OFF'
+            : '';
 
-          return `
-            <div class="${isSingle ? 'single-banner' : 'small-card'}" id="${item.id}">
-              <div class="img-box" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">
-                <img src="${item.previewImg}" alt="${item.title}" onerror="this.src='assets/logo.png'">
-              </div>
-              <div class="card-details">
-                <h3>${escapeHtml(item.title)}</h3>
-                <div class="price-row">
-                  <div>
-                    <span class="price-main">₹${item.price}</span>
-                    <span class="price-orig">₹${item.originalPrice}</span>
-                    ${discount ? `<span class="off-badge">${discount}</span>` : ''}
-                  </div>
-                  <button class="btn-get" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it now →</button>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('');
+          return `
+            <div class="${isSingle ? 'single-banner' : 'small-card'}" id="${item.id}">
+              <div class="img-box" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">
+                <img src="${item.previewImg}" alt="${item.title}" onerror="this.src='assets/logo.png'">
+              </div>
+              <div class="card-details">
+                <h3>${escapeHtml(item.title)}</h3>
+                <div class="price-row">
+                  <div>
+                    <span class="price-main">₹${item.price}</span>
+                    <span class="price-orig">₹${item.originalPrice}</span>
+                    ${discount ? `<span class="off-badge">${discount}</span>` : ''}
+                  </div>
+                  <button class="btn-get" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it now →</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
 
-        secBlock.innerHTML = `
-          <h2 class="sector-title">${escapeHtml(sec.sectionTitle)}</h2>
-          <div class="${isSingle ? '' : 'multi-grid'}">${cardsHtml}</div>
-        `;
+        secBlock.innerHTML = `
+          <h2 class="sector-title">${escapeHtml(sec.sectionTitle)}</h2>
+          <div class="${isSingle ? '' : 'multi-grid'}">${cardsHtml}</div>
+        `;
 
-        container.appendChild(secBlock);
-      });
-    }
+        container.appendChild(secBlock);
+      });
+    }
 
-    function openPay(title, price) {
-      document.getElementById('payTitle').innerText = title;
-      document.getElementById('payPrice').innerText = `₹${price}`;
-      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
-      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.')}`;
-      document.getElementById('payModal').classList.add('active');
-    }
+    function openPay(title, price) {
+      document.getElementById('payTitle').innerText = title;
+      document.getElementById('payPrice').innerText = `₹${price}`;
+      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
+      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.')}`;
+      document.getElementById('payModal').classList.add('active');
+    }
 
-    function escapeHtml(str) {
-      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-    }
+    function escapeHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
 
-    window.onload = fetchStoreData;
-  </script>
+    window.onload = fetchStoreData;
+  </script>
 </body>
 </html>
