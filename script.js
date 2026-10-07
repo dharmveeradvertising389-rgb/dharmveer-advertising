@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (ORANGE COLOR, DUP FIX & SHOW MORE/LESS)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (STABLE & AUTO-LOADER FIX)
    ========================================================= */
 
 let CONTACT = {
@@ -12,10 +12,19 @@ let CONTACT = {
 
 const API_BASE = "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
 
-// Admin Panel मधून आलेले फोटो साठवण्यासाठी
+// Admin Panel mdhun aalele photo sathvnyasathi
 let dynamicPortfolioItems = [];
 
-// १. फोटोची लिंक शोधणारा फंक्शन
+// Loader la emergency close karnyasathi function
+function forceHideLoader() {
+  const loader = document.getElementById("loader");
+  if (loader) {
+    loader.classList.add("hide");
+    loader.style.display = "none";
+  }
+}
+
+// 1. Photo chi link shodhnara function
 function getImageUrl(item) {
   if (!item) return "";
   let url = item.image_url || item.imageUrl || item.image || item.photo || item.photo_url || item.url || item.img || item.src || "";
@@ -29,7 +38,7 @@ function getImageUrl(item) {
   return url;
 }
 
-// २. कॅटेगरीच्या नावातील डबल ऑप्शन्स घालवण्यासाठी नॅचरल मॅपिंग
+// 2. Category nawateel double options kadhnyasathi cleaning mapping
 function cleanCategoryName(cat) {
   if (!cat) return "Other";
   let c = cat.trim();
@@ -45,12 +54,11 @@ function cleanCategoryName(cat) {
   return c;
 }
 
-// ३. ऑटो CSS स्टाइल इंजेक्ट (ऑरेंज कलर व Show More/Less बटण स्टाइल)
+// 3. Dynamic CSS Styles Inject
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
   style.innerHTML = `
-    /* फिल्टर बटन्सची ऑरेंज स्टाइल */
     #filters {
       display: flex !important;
       flex-wrap: wrap !important;
@@ -76,7 +84,6 @@ if (!document.getElementById("portfolio-custom-styles")) {
       display: inline-block !important;
     }
 
-    /* Active आणि Hover वर ऑरेंज रंग (Orange Color Glow) */
     .filter-btn:hover, .filter-btn.active {
       background: #ff6600 !important;
       color: #ffffff !important;
@@ -84,7 +91,6 @@ if (!document.getElementById("portfolio-custom-styles")) {
       box-shadow: 0 4px 15px rgba(255, 102, 0, 0.5) !important;
     }
 
-    /* "अधिक पहा / कमी पहा" बटण स्टाइल */
     .toggle-portfolio-btn {
       display: inline-block !important;
       margin: 30px auto 10px auto !important;
@@ -105,7 +111,6 @@ if (!document.getElementById("portfolio-custom-styles")) {
       box-shadow: 0 6px 20px rgba(255, 102, 0, 0.6) !important;
     }
 
-    /* इमेज आणि पोर्टफोलिओ कार्ड स्टाइल */
     .portfolio-visual::before,
     .portfolio-visual::after,
     .portfolio-card::before,
@@ -143,7 +148,6 @@ if (!document.getElementById("portfolio-custom-styles")) {
       transform: scale(1.05) !important;
     }
 
-    /* Lightbox Modal (फोटोवर क्लिक केल्यावर मोठा दिसण्यासाठी) */
     .img-modal {
       display: none;
       position: fixed;
@@ -257,7 +261,6 @@ async function loadSettings() {
   }
 }
 
-// API द्वारे डिझाईन्स लोड करणे
 async function loadPortfolioData() {
   try {
     const response = await fetch(API_BASE + "/api/portfolio?t=" + Date.now(), { cache: "no-store" });
@@ -399,18 +402,15 @@ const translations = {
 
 const $ = s => document.querySelector(s); const $$ = s => document.querySelectorAll(s);
 
-// पोर्टफोलिओ व फिल्टर्स रेंडरिंग (अधिक पहा / कमी पहा टोगल व ड्युप्लिकेट फिक्ससह)
 function renderPortfolio(category="Personal", isExpanded=false){
   const grid=$("#portfolioGrid");
   if (!grid) return;
 
   const currentItems = dynamicPortfolioItems.length > 0 ? dynamicPortfolioItems : defaultPortfolioItems;
   
-  // युनिक आणि स्वच्छ कॅटेगरीज गोळा करणे
   const defaultCats = ["Business", "Social Media", "Festival", "Political", "Personal", "Other"];
   const dynamicCats = currentItems.map(x => cleanCategoryName(x.category)).filter(Boolean);
   
-  // डुप्लिकेट ऑप्शन्स पूर्णपणे बंद करणे (Unique Categories)
   const uniqueCategoryList = [];
   [...defaultCats, ...dynamicCats].forEach(cat => {
     const clean = cleanCategoryName(cat);
@@ -433,7 +433,6 @@ function renderPortfolio(category="Personal", isExpanded=false){
     return x.category && x.category.toLowerCase() === category.toLowerCase();
   });
 
-  // जुने 'अधिक पहा' बटण जर आधीच असेल तर काढणे
   const existingToggleBtn = document.getElementById("portfolioToggleBtn");
   if (existingToggleBtn) {
     existingToggleBtn.remove();
@@ -442,7 +441,6 @@ function renderPortfolio(category="Personal", isExpanded=false){
   if (filteredItems.length === 0 && category !== "All") {
     grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px; font-size: 16px;">या कॅटेगरीमध्ये सध्या डिझाईन जोडलेले नाही.</div>`;
   } else {
-    // जर अन-एक्सपांडेड (isExpanded == false) असेल तर फक्त पहिले २ आयटम दाखवणे
     const itemsToDisplay = isExpanded ? filteredItems : filteredItems.slice(0, 2);
 
     grid.innerHTML = itemsToDisplay.map((x, i) => {
@@ -468,7 +466,6 @@ function renderPortfolio(category="Personal", isExpanded=false){
       `;
     }).join("");
 
-    // जर २ पेक्षा जास्त डिझाईन्स असतील, तरच "अधिक पहा / कमी पहा" बटण दाखवा
     if (filteredItems.length > 2) {
       const toggleBtn = document.createElement("button");
       toggleBtn.id = "portfolioToggleBtn";
@@ -479,14 +476,12 @@ function renderPortfolio(category="Personal", isExpanded=false){
         renderPortfolio(category, !isExpanded);
       };
 
-      // बटण पोर्टफोलिओ ग्रीडच्या खाली सेंटरमध्ये जोडणे
       if (grid.parentNode) {
         grid.parentNode.insertBefore(toggleBtn, grid.nextSibling);
       }
     }
   }
 
-  // फिल्टर बटन्स क्लिक इव्हेंट सेट करणे (नवीन कॅटेगरी निवडल्यावर ५ किंवा जास्त डिझाईन्स न दिसता परत फक्त २ च दिसतील)
   $$(".filter-btn").forEach(b => {
     b.onclick = () => renderPortfolio(b.dataset.category, false);
   });
@@ -563,15 +558,12 @@ function applyLanguage(lang){
   localStorage.setItem("dv-lang",lang);
 }
 
-// Main Initialization Function
+// Main App Initialization
 async function initApp() {
-  const loader = document.getElementById("loader");
-  if (loader) {
-    loader.classList.add("hide");
-    loader.style.display = "none";
-  }
-
   setupModal();
+
+  // Hide loader early to ensure screen doesn't block
+  forceHideLoader();
 
   await loadPortfolioData();
 
@@ -627,10 +619,16 @@ async function initApp() {
       }
     };
   }
+
+  forceHideLoader();
 }
 
+// App Trigger
 if (document.readyState === "complete" || document.readyState === "interactive") {
   initApp();
 } else {
   document.addEventListener("DOMContentLoaded", initApp);
 }
+
+// Emergency Fallback: 1.2s bhetlyavr loader auto-close hoil
+setTimeout(forceHideLoader, 1200);
