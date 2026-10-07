@@ -1,5 +1,5 @@
 /* =========================================================
-   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (COMPLETE FULL CODE)
+   धर्मवीर ॲडव्हर्टायझिंग — SCRIPT.JS (WITH INTRO SPLASH & SELECTION MODAL)
    ========================================================= */
 
 let CONTACT = {
@@ -11,9 +11,6 @@ let CONTACT = {
 };
 
 const API_BASE = "https://falling-tree-3813.dharmveeradvertising389.workers.dev";
-
-// Local default logo path
-const DEFAULT_LOGO = "assets/logo.png";
 
 // Admin Panel मधून आलेले फोटो साठवण्यासाठी
 let dynamicPortfolioItems = [];
@@ -48,7 +45,7 @@ function cleanCategoryName(cat) {
   return c;
 }
 
-// ३. ऑटो CSS स्टाइल इंजेक्ट (Fixed PNG Logo & Active Filters)
+// ३. ऑटो CSS स्टाइल इंजेक्ट (Intro Pop-up, Choice Modal, Orange Filter v Show More/Less)
 if (!document.getElementById("portfolio-custom-styles")) {
   const style = document.createElement("style");
   style.id = "portfolio-custom-styles";
@@ -61,10 +58,9 @@ if (!document.getElementById("portfolio-custom-styles")) {
       justify-content: center !important;
       margin-bottom: 30px !important;
       position: relative !important;
-      z-index: 50 !important;
+      z-index: 20 !important;
       visibility: visible !important;
       opacity: 1 !important;
-      pointer-events: auto !important;
     }
 
     .filter-btn {
@@ -78,8 +74,6 @@ if (!document.getElementById("portfolio-custom-styles")) {
       font-weight: 500 !important;
       transition: all 0.3s ease !important;
       display: inline-block !important;
-      pointer-events: auto !important;
-      user-select: none;
     }
 
     .filter-btn:hover, .filter-btn.active {
@@ -196,7 +190,7 @@ if (!document.getElementById("portfolio-custom-styles")) {
       text-align: center;
     }
 
-    /* --- Transparent PNG Logo Container --- */
+    /* --- Splash Screen Pop-up --- */
     #dv-splash-screen {
       position: fixed;
       inset: 0;
@@ -205,39 +199,41 @@ if (!document.getElementById("portfolio-custom-styles")) {
       justify-content: center;
       align-items: center;
       z-index: 9999999;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
     }
     #dv-splash-screen.fade-out {
       opacity: 0;
       visibility: hidden;
-      pointer-events: none !important;
-      display: none !important;
     }
     .dv-logo-box {
       text-align: center;
+      animation: dvPulse 1.2s infinite alternate;
     }
-    .dv-logo-wrapper {
-      width: 140px;
-      height: 140px;
-      margin: 0 auto 15px;
+    .dv-logo-circle {
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(135deg, #ff6600, #ff8800);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: transparent !important;
-      border: none !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
+      margin: 0 auto 15px;
+      box-shadow: 0 0 25px rgba(255, 102, 0, 0.6);
+      overflow: hidden;
     }
-    .dv-logo-wrapper img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      filter: drop-shadow(0px 4px 12px rgba(255, 102, 0, 0.5));
+    .dv-logo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .dv-logo-text {
       color: #ffffff;
       font-weight: 800;
       font-size: 1rem;
+    }
+    @keyframes dvPulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      100% { transform: scale(1.05); opacity: 1; }
     }
 
     /* --- Selection Modal Overlay --- */
@@ -255,7 +251,6 @@ if (!document.getElementById("portfolio-custom-styles")) {
     }
     #dv-selection-modal.hidden {
       display: none !important;
-      pointer-events: none !important;
     }
     .dv-modal-card {
       background-color: #121824;
@@ -352,18 +347,18 @@ if (!document.getElementById("portfolio-custom-styles")) {
   document.head.appendChild(style);
 }
 
-// Intro Splash आणि Choice Modal Inject करणारा फंक्शन
+// Intro Splash aani Option Modal Inject karnaare Function
 function setupIntroAndModal() {
   if (document.getElementById("dv-splash-screen")) return;
 
-  const logoSrc = CONTACT.logo_url || DEFAULT_LOGO;
-  const logoHTML = `<img src="${logoSrc}" id="splashLogoImg" alt="Logo" onerror="this.onerror=null; this.src='${DEFAULT_LOGO}';">`;
+  const logoSrc = CONTACT.logo_url || "";
+  const logoHTML = logoSrc ? `<img src="${logoSrc}" alt="Logo">` : `<span class="dv-logo-text">LOGO</span>`;
 
   const introHTML = `
     <!-- 1. Logo Pop-up Splash -->
     <div id="dv-splash-screen">
       <div class="dv-logo-box">
-        <div class="dv-logo-wrapper">
+        <div class="dv-logo-circle">
           ${logoHTML}
         </div>
         <p style="color:#94a3b8; font-size: 0.9rem;">धर्मवीर ॲडव्हर्टायझिंग</p>
@@ -407,22 +402,15 @@ function setupIntroAndModal() {
   `;
   document.body.insertAdjacentHTML('beforeend', introHTML);
 
-  // Logo Pop-up 1.8 सेकंदात हटवून स्क्रीन पूर्ण अनब्लॉक करेल
+  // Logo Pop-up 1.8 सेकंद दिसल्यावर modal उघडा
   setTimeout(() => {
     const splash = document.getElementById("dv-splash-screen");
     const modal = document.getElementById("dv-selection-modal");
-    
-    const loader = document.getElementById("loader");
-    if (loader) {
-      loader.classList.add("hide");
-      loader.style.display = "none";
-    }
-
-    if (splash) {
-      splash.classList.add("fade-out");
-      splash.style.display = "none";
-    }
-    if (modal) modal.classList.remove("hidden");
+    if (splash) splash.classList.add("fade-out");
+    setTimeout(() => {
+      if (splash) splash.style.display = "none";
+      if (modal) modal.classList.remove("hidden");
+    }, 500);
   }, 1800);
 }
 
@@ -449,10 +437,7 @@ window.selectDvCategory = function(catName) {
 
 function closeDvModal() {
   const modal = document.getElementById("dv-selection-modal");
-  if (modal) {
-    modal.classList.add("hidden");
-    modal.style.display = "none";
-  }
+  if (modal) modal.classList.add("hidden");
 }
 
 function setupModal() {
@@ -469,12 +454,10 @@ function setupModal() {
   const modal = document.getElementById("imgModal");
   const closeBtn = document.getElementById("closeModalBtn");
 
-  if (closeBtn) closeBtn.onclick = () => modal.classList.remove("active");
-  if (modal) {
-    modal.onclick = (e) => {
-      if (e.target === modal) modal.classList.remove("active");
-    };
-  }
+  closeBtn.onclick = () => modal.classList.remove("active");
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.classList.remove("active");
+  };
 }
 
 function openModal(imageSrc, title) {
@@ -484,7 +467,7 @@ function openModal(imageSrc, title) {
   const modalCaption = document.getElementById("imgModalCaption");
   if (modal && modalImg) {
     modalImg.src = imageSrc;
-    if (modalCaption) modalCaption.textContent = title || "";
+    modalCaption.textContent = title || "";
     modal.classList.add("active");
   }
 }
@@ -504,10 +487,11 @@ async function loadSettings() {
 
       updateContact();
 
-      const activeLogo = CONTACT.logo_url || DEFAULT_LOGO;
-      document.querySelectorAll(".about-logo img, .brand img, .hero-logo, .footer-brand img, .dv-logo-wrapper img, #splashLogoImg").forEach(img => {
-        img.src = activeLogo;
-      });
+      if (CONTACT.logo_url) {
+        document.querySelectorAll(".about-logo img, .brand img, .hero-logo, .footer-brand img, .dv-logo-circle img").forEach(img => {
+          img.src = CONTACT.logo_url;
+        });
+      }
 
       if (CONTACT.about) {
         const aboutText = document.querySelector("#about [data-i18n='aboutText']");
@@ -519,6 +503,7 @@ async function loadSettings() {
   }
 }
 
+// API द्वारे डिझाईन्स लोड करणे
 async function loadPortfolioData() {
   try {
     const response = await fetch(API_BASE + "/api/portfolio?t=" + Date.now(), { cache: "no-store" });
@@ -535,7 +520,6 @@ async function loadPortfolioData() {
           image: imgUrl
         };
       });
-      renderPortfolio("All", false);
     }
   } catch (error) {
     console.error("Portfolio fetch error:", error);
@@ -574,6 +558,8 @@ function updateContact() {
     }
   }
 }
+
+loadSettings();
 
 const defaultPortfolioItems = [
   {title:"Business Design", category:"Business", desc:"Business / Branding Creative", image:""},
@@ -657,10 +643,10 @@ const translations = {
   }
 };
 
-const $ = s => document.querySelector(s);  const $$ = s => document.querySelectorAll(s);
+const $= s => document.querySelector(s); const$$ = s => document.querySelectorAll(s);
 
 // पोर्टफोलिओ व फिल्टर्स रेंडरिंग
-function renderPortfolio(category="All", isExpanded=false){
+function renderPortfolio(category="Personal", isExpanded=false){
   const grid=$("#portfolioGrid");
   if (!grid) return;
 
@@ -741,10 +727,7 @@ function renderPortfolio(category="All", isExpanded=false){
   }
 
   $$(".filter-btn").forEach(b => {
-    b.onclick = (e) => {
-      e.preventDefault();
-      renderPortfolio(b.dataset.category, false);
-    };
+    b.onclick = () => renderPortfolio(b.dataset.category, false);
   });
 }
 
@@ -820,11 +803,19 @@ function applyLanguage(lang){
 }
 
 // Main Initialization Function
-function initApp() {
+async function initApp() {
+  const loader = document.getElementById("loader");
+  if (loader) {
+    loader.classList.add("hide");
+    loader.style.display = "none";
+  }
+
   setupModal();
   setupIntroAndModal();
 
-  try { renderPortfolio("All", false); } catch(e) {}
+  await loadPortfolioData();
+
+  try { renderPortfolio("Personal", false); } catch(e) {}
   try { renderServices(); } catch(e) {}
   try { renderWhy(); } catch(e) {}
   try { renderReviews(); } catch(e) {}
@@ -846,19 +837,30 @@ function initApp() {
     contactForm.onsubmit = e => {
       e.preventDefault();
       const fd = new FormData(e.currentTarget);
-      const name = fd.get("name") || "";
-      const phone = fd.get("phone") || "";
-      const work = fd.get("work") || "";
-      const message = fd.get("message") || "";
-
-      const text = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,\n\nमी वेबसाईट वरून मेसेज करत आहे:\n\n*नाव:* ${name}\n*मोबाईल नंबर:* ${phone}\n*कामाचा प्रकार:* ${work}\n*संदेश:* ${message}`;
-
+      const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aनाव: ${fd.get("name")}%0Aमोबाईल: ${fd.get("phone")}%0Aकामाचा प्रकार: ${fd.get("work")}%0Aसंदेश: ${fd.get("message") || "-"}`;
       if (CONTACT.whatsapp) {
-        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(text)}`, "_blank");
+        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
       } else {
         const toast = $("#toast");
         if (toast) {
-          toast.textContent = "Admin Panel मध्ये आधी WhatsApp Number सेव्ह करा.";
+          toast.textContent = "WhatsApp number नंतर Admin Panel मध्ये जोडा.";
+          toast.classList.add("show");
+          setTimeout(() => toast.classList.remove("show"), 3000);
+        }
+      }
+    };
+  }
+
+  const feedbackBtn = document.getElementById("giveFeedbackBtn");
+  if (feedbackBtn) {
+    feedbackBtn.onclick = () => {
+      const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aमला माझी प्रतिक्रिया (Review) द्यायची आहे:%0A%0Aरेटिंग: ⭐⭐⭐⭐⭐%0Aनाव: %0Aप्रतिक्रिया: `;
+      if (CONTACT.whatsapp) {
+        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
+      } else {
+        const toast = $("#toast");
+        if (toast) {
+          toast.textContent = "WhatsApp number नंतर Admin Panel मध्ये जोडा.";
           toast.classList.add("show");
           setTimeout(() => toast.classList.remove("show"), 3000);
         }
@@ -867,9 +869,8 @@ function initApp() {
   }
 }
 
-// DOM load झाल्यावर डेटा आणि अ‍ॅप सुरू करा
-document.addEventListener("DOMContentLoaded", async () => {
+if (document.readyState === "complete" || document.readyState === "interactive") {
   initApp();
-  await loadSettings();
-  await loadPortfolioData();
-});
+} else {
+  document.addEventListener("DOMContentLoaded", initApp);
+}
