@@ -4,99 +4,287 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PSD Store | धर्मवीर ॲडव्हर्टायझिंग</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Favicon Tab Logo -->
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Devanagari', sans-serif; }
-    body { background-color: #0b0b0b; color: #ffffff; min-height: 100vh; padding-bottom: 50px; }
 
-    /* Header */
-    .store-header {
-      display: flex; justify-content: space-between; align-items: center; padding: 15px 5%;
-      background: rgba(15, 15, 15, 0.95); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px);
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 20px 15px;
     }
-    .store-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
-    .store-brand img { height: 42px; width: auto; }
-    .back-btn { background: rgba(255, 102, 0, 0.15); color: #ff6600; border: 1px solid #ff6600; padding: 8px 18px; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 600; }
 
-    .store-hero { text-align: center; padding: 30px 20px 10px; }
-    .store-hero h1 { font-size: 30px; }
-    .store-hero h1 span { color: #ff6600; }
-
-    /* Sector Styling */
-    .sector-block { max-width: 1200px; margin: 35px auto; padding: 0 20px; }
-    .sector-title { font-size: 20px; color: #ff6600; margin-bottom: 15px; border-bottom: 1px solid rgba(255,102,0,0.3); padding-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
-
-    /* Horizontal Scroll Flex Container */
-    .scroll-grid {
-      display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 10px;
+    /* Top Navigation Header */
+    .top-bar {
+      max-width: 1100px;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: flex-end;
     }
-    .scroll-grid::-webkit-scrollbar { height: 6px; }
-    .scroll-grid::-webkit-scrollbar-thumb { background: #ff6600; border-radius: 10px; }
 
-    /* PSD Cards */
-    .psd-card {
-      min-width: 280px; max-width: 320px; background: #141414; border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px; overflow: hidden; flex-shrink: 0; transition: transform 0.3s;
+    .btn-back {
+      background: #ff5500;
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s;
     }
-    .single-card { min-width: 100%; max-width: 100%; } /* Single Item Banner View */
+    .btn-back:hover { opacity: 0.9; }
 
-    .psd-card:hover { transform: translateY(-5px); border-color: #ff6600; }
+    /* Store Main Layout */
+    .store-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 30px;
+      align-items: start;
+    }
 
-    .psd-img-box { height: 240px; width: 100%; background: #1e1e1e; overflow: hidden; cursor: pointer; }
-    .psd-img-box img { width: 100%; height: 100%; object-fit: cover; }
+    /* Left Branding Sidebar */
+    .brand-sidebar {
+      text-align: center;
+      padding: 20px 10px;
+      position: sticky;
+      top: 20px;
+    }
 
-    .psd-details { padding: 16px; }
-    .psd-details h3 { font-size: 16px; margin-bottom: 8px; color: #fff; }
+    .brand-logo-img {
+      width: 220px;
+      height: auto;
+      margin: 0 auto 15px;
+      display: block;
+      filter: drop-shadow(0px 8px 20px rgba(255, 85, 0, 0.3));
+    }
+
+    .brand-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .brand-subtitle {
+      font-size: 14px;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    /* Right Products Content Area */
+    .products-content { width: 100%; min-width: 0; }
+
+    .section-block { margin-bottom: 35px; }
     
-    .price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
-    .price-main { font-size: 20px; font-weight: bold; color: #ff6600; }
-    .price-orig { font-size: 13px; color: #777; text-decoration: line-through; margin-left: 6px; }
+    .section-header {
+      font-size: 16px;
+      color: #cbd5e1;
+      font-weight: 500;
+      margin-bottom: 12px;
+      text-align: center;
+    }
 
-    .btn-buy { background: #ff6600; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; }
-    .btn-share { background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+    /* Smart Dynamic Cards Grid */
+    .multi-cards-grid {
+      display: flex;
+      gap: 15px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 10px;
+    }
+    .multi-cards-grid::-webkit-scrollbar { display: none; }
 
-    /* Payment Modal */
-    .pay-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; z-index: 10000; }
+    /* Single Item: Large Banner View */
+    .single-card-banner {
+      background: #ffffff;
+      color: #1e293b;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    .single-card-banner .img-container {
+      width: 100%;
+      height: 280px;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .single-card-banner .img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Multiple Items: Small Compact White Cards */
+    .compact-card {
+      min-width: 210px;
+      max-width: 220px;
+      background: #ffffff;
+      color: #1e293b;
+      border-radius: 18px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .compact-card .img-container {
+      width: 100%;
+      height: 180px;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .compact-card .img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-info { padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .card-info h3 { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 4px; line-height: 1.2; }
+
+    .price-details { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+    .price-current { font-size: 18px; font-weight: 800; color: #0f172a; }
+    .price-old { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-left: 4px; }
+    .discount-tag { font-size: 11px; color: #64748b; }
+
+    /* Action Row with Button and Selection Circle */
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-action {
+      background: #ff5500;
+      color: #ffffff;
+      border: none;
+      padding: 9px 12px;
+      border-radius: 18px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      flex-grow: 1;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    /* Selection Circle Box */
+    .select-circle {
+      width: 26px;
+      height: 26px;
+      border: 2px solid #cbd5e1;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .select-circle input { display: none; }
+    .select-circle.checked {
+      border-color: #ff5500;
+      background: #ff5500;
+    }
+    .select-circle.checked::after {
+      content: '✓';
+      color: #fff;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* Scroll Navigation Controls */
+    .scroll-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .nav-arrow {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid #ffffff;
+      background: transparent;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* Modal Styling */
+    .pay-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 10000; }
     .pay-modal.active { display: flex; }
-    .pay-card { background: #181818; border: 1px solid #ff6600; padding: 22px; border-radius: 16px; width: 90%; max-width: 360px; text-align: center; }
+    .pay-card { background: #1e293b; border: 1px solid #ff5500; padding: 20px; border-radius: 18px; width: 90%; max-width: 350px; text-align: center; color: #fff; }
+
+    /* Mobile View Setup */
+    @media (max-width: 768px) {
+      .store-container { grid-template-columns: 1fr; gap: 20px; }
+      .brand-sidebar { position: relative; top: 0; padding: 10px 0; }
+      .brand-logo-img { width: 180px; }
+      .brand-title { font-size: 20px; }
+      .compact-card { min-width: 47%; max-width: 48%; }
+      .multi-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-x: visible; }
+    }
   </style>
 </head>
 <body>
 
-  <header class="store-header">
-    <a href="index.html" class="store-brand">
-      <img src="assets/logo.png" alt="Logo" onerror="this.style.display='none'">
-      <strong>धर्मवीर ॲडव्हर्टायझिंग</strong>
-    </a>
-    <a href="index.html" class="back-btn">← Back to Home</a>
-  </header>
-
-  <div class="store-hero">
-    <h1>प्रीमियम <span>PSD Store</span></h1>
+  <!-- Top Navigation -->
+  <div class="top-bar">
+    <a href="index.html" class="btn-back">← Back</a>
   </div>
 
-  <div id="mainStoreContent">
-    <p style="text-align:center; padding: 30px; color:#aaa;">स्टोअर लोड होत आहे...</p>
+  <div class="store-container">
+    
+    <!-- Branding Header Sidebar -->
+    <aside class="brand-sidebar">
+      <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग" class="brand-logo-img" onerror="this.src='https://via.placeholder.com/200?text=Logo'">
+      <h1 class="brand-title">धर्मवीर ॲडव्हर्टायझिंग</h1>
+      <p class="brand-subtitle">Premium PSD Templates</p>
+    </aside>
+
+    <!-- Products Content -->
+    <main class="products-content" id="storeMain">
+      <p style="text-align:center; padding: 30px; color:#94a3b8;">PSD Store लोड होत आहे...</p>
+    </main>
+
   </div>
 
-  <!-- QR Payment Popup -->
+  <!-- QR Code Modal -->
   <div class="pay-modal" id="payModal">
     <div class="pay-card">
-      <h3 id="payTitle">PSD Name</h3>
-      <p style="margin:10px 0; color:#ff6600; font-weight:bold; font-size: 22px;" id="payPrice">₹0</p>
+      <h3 id="payTitle" style="font-size:15px;">PSD Name</h3>
+      <p style="margin:6px 0; color:#ff5500; font-weight:800; font-size: 22px;" id="payPrice">₹0</p>
       
-      <div style="background:#fff; padding:10px; border-radius:10px; display:inline-block;">
-        <img id="qrImage" src="" style="width:170px; height:170px; display:block;">
+      <div style="background:#fff; padding:8px; border-radius:10px; display:inline-block; margin: 4px 0;">
+        <img id="qrImage" src="" style="width:160px; height:160px; display:block;">
       </div>
       
-      <p style="font-size:12px; color:#aaa; margin:12px 0 6px;">QR कोड स्कॅन करा किंवा UPI ID कॉपी करा:</p>
-      <button onclick="navigator.clipboard.writeText('9309860089@ybl'); alert('UPI ID कॉपी झाला!');" style="background:#0b0b0b; color:#fff; border:1px dashed #ff6600; padding:8px 14px; border-radius:6px; cursor:pointer; font-size:13px; width: 100%;">Copy UPI: 9309860089@ybl</button>
+      <p style="font-size:11px; color:#94a3b8; margin:8px 0 4px;">QR कोड स्कॅन करा किंवा UPI ID कॉपी करा:</p>
+      <button onclick="navigator.clipboard.writeText('9309860089@ybl'); alert('UPI ID कॉपी झाला!');" style="background:#0f172a; color:#fff; border:1px dashed #ff5500; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px; width: 100%;">Copy UPI: 9309860089@ybl</button>
 
-      <a id="waLink" href="#" target="_blank" style="display:block; background:#25D366; color:#fff; padding:10px; border-radius:8px; text-decoration:none; font-weight:bold; margin-top:12px; font-size:14px;">WhatsApp वर स्क्रीनशॉट पाठवा →</a>
-      <button onclick="document.getElementById('payModal').classList.remove('active')" style="background:transparent; color:#888; border:none; margin-top:12px; cursor:pointer; font-size:13px;">रद्द करा</button>
+      <a id="waLink" href="#" target="_blank" style="display:block; background:#25D366; color:#fff; padding:10px; border-radius:8px; text-decoration:none; font-weight:bold; margin-top:10px; font-size:13px;">WhatsApp वर स्क्रीनशॉट पाठवा →</a>
+      <button onclick="document.getElementById('payModal').classList.remove('active')" style="background:transparent; color:#94a3b8; border:none; margin-top:8px; cursor:pointer; font-size:12px;">रद्द करा</button>
     </div>
   </div>
 
@@ -110,55 +298,75 @@
         const data = await res.json();
         renderStore(data);
       } catch (e) {
-        document.getElementById('mainStoreContent').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
+        document.getElementById('storeMain').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
       }
     }
 
     function renderStore(data) {
-      const container = document.getElementById('mainStoreContent');
+      const container = document.getElementById('storeMain');
       container.innerHTML = '';
 
       if (!data || data.length === 0) {
-        container.innerHTML = "<p style='text-align:center; color:#888;'>सध्या कोणतीही PSD उपलब्ध नाही.</p>";
+        container.innerHTML = "<p style='text-align:center; color:#94a3b8;'>सध्या कोणतीही PSD उपलब्ध नाही.</p>";
         return;
       }
 
-      data.forEach(sec => {
+      data.forEach((sec, idx) => {
         if (!sec.items || sec.items.length === 0) return;
 
         const secBlock = document.createElement('div');
-        secBlock.className = 'sector-block';
+        secBlock.className = 'section-block';
 
         const isSingle = sec.items.length === 1;
 
-        let cardsHtml = sec.items.map(item => `
-          <div class="psd-card ${isSingle ? 'single-card' : ''}" id="${item.id}">
-            <div class="psd-img-box" onclick="openPay('${item.title}', '${item.price}')">
-              <img src="${item.previewImg}" alt="${item.title}" onerror="this.src='assets/logo.png'">
-            </div>
-            <div class="psd-details">
-              <h3>${item.title}</h3>
-              <div class="price-row">
+        let cardsHtml = sec.items.map(item => {
+          const discount = item.originalPrice && Number(item.originalPrice) > Number(item.price)
+            ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) + '%Off'
+            : '';
+
+          return `
+            <div class="${isSingle ? 'single-card-banner' : 'compact-card'}">
+              <div class="img-container" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">
+                <img src="${item.previewImg}" alt="${item.title}" onerror="this.src='assets/logo.png'">
+              </div>
+              <div class="card-info">
                 <div>
-                  <span class="price-main">₹${item.price}</span>
-                  <span class="price-orig">₹${item.originalPrice}</span>
+                  <h3>${escapeHtml(item.title)}</h3>
+                  <div class="price-details">
+                    <div>
+                      <span class="price-current">₹${item.price}</span>
+                      <span class="price-old">₹${item.originalPrice}</span>
+                    </div>
+                    ${discount ? `<span class="discount-tag">${discount}</span>` : ''}
+                  </div>
                 </div>
-                <div>
-                  <button class="btn-buy" onclick="openPay('${item.title}', '${item.price}')">खरेदी करा →</button>
-                  <button class="btn-share" onclick="copyLink('${item.id}')">🔗</button>
+                <div class="action-row">
+                  <button class="btn-action" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it Now →</button>
+                  <div class="select-circle" onclick="this.classList.toggle('checked')"></div>
                 </div>
               </div>
             </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
 
         secBlock.innerHTML = `
-          <h2 class="sector-title">${sec.sectionTitle}</h2>
-          <div class="${isSingle ? '' : 'scroll-grid'}">${cardsHtml}</div>
+          <div class="section-header">${escapeHtml(sec.sectionTitle)}</div>
+          <div class="${isSingle ? '' : 'multi-cards-grid'}" id="scroll_grid_${idx}">${cardsHtml}</div>
+          ${!isSingle ? `
+            <div class="scroll-controls">
+              <button class="nav-arrow" onclick="scrollGrid(${idx}, -200)">←</button>
+              <button class="nav-arrow" onclick="scrollGrid(${idx}, 200)">→</button>
+            </div>
+          ` : ''}
         `;
 
         container.appendChild(secBlock);
       });
+    }
+
+    function scrollGrid(idx, dist) {
+      const grid = document.getElementById(`scroll_grid_${idx}`);
+      if(grid) grid.scrollBy({ left: dist, behavior: 'smooth' });
     }
 
     function openPay(title, price) {
@@ -169,8 +377,8 @@
       document.getElementById('payModal').classList.add('active');
     }
 
-    function copyLink(id) {
-      navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}?id=${id}`).then(() => alert("लिंक कॉपी झाली!"));
+    function escapeHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
 
     window.onload = fetchStoreData;
