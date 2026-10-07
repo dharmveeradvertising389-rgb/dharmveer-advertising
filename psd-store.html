@@ -13,6 +13,7 @@
       background-color: #0b0b0b;
       color: #ffffff;
       min-height: 100vh;
+      padding-bottom: 50px;
     }
 
     /* Top Custom Header */
@@ -117,6 +118,13 @@
       box-shadow: 0 12px 30px rgba(255, 102, 0, 0.3);
     }
 
+    /* Highlighted Targeted Card */
+    .psd-card.highlighted {
+      border: 2px solid #ff6600 !important;
+      box-shadow: 0 0 35px rgba(255, 102, 0, 0.6) !important;
+      transform: scale(1.02);
+    }
+
     .psd-img-box {
       height: 260px;
       width: 100%;
@@ -153,14 +161,21 @@
       margin-bottom: 16px;
     }
 
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
     /* Price Box */
     .price-tag {
+      flex: 1;
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: rgba(255, 102, 0, 0.1);
       border: 1px solid rgba(255, 102, 0, 0.3);
-      padding: 10px 16px;
+      padding: 10px 14px;
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -184,6 +199,22 @@
       font-size: 13px;
       font-weight: 600;
       color: #ddd;
+    }
+
+    .copy-link-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.3s ease;
+    }
+
+    .copy-link-btn:hover {
+      background: #ff6600;
+      border-color: #ff6600;
     }
 
     /* Image Lightbox Modal */
@@ -224,6 +255,7 @@
       background: rgba(0,0,0,0.85);
       align-items: center;
       justify-content: center;
+      backdrop-filter: blur(5px);
     }
 
     .pay-modal.active { display: flex; }
@@ -233,25 +265,30 @@
       border: 1px solid #ff6600;
       padding: 25px;
       border-radius: 16px;
-      max-width: 380px;
+      max-width: 400px;
       width: 90%;
       text-align: center;
       box-shadow: 0 10px 30px rgba(255, 102, 0, 0.3);
     }
 
-    .pay-card h3 { color: #ff6600; margin-bottom: 10px; }
-    .pay-card p { font-size: 14px; color: #ccc; margin-bottom: 20px; }
-    
-    .pay-btn-wa {
-      display: block;
-      width: 100%;
-      background: #25D366;
-      color: #fff;
-      padding: 12px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-      margin-bottom: 10px;
+    .pay-card h3 { color: #ff6600; margin-bottom: 8px; }
+    .pay-card p { font-size: 14px; color: #ccc; margin-bottom: 18px; }
+
+    .upi-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .upi-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 12px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 15px; color: #fff;
+      border: none; cursor: pointer; transition: transform 0.2s;
+    }
+    .upi-btn:hover { transform: translateY(-2px); }
+    .upi-gpay { background: #4285F4; }
+    .upi-phonepe { background: #5f259f; }
+    .upi-paytm { background: #00baf2; }
+    .upi-wa { background: #25D366; }
+
+    .download-btn {
+      display: block; width: 100%; background: #ff6600; color: #fff; padding: 12px;
+      border-radius: 10px; text-decoration: none; font-weight: bold; margin-top: 15px; font-size: 15px;
     }
 
     .pay-btn-close {
@@ -260,7 +297,17 @@
       border: none;
       cursor: pointer;
       font-size: 14px;
+      margin-top: 12px;
     }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: #ff6600; color: #fff; padding: 10px 20px; border-radius: 20px;
+      font-size: 14px; font-weight: bold; display: none; z-index: 200000;
+    }
+    .toast.show { display: block; animation: fadeInOut 2.5s ease; }
+    @keyframes fadeInOut { 0%{opacity:0;} 15%{opacity:1;} 85%{opacity:1;} 100%{opacity:0;} }
   </style>
 </head>
 <body>
@@ -284,34 +331,40 @@
   </div>
 
   <!-- PSD Items Container -->
-  <div class="psd-container">
+  <div class="psd-container" id="psdContainer">
 
     <!-- Card 1 -->
-    <div class="psd-card">
+    <div class="psd-card" id="festival-banner">
       <div class="psd-img-box" onclick="showFullImg('assets/logo.png')">
-        <img src="assets/logo.png" alt="Festival PSD" onerror="this.src='https://via.placeholder.com/400x300/181818/ff6600?text=PSD+Design+Preview'">
+        <img src="assets/logo.png" alt="Festival PSD" onerror="this.src='https://via.placeholder.com/400x300/181818/ff6600?text=Festival+Banner+PSD'">
       </div>
       <div class="psd-details">
         <h3>Festival Banner PSD</h3>
         <p>Fully Editable Layers • HD Quality</p>
-        <div class="price-tag" onclick="buyPsd('Festival Banner PSD', '₹199')">
-          <span>₹199</span>
-          <small>Buy PSD →</small>
+        <div class="card-actions">
+          <div class="price-tag" onclick="buyPsd('Festival Banner PSD', '199', 'festival-banner', 'https://drive.google.com/your-psd-link-1')">
+            <span>₹199</span>
+            <small>Buy PSD →</small>
+          </div>
+          <button class="copy-link-btn" onclick="copyPsdLink('festival-banner')">🔗 Link</button>
         </div>
       </div>
     </div>
 
     <!-- Card 2 -->
-    <div class="psd-card">
+    <div class="psd-card" id="political-poster">
       <div class="psd-img-box" onclick="showFullImg('assets/logo.png')">
-        <img src="assets/logo.png" alt="Political PSD" onerror="this.src='https://via.placeholder.com/400x300/181818/ff6600?text=PSD+Design+Preview'">
+        <img src="assets/logo.png" alt="Political PSD" onerror="this.src='https://via.placeholder.com/400x300/181818/ff6600?text=Political+Poster+PSD'">
       </div>
       <div class="psd-details">
         <h3>Political Poster PSD</h3>
         <p>High Resolution • Ready to Print</p>
-        <div class="price-tag" onclick="buyPsd('Political Poster PSD', '₹299')">
-          <span>₹299</span>
-          <small>Buy PSD →</small>
+        <div class="card-actions">
+          <div class="price-tag" onclick="buyPsd('Political Poster PSD', '299', 'political-poster', 'https://drive.google.com/your-psd-link-2')">
+            <span>₹299</span>
+            <small>Buy PSD →</small>
+          </div>
+          <button class="copy-link-btn" onclick="copyPsdLink('political-poster')">🔗 Link</button>
         </div>
       </div>
     </div>
@@ -329,13 +382,29 @@
     <div class="pay-card">
       <h3 id="payTitle">PSD Name</h3>
       <p>किंमत: <strong id="payPrice" style="color:#ff6600;">₹0</strong></p>
-      <p>ही PSD फाईल मिळवण्यासाठी खालील बटणावर क्लिक करून WhatsApp वर संपर्क करा:</p>
-      <a id="waLink" href="#" target="_blank" class="pay-btn-wa">WhatsApp Payment / Order →</a>
+
+      <div class="upi-options">
+        <a id="gpayBtn" href="#" class="upi-btn upi-gpay">Google Pay द्वारे भरणा करा</a>
+        <a id="phonepeBtn" href="#" class="upi-btn upi-phonepe">PhonePe द्वारे भरणा करा</a>
+        <a id="paytmBtn" href="#" class="upi-btn upi-paytm">Paytm द्वारे भरणा करा</a>
+        <a id="waLink" href="#" target="_blank" class="upi-btn upi-wa">WhatsApp Order →</a>
+      </div>
+
+      <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+        <p style="font-size: 12px; color: #aaa;">पेमेंट झाल्यावर फाईल लिंक उघडेल:</p>
+        <a id="downloadBtn" href="#" target="_blank" class="download-btn">📥 PSD File Download करा</a>
+      </div>
+
       <button class="pay-btn-close" onclick="closePayModal()">रद्द करा</button>
     </div>
   </div>
 
+  <div class="toast" id="toast">लिंक कॉपी झाली!</div>
+
   <script>
+    const waNum = "919309860089"; // तुमचा WhatsApp नंबर
+    const UPI_ID = "9309860089@ybl"; // इथे तुमचा UPI ID टाका (उदा. phonepe/gpay)
+
     function showFullImg(src) {
       document.getElementById('fullImgSrc').src = src;
       document.getElementById('imgModal').classList.add('active');
@@ -345,15 +414,54 @@
       document.getElementById('imgModal').classList.remove('active');
     }
 
-    function buyPsd(title, price) {
+    // 1. Copy Direct Link Feature
+    function copyPsdLink(id) {
+      const fullUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        showToast("PSD ची लिंक कॉपी झाली!");
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.innerText = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+
+    // 2. Direct Target Link Handler (इन्स्टाग्राम वरून आल्यावर तीच फाईल सर्वात वर दिसेल)
+    window.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetId = urlParams.get('id');
+
+      if (targetId) {
+        const targetCard = document.getElementById(targetId);
+        if (targetCard) {
+          const container = document.getElementById("psdContainer");
+          container.prepend(targetCard);
+          targetCard.classList.add("highlighted");
+
+          setTimeout(() => {
+            targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 300);
+        }
+      }
+    });
+
+    // 3. Payment Handler
+    function buyPsd(title, price, id, downloadLink) {
       document.getElementById('payTitle').innerText = title;
-      document.getElementById('payPrice').innerText = price;
-      
-      const msg = encodeURIComponent(`नमस्कार धर्मवीर ॲडव्हर्टायझिंग, मला "${title}" (${price}) ही PSD फाईल विकत घ्यायची आहे.`);
-      
-      // Admin WhatsApp Link (Set number here)
-      const waNum = "919000000000"; // Tumcha WhatsApp Number ithe taka
+      document.getElementById('payPrice').innerText = `₹${price}`;
+
+      const upiUrl = `upi://pay?pa=${UPI_ID}&pn=DharmveerAdvertising&am=${price}&cu=INR&tn=${encodeURIComponent(title)}`;
+      document.getElementById('gpayBtn').href = upiUrl;
+      document.getElementById('phonepeBtn').href = upiUrl;
+      document.getElementById('paytmBtn').href = upiUrl;
+
+      const msg = encodeURIComponent(`नमस्कार धर्मवीर ॲडव्हर्टायझिंग, मला "${title}" (₹${price}) ही PSD फाईल विकत घ्यायची आहे.`);
       document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${msg}`;
+
+      document.getElementById('downloadBtn').href = downloadLink || "#";
 
       document.getElementById('payModal').classList.add('active');
     }
@@ -365,4 +473,3 @@
 
 </body>
 </html>
-const waNum = "919309860089"; // इथे तुमचा ९१ सह व्हॉट्सॲप नंबर टाका
