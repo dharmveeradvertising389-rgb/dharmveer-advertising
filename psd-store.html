@@ -22,7 +22,7 @@
 
     /* Top Navigation Header */
     .top-bar {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto 20px;
       display: flex;
       justify-content: flex-end;
@@ -45,41 +45,50 @@
 
     /* Store Main Layout */
     .store-container {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 30px;
+      grid-template-columns: 350px 1fr;
+      gap: 40px;
       align-items: start;
     }
 
-    /* Left Branding Sidebar */
+    /* Left Branding Sidebar (PC: Perfect Centered) */
     .brand-sidebar {
       text-align: center;
-      padding: 20px 10px;
+      padding: 40px 10px;
       position: sticky;
-      top: 20px;
+      top: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
     }
 
     .brand-logo-img {
-      width: 220px;
+      width: 260px;
       height: auto;
-      margin: 0 auto 15px;
+      margin: 0 auto 18px;
       display: block;
-      filter: drop-shadow(0px 8px 20px rgba(255, 85, 0, 0.3));
+      filter: drop-shadow(0px 10px 25px rgba(255, 85, 0, 0.35));
     }
 
     .brand-title {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
       color: #ffffff;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      text-align: center;
     }
 
     .brand-subtitle {
-      font-size: 14px;
+      font-size: 15px;
       color: #cbd5e1;
       font-weight: 500;
+      text-align: center;
     }
 
     /* Right Products Content Area */
@@ -119,13 +128,16 @@
       height: 280px;
       background: #000;
       overflow: hidden;
+      cursor: zoom-in;
     }
 
     .single-card-banner .img-container img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.3s;
     }
+    .single-card-banner .img-container img:hover { transform: scale(1.03); }
 
     /* Multiple Items: Small Compact White Cards */
     .compact-card {
@@ -146,13 +158,16 @@
       height: 180px;
       background: #000;
       overflow: hidden;
+      cursor: zoom-in;
     }
 
     .compact-card .img-container img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.3s;
     }
+    .compact-card .img-container img:hover { transform: scale(1.03); }
 
     .card-info { padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
     .card-info h3 { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 4px; line-height: 1.2; }
@@ -162,7 +177,7 @@
     .price-old { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-left: 4px; }
     .discount-tag { font-size: 11px; color: #64748b; }
 
-    /* Action Row with Button and Selection Circle */
+    /* Action Row with Button and Share Link Button */
     .action-row {
       display: flex;
       align-items: center;
@@ -182,31 +197,29 @@
       flex-grow: 1;
       text-align: center;
       text-decoration: none;
+      transition: background 0.2s;
     }
+    .btn-action:hover { background: #e04b00; }
 
-    /* Selection Circle Box */
-    .select-circle {
-      width: 26px;
-      height: 26px;
+    .link-circle {
+      width: 32px;
+      height: 32px;
       border: 2px solid #cbd5e1;
       border-radius: 50%;
+      background: #f8fafc;
+      color: #475569;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      font-size: 14px;
       transition: all 0.2s;
     }
-    .select-circle input { display: none; }
-    .select-circle.checked {
+    .link-circle:hover {
       border-color: #ff5500;
-      background: #ff5500;
-    }
-    .select-circle.checked::after {
-      content: '✓';
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
+      color: #ff5500;
+      background: #fff5f0;
     }
 
     /* Scroll Navigation Controls */
@@ -231,15 +244,45 @@
       font-size: 16px;
     }
 
-    /* Modal Styling */
-    .pay-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 10000; }
-    .pay-modal.active { display: flex; }
-    .pay-card { background: #1e293b; border: 1px solid #ff5500; padding: 20px; border-radius: 18px; width: 90%; max-width: 350px; text-align: center; color: #fff; }
+    /* Modals Styling (Payment & Full Image Preview) */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.88);
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .pay-card {
+      background: #1e293b;
+      border: 1px solid #ff5500;
+      padding: 20px;
+      border-radius: 18px;
+      width: 90%;
+      max-width: 350px;
+      text-align: center;
+      color: #fff;
+    }
+
+    /* Full Image Lightbox */
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 90vh;
+      border-radius: 12px;
+      object-fit: contain;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      border: 2px solid rgba(255,255,255,0.2);
+    }
 
     /* Mobile View Setup */
     @media (max-width: 768px) {
       .store-container { grid-template-columns: 1fr; gap: 20px; }
-      .brand-sidebar { position: relative; top: 0; padding: 10px 0; }
+      .brand-sidebar { position: relative; top: 0; padding: 20px 10px; background: transparent; border: none; }
       .brand-logo-img { width: 180px; }
       .brand-title { font-size: 20px; }
       .compact-card { min-width: 47%; max-width: 48%; }
@@ -256,9 +299,9 @@
 
   <div class="store-container">
     
-    <!-- Branding Header Sidebar -->
+    <!-- Branding Header Sidebar (Centered) -->
     <aside class="brand-sidebar">
-      <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग" class="brand-logo-img" onerror="this.src='https://via.placeholder.com/200?text=Logo'">
+      <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग" class="brand-logo-img" onerror="this.src='https://via.placeholder.com/260?text=Logo'">
       <h1 class="brand-title">धर्मवीर ॲडव्हर्टायझिंग</h1>
       <p class="brand-subtitle">Premium PSD Templates</p>
     </aside>
@@ -270,9 +313,9 @@
 
   </div>
 
-  <!-- QR Code Modal -->
-  <div class="pay-modal" id="payModal">
-    <div class="pay-card">
+  <!-- QR Code Payment Modal -->
+  <div class="modal-overlay" id="payModal" onclick="closeModalOutside(event, 'payModal')">
+    <div class="pay-card" onclick="event.stopPropagation()">
       <h3 id="payTitle" style="font-size:15px;">PSD Name</h3>
       <p style="margin:6px 0; color:#ff5500; font-weight:800; font-size: 22px;" id="payPrice">₹0</p>
       
@@ -286,6 +329,11 @@
       <a id="waLink" href="#" target="_blank" style="display:block; background:#25D366; color:#fff; padding:10px; border-radius:8px; text-decoration:none; font-weight:bold; margin-top:10px; font-size:13px;">WhatsApp वर स्क्रीनशॉट पाठवा →</a>
       <button onclick="document.getElementById('payModal').classList.remove('active')" style="background:transparent; color:#94a3b8; border:none; margin-top:8px; cursor:pointer; font-size:12px;">रद्द करा</button>
     </div>
+  </div>
+
+  <!-- Full Image Preview Modal (Lightbox) -->
+  <div class="modal-overlay" id="imageModal" onclick="closeModalOutside(event, 'imageModal')">
+    <img id="lightboxImg" class="lightbox-content" src="" alt="Full Preview">
   </div>
 
   <script>
@@ -324,9 +372,11 @@
             ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) + '%Off'
             : '';
 
+          const itemUrl = window.location.origin + window.location.pathname + '#' + item.id;
+
           return `
-            <div class="${isSingle ? 'single-card-banner' : 'compact-card'}">
-              <div class="img-container" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">
+            <div class="${isSingle ? 'single-card-banner' : 'compact-card'}" id="${item.id}">
+              <div class="img-container" onclick="openImageLightbox('${escapeHtml(item.previewImg)}')">
                 <img src="${item.previewImg}" alt="${item.title}" onerror="this.src='assets/logo.png'">
               </div>
               <div class="card-info">
@@ -342,7 +392,7 @@
                 </div>
                 <div class="action-row">
                   <button class="btn-action" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it Now →</button>
-                  <div class="select-circle" onclick="this.classList.toggle('checked')"></div>
+                  <div class="link-circle" title="या PSD ची लिंक कॉपी करा" onclick="copyItemLink('${itemUrl}')">🔗</div>
                 </div>
               </div>
             </div>
@@ -361,6 +411,23 @@
         `;
 
         container.appendChild(secBlock);
+      });
+    }
+
+    function openImageLightbox(imgSrc) {
+      document.getElementById('lightboxImg').src = imgSrc;
+      document.getElementById('imageModal').classList.add('active');
+    }
+
+    function closeModalOutside(event, modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    function copyItemLink(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        alert("या PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\nआता तुम्ही ती WhatsApp किंवा Instagram वर पेस्ट करू शकता.");
+      }).catch(err => {
+        alert("लिंक कॉपी करताना अडचण आली.");
       });
     }
 
