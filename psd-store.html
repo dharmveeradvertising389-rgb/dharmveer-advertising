@@ -13,277 +13,149 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Devanagari', sans-serif; }
 
-    /* Background Texture & Theme */
+    /* Pure Black Background with Subtle Dot Texture */
     body {
-      background-color: #0d1322;
-      background-image: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.25) 0px, rgba(0, 0, 0, 0.25) 2px, transparent 2px, transparent 8px);
+      background-color: #080808;
+      background-image: radial-gradient(#1a1a1a 1px, transparent 1px);
+      background-size: 20px 20px;
       color: #ffffff;
       min-height: 100vh;
+      padding: 30px 15px;
+    }
+
+    /* Main Container */
+    .store-layout {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 40px;
+    }
+
+    /* Left Sidebar / Brand Area */
+    .profile-sidebar {
+      position: sticky;
+      top: 30px;
+      height: fit-content;
+      text-align: center;
       padding: 20px 10px;
     }
 
-    /* Main Container (PC: 2 Columns Layout) */
-    .store-layout {
-      max-width: 1150px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 25px;
-    }
-
-    /* Left Profile Sidebar (PC) */
-    .profile-sidebar {
-      position: sticky;
-      top: 20px;
-      height: fit-content;
-      text-align: center;
-      padding: 25px 20px;
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 102, 0, 0.3);
-      border-radius: 20px;
-    }
-
-    /* Top Back Button */
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255, 102, 0, 0.15);
-      color: #ff6600;
-      border: 1px solid #ff6600;
-      padding: 6px 14px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 700;
+    /* Big PNG Logo Container */
+    .logo-wrapper {
+      position: relative;
+      display: inline-block;
       margin-bottom: 20px;
-      transition: all 0.2s;
+      padding: 10px;
     }
-    .back-btn:hover { background: #ff6600; color: #fff; }
 
     .profile-avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #ff6600;
-      margin: 0 auto 12px;
-      box-shadow: 0 6px 20px rgba(255, 102, 0, 0.25);
-      background: #111;
+      width: 220px;
+      height: auto;
+      max-height: 260px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 20px rgba(255, 102, 0, 0.25));
     }
 
-    .profile-name { font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 6px; }
-    .profile-tagline { font-size: 13px; color: #ff6600; font-weight: 700; margin-bottom: 6px; }
-    .profile-desc { font-size: 12px; color: #cbd5e1; line-height: 1.5; }
+    /* Floating Badges like uploaded image */
+    .tag-badge {
+      position: absolute;
+      background: rgba(20, 20, 20, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 8px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    .tag-badge span { color: #ff6600; margin-right: 4px; }
+
+    .tag-creative { top: 15%; left: -10px; }
+    .tag-branding { top: 35%; right: -10px; }
+    .tag-marketing { bottom: 10%; left: -5px; }
+
+    .profile-name { font-size: 24px; font-weight: 800; color: #ffffff; margin-bottom: 6px; letter-spacing: 0.5px; }
+    .profile-tagline { font-size: 14px; color: #ff6600; font-weight: 700; margin-bottom: 10px; }
+    .profile-desc { font-size: 13px; color: #a1a1aa; line-height: 1.6; max-width: 300px; margin: 0 auto; }
 
     /* Right Products Section */
     .products-container { width: 100%; min-width: 0; }
 
-    .sector-block { margin-bottom: 35px; }
+    .sector-block { margin-bottom: 45px; }
     .sector-title {
       font-size: 20px;
       font-weight: 800;
       color: #ff6600;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    /* Multiple items (2-3 or more): Dynamic Grid / Horizontal Scroll */
+    /* Smart Dynamic Grid */
     .multi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px;
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 15px;
     }
+    .multi-grid::-webkit-scrollbar { height: 6px; }
+    .multi-grid::-webkit-scrollbar-thumb { background: #ff6600; border-radius: 10px; }
 
-    /* White Theme Cards */
+    /* Cards - Dark Style */
     .small-card {
-      background: #ffffff;
-      color: #1e293b;
+      min-width: 270px;
+      max-width: 290px;
+      background: #121212;
+      border: 1px solid #222;
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      transition: transform 0.25s, box-shadow 0.25s;
-      display: flex;
-      flex-direction: column;
+      flex-shrink: 0;
+      transition: transform 0.3s, border-color 0.3s;
     }
-    .small-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); }
+    .small-card:hover { transform: translateY(-5px); border-color: #ff6600; }
 
-    .small-card .img-box { height: 180px; width: 100%; background: #f1f5f9; overflow: hidden; cursor: pointer; }
+    .small-card .img-box { height: 230px; width: 100%; background: #1a1a1a; overflow: hidden; cursor: pointer; }
     .small-card .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Single Item: Large Banner View (White Theme) */
+    /* Single Large Banner View */
     .single-banner {
       width: 100%;
-      background: #ffffff;
-      color: #1e293b;
-      border-radius: 18px;
+      background: #121212;
+      border: 1px solid #262626;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      transition: transform 0.3s;
     }
-    .single-banner .img-box { height: 320px; width: 100%; background: #f1f5f9; overflow: hidden; cursor: pointer; }
+    .single-banner .img-box { height: 400px; width: 100%; background: #1a1a1a; overflow: hidden; cursor: pointer; }
     .single-banner .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-    .card-details { padding: 14px 16px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .card-details h3 { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 6px; line-height: 1.3; }
+    .card-details { padding: 18px; }
+    .card-details h3 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 10px; }
 
-    .price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
-    .price-main { font-size: 20px; font-weight: 800; color: #0f172a; }
-    .price-orig { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-left: 4px; }
-    .off-badge { color: #16a34a; font-size: 11px; font-weight: 800; margin-left: 6px; }
+    .price-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+    .price-main { font-size: 22px; font-weight: 800; color: #ff6600; }
+    .price-orig { font-size: 13px; color: #666; text-decoration: line-through; margin-left: 6px; }
+    .off-badge { background: rgba(255, 102, 0, 0.15); color: #ff6600; font-size: 11px; padding: 3px 8px; border-radius: 12px; font-weight: bold; }
 
     .btn-get {
-      width: 100%;
-      background: #000000;
-      color: #ffffff;
+      background: #ff6600;
+      color: #fff;
       border: none;
-      padding: 10px 14px;
-      border-radius: 20px;
+      padding: 10px 18px;
+      border-radius: 10px;
       cursor: pointer;
-      font-weight: 700;
+      font-weight: bold;
       font-size: 13px;
-      margin-top: 12px;
-      text-align: center;
       transition: background 0.2s;
     }
-    .btn-get:hover { background: #ff6600; }
+    .btn-get:hover { background: #e65c00; }
 
-    /* Payment Modal Popup */
-    .pay-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; z-index: 10000; }
-    .pay-modal.active { display: flex; }
-    .pay-card { background: #0f172a; border: 1px solid #ff6600; padding: 25px; border-radius: 20px; width: 90%; max-width: 360px; text-align: center; color: #fff; }
-
-    /* Mobile Responsive View */
-    @media (max-width: 768px) {
-      .store-layout { grid-template-columns: 1fr; gap: 15px; }
-      .profile-sidebar { position: relative; top: 0; border-radius: 16px; padding: 20px 15px; }
-      .profile-avatar { width: 90px; height: 90px; }
-      .profile-name { font-size: 18px; }
-      .single-banner .img-box { height: 220px; }
-      .multi-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-      .small-card .img-box { height: 140px; }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="store-layout">
-    
-    <!-- Left Sidebar / Profile Header -->
-    <aside class="profile-sidebar">
-      <a href="index.html" class="back-btn">← Back to Home</a>
-      <img src="assets/logo.png" alt="Logo" class="profile-avatar" onerror="this.src='https://via.placeholder.com/120?text=Logo'">
-      <h1 class="profile-name">धर्मवीर ॲडव्हर्टायझिंग</h1>
-      <p class="profile-tagline">🎨 Premium PSD Templates</p>
-      <p class="profile-desc">उच्च दर्जाचे ग्राफिक डिझाईन्स, फ्लेक्स बॅनर, उत्सव व बिझनेस PSD टेम्पलेट्स.</p>
-    </aside>
-
-    <!-- Right Products Area -->
-    <main class="products-container" id="mainStoreContent">
-      <p style="text-align:center; padding: 40px; color:#94a3b8;">PSD Store लोड होत आहे...</p>
-    </main>
-
-  </div>
-
-  <!-- QR Payment Modal -->
-  <div class="pay-modal" id="payModal">
-    <div class="pay-card">
-      <h3 id="payTitle" style="font-size:16px;">PSD Name</h3>
-      <p style="margin:8px 0; color:#ff6600; font-weight:800; font-size: 24px;" id="payPrice">₹0</p>
-      
-      <div style="background:#fff; padding:10px; border-radius:12px; display:inline-block; margin: 5px 0;">
-        <img id="qrImage" src="" style="width:170px; height:170px; display:block;">
-      </div>
-      
-      <p style="font-size:12px; color:#94a3b8; margin:10px 0 6px;">QR कोड स्कॅन करा किंवा UPI ID कॉपी करा:</p>
-      <button onclick="navigator.clipboard.writeText('9309860089@ybl'); alert('UPI ID कॉपी झाला!');" style="background:#1e293b; color:#fff; border:1px dashed #ff6600; padding:8px 14px; border-radius:8px; cursor:pointer; font-size:12px; width: 100%;">Copy UPI: 9309860089@ybl</button>
-
-      <a id="waLink" href="#" target="_blank" style="display:block; background:#25D366; color:#fff; padding:12px; border-radius:10px; text-decoration:none; font-weight:bold; margin-top:12px; font-size:13px;">WhatsApp वर स्क्रीनशॉट पाठवा →</a>
-      <button onclick="document.getElementById('payModal').classList.remove('active')" style="background:transparent; color:#94a3b8; border:none; margin-top:10px; cursor:pointer; font-size:12px;">रद्द करा</button>
-    </div>
-  </div>
-
-  <script>
-    const waNum = "919309860089";
-    const UPI_ID = "9309860089@ybl";
-
-    async function fetchStoreData() {
-      try {
-        const res = await fetch('/api/psd-store');
-        const data = await res.json();
-        renderStore(data);
-      } catch (e) {
-        document.getElementById('mainStoreContent').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
-      }
-    }
-
-    function renderStore(data) {
-      const container = document.getElementById('mainStoreContent');
-      container.innerHTML = '';
-
-      if (!data || data.length === 0) {
-        container.innerHTML = "<p style='text-align:center; color:#94a3b8;'>सध्या कोणतीही PSD उपलब्ध नाही.</p>";
-        return;
-      }
-
-      data.forEach(sec => {
-        if (!sec.items || sec.items.length === 0) return;
-
-        const secBlock = document.createElement('div');
-        secBlock.className = 'sector-block';
-
-        const isSingle = sec.items.length === 1;
-
-        let cardsHtml = sec.items.map(item => {
-          const discount = item.originalPrice && Number(item.originalPrice) > Number(item.price)
-            ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) + '% off'
-            : '';
-
-          return `
-            <div class="${isSingle ? 'single-banner' : 'small-card'}" id="${item.id}">
-              <div class="img-box" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">
-                <img src="${item.previewImg}" alt="${item.title}" onerror="this.src='assets/logo.png'">
-              </div>
-              <div class="card-details">
-                <div>
-                  <h3>${escapeHtml(item.title)}</h3>
-                  <div class="price-row">
-                    <div>
-                      <span class="price-main">₹${item.price}</span>
-                      <span class="price-orig">₹${item.originalPrice}</span>
-                    </div>
-                    ${discount ? `<span class="off-badge">${discount}</span>` : ''}
-                  </div>
-                </div>
-                <button class="btn-get" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it now →</button>
-              </div>
-            </div>
-          `;
-        }).join('');
-
-        secBlock.innerHTML = `
-          <h2 class="sector-title">${escapeHtml(sec.sectionTitle)}</h2>
-          <div class="${isSingle ? '' : 'multi-grid'}">${cardsHtml}</div>
-        `;
-
-        container.appendChild(secBlock);
-      });
-    }
-
-    function openPay(title, price) {
-      document.getElementById('payTitle').innerText = title;
-      document.getElementById('payPrice').innerText = `₹${price}`;
-      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
-      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.')}`;
-      document.getElementById('payModal').classList.add('active');
-    }
-
-    function escapeHtml(str) {
-      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-    }
-
-    window.onload = fetchStoreData;
-  </script>
-</body>
-</html>
+    /* Modal Popup */
+    .pay-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); align-items: center; justify-content: center; z-index: 10000; }
+    .pay-modal.active { display
