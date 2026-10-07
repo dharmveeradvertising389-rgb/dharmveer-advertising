@@ -93,8 +93,9 @@ nav button.active{background:#e67e22}
 
 /* PSD Store Admin Styles */
 .section-block { background: #f9f9f9; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 6px; }
-.item-row { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px 14px; margin-bottom: 8px; border-radius: 6px; border: 1px solid #eee; font-size: 14px; }
-.action-btns { display: flex; gap: 4px; align-items: center; }
+.item-row { background: #fff; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #eee; }
+.item-edit-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.action-row { display: flex; justify-content: space-between; align-items: center; }
 </style>
 </head>
 
@@ -440,7 +441,6 @@ function showSection(id,btn){
   document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
   btn.classList.add("active");
 
-  // टॅब उघडल्यावर ऑटो-डेटा रिफ्रेश
   if(id === 'portfolio') loadPortfolio();
   if(id === 'psdstore') loadPsdStoreData();
 }
@@ -494,7 +494,7 @@ async function loadAll(){
 }
 
 /* ==============================================
-   PSD STORE MANAGEMENT (Cloudflare KV API)
+   PSD STORE MANAGEMENT (Edit, Move & Cloud Sync)
    ============================================== */
 
 async function loadPsdStoreData() {
@@ -532,11 +532,20 @@ function renderPsdAdminView() {
       sec.items.forEach((item, itemIdx) => {
         itemsHtml += `
           <div class="item-row">
-            <span><strong>${escapeHtml(item.title)}</strong> - ₹${escapeHtml(item.price)} <small style="color:#777;">(जुनी: ₹${escapeHtml(item.originalPrice)})</small></span>
-            <div class="action-btns">
-              <button onclick="movePsdItem(${secIdx}, ${itemIdx}, -1)">⬆️</button>
-              <button onclick="movePsdItem(${secIdx}, ${itemIdx}, 1)">⬇️</button>
-              <button class="danger" style="padding:4px 8px; margin:0;" onclick="deletePsdItem(${secIdx}, ${itemIdx})">Delete</button>
+            <div class="item-edit-grid">
+              <input type="text" value="${escapeHtml(item.title)}" id="psd_title_${secIdx}_${itemIdx}" placeholder="Title">
+              <input type="number" value="${escapeHtml(item.price)}" id="psd_price_${secIdx}_${itemIdx}" placeholder="Offer Price">
+              <input type="number" value="${escapeHtml(item.originalPrice)}" id="psd_orig_${secIdx}_${itemIdx}" placeholder="Cut Price">
+            </div>
+            <div class="action-row">
+              <div>
+                <button class="edit" style="padding:4px 8px; margin:0;" onclick="updatePsdItem(${secIdx}, ${itemIdx})">✏️ Update</button>
+                <button class="danger" style="padding:4px 8px; margin:0;" onclick="deletePsdItem(${secIdx}, ${itemIdx})">Delete</button>
+              </div>
+              <div>
+                <button onclick="movePsdItem(${secIdx}, ${itemIdx}, -1)">⬆️</button>
+                <button onclick="movePsdItem(${secIdx}, ${itemIdx}, 1)">⬇️</button>
+              </div>
             </div>
           </div>
         `;
@@ -545,9 +554,10 @@ function renderPsdAdminView() {
 
     preview.innerHTML += `
       <div class="section-block">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h3 style="color:#e67e22;">${escapeHtml(sec.sectionTitle)}</h3>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <input type="text" value="${escapeHtml(sec.sectionTitle)}" id="sec_title_${secIdx}" style="font-weight:bold; color:#e67e22; font-size:16px; margin:0; width:60%;">
           <div>
+            <button class="edit" style="padding:4px 8px; margin:0;" onclick="updatePsdSection(${secIdx})">✏️ Rename</button>
             <button onclick="movePsdSection(${secIdx}, -1)">⬆️ Section</button>
             <button onclick="movePsdSection(${secIdx}, 1)">⬇️ Section</button>
             <button class="danger" style="padding:4px 8px; margin:0;" onclick="deletePsdSection(${secIdx})">Sector Delete</button>
@@ -567,6 +577,14 @@ function addPsdSection() {
   psdStoreData.push({ sectionId: id, sectionTitle: title, items: [] });
   setValue('newSectionTitle', '');
   renderPsdAdminView();
+}
+
+function updatePsdSection(secIdx) {
+  const newTitle = getValue(`sec_title_${secIdx}`);
+  if(!newTitle) return alert("नाव रिकामे ठेऊ नका!");
+  psdStoreData[secIdx].sectionTitle = newTitle;
+  renderPsdAdminView();
+  message("Section नाव बदलले! बदलांसाठी Save वर क्लिक करा.");
 }
 
 function addPsdItem() {
@@ -599,6 +617,21 @@ function addPsdItem() {
   setValue('psdDownloadUrl', '');
 
   renderPsdAdminView();
+}
+
+function updatePsdItem(secIdx, itemIdx) {
+  const newTitle = getValue(`psd_title_${secIdx}_${itemIdx}`);
+  const newPrice = getValue(`psd_price_${secIdx}_${itemIdx}`);
+  const newOrig = getValue(`psd_orig_${secIdx}_${itemIdx}`);
+
+  if (!newTitle || !newPrice) return alert("शीर्षक आणि ऑफर किंमत भरलेली असावी!");
+
+  psdStoreData[secIdx].items[itemIdx].title = newTitle;
+  psdStoreData[secIdx].items[itemIdx].price = newPrice;
+  psdStoreData[secIdx].items[itemIdx].originalPrice = newOrig || newPrice;
+
+  renderPsdAdminView();
+  message("PSD माहिती अपडेट झाली! सेव्ह करण्यासाठी बटणावर क्लिक करा.");
 }
 
 function deletePsdItem(secIdx, itemIdx) {
