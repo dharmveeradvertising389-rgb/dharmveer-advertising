@@ -14,11 +14,10 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Devanagari', sans-serif; }
 
     body {
-      background-color: var(--store-bg, #121212);
+      background-color: #121212;
       color: #ffffff;
       min-height: 100vh;
       padding: 20px 15px;
-      transition: background-color 0.3s;
     }
 
     /* Top Navigation Header */
@@ -54,7 +53,7 @@
       align-items: start;
     }
 
-    /* Left Branding Sidebar */
+    /* Left Branding Sidebar (PC: Perfect Centered) */
     .brand-sidebar {
       text-align: center;
       padding: 40px 10px;
@@ -245,7 +244,7 @@
       font-size: 16px;
     }
 
-    /* Modals Styling */
+    /* Modals Styling (Payment & Full Image Preview) */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -270,6 +269,7 @@
       color: #fff;
     }
 
+    /* Full Image Lightbox */
     .lightbox-content {
       max-width: 90%;
       max-height: 90vh;
@@ -299,7 +299,7 @@
 
   <div class="store-container">
     
-    <!-- Branding Header Sidebar -->
+    <!-- Branding Header Sidebar (Centered) -->
     <aside class="brand-sidebar">
       <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग" class="brand-logo-img" onerror="this.src='https://via.placeholder.com/260?text=Logo'">
       <h1 class="brand-title">धर्मवीर ॲडव्हर्टायझिंग</h1>
@@ -340,16 +340,8 @@
     const waNum = "919309860089";
     const UPI_ID = "9309860089@ybl";
 
-    async function initStore() {
+    async function fetchStoreData() {
       try {
-        // 1. Fetch Settings for Background Color
-        const settingsRes = await fetch('/api/settings');
-        const settingsData = await settingsRes.json();
-        if(settingsData && settingsData.length > 0 && settingsData[0].theme_color) {
-          document.documentElement.style.setProperty('--store-bg', settingsData[0].theme_color);
-        }
-
-        // 2. Fetch PSD Store Items
         const res = await fetch('/api/psd-store');
         const data = await res.json();
         renderStore(data);
@@ -456,7 +448,7 @@
       return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
 
-    window.onload = initStore;
+    window.onload = fetchStoreData;
   </script>
 </body>
 </html>
