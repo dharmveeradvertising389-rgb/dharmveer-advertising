@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PSD Store | धर्मवीर ॲडव्हर्टायझिंग</title>
   
+  <!-- Favicon Tab Logo -->
   <link rel="icon" type="image/png" href="assets/logo.png">
   <link rel="apple-touch-icon" href="assets/logo.png">
 
@@ -13,13 +14,13 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Devanagari', sans-serif; }
 
     body {
-      background-color: var(--store-bg, #121212);
+      background-color: #121212;
       color: #ffffff;
       min-height: 100vh;
       padding: 20px 15px;
-      transition: background-color 0.3s;
     }
 
+    /* Top Navigation Header */
     .top-bar {
       max-width: 1200px;
       margin: 0 auto 20px;
@@ -42,6 +43,7 @@
     }
     .btn-back:hover { opacity: 0.9; }
 
+    /* Store Main Layout */
     .store-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -51,6 +53,7 @@
       align-items: start;
     }
 
+    /* Left Branding Sidebar (PC: Perfect Centered) */
     .brand-sidebar {
       text-align: center;
       padding: 40px 10px;
@@ -88,9 +91,10 @@
       text-align: center;
     }
 
+    /* Right Products Content Area */
     .products-content { width: 100%; min-width: 0; }
 
-    .section-block { margin-bottom: 40px; }
+    .section-block { margin-bottom: 35px; }
     
     .section-header {
       font-size: 18px;
@@ -102,6 +106,7 @@
       letter-spacing: 0.5px;
     }
 
+    /* Smart Dynamic Cards Grid (PC horizontal scroll) */
     .multi-cards-grid {
       display: flex;
       gap: 20px;
@@ -112,6 +117,7 @@
     .multi-cards-grid::-webkit-scrollbar { height: 6px; }
     .multi-cards-grid::-webkit-scrollbar-thumb { background: #ff5500; border-radius: 10px; }
 
+    /* Single Item: Large Banner View */
     .single-card-banner {
       width: 100%;
       background: #ffffff;
@@ -135,7 +141,9 @@
       object-fit: cover;
       transition: transform 0.3s;
     }
+    .single-card-banner .img-container img:hover { transform: scale(1.03); }
 
+    /* Multiple Items: Small Compact White Cards */
     .compact-card {
       min-width: 240px;
       max-width: 240px;
@@ -151,7 +159,7 @@
 
     .compact-card .img-container {
       width: 100%;
-      height: 180px; 
+      height: 180px;
       background: #000;
       overflow: hidden;
       cursor: zoom-in;
@@ -163,6 +171,7 @@
       object-fit: cover;
       transition: transform 0.3s;
     }
+    .compact-card .img-container img:hover { transform: scale(1.03); }
 
     .card-info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
     .card-info h3 { font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 6px; line-height: 1.2; }
@@ -172,6 +181,7 @@
     .price-old { font-size: 11px; color: #94a3b8; text-decoration: line-through; margin-left: 4px; }
     .discount-tag { font-size: 10px; color: #16a34a; font-weight: 700; }
 
+    /* Action Row with Button and Share Link Button */
     .action-row {
       display: flex;
       align-items: center;
@@ -216,6 +226,7 @@
       background: #fff5f0;
     }
 
+    /* Scroll Navigation Controls */
     .scroll-controls {
       display: flex;
       justify-content: center;
@@ -239,6 +250,7 @@
     }
     .nav-arrow:hover { background: #ff5500; border-color: #ff5500; }
 
+    /* Modals Styling (Payment & Full Image Preview) */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -263,6 +275,7 @@
       color: #fff;
     }
 
+    /* Full Image Lightbox */
     .lightbox-content {
       max-width: 90%;
       max-height: 90vh;
@@ -272,33 +285,57 @@
       border: 2px solid rgba(255,255,255,0.2);
     }
 
+    /* Mobile View Setup: Clean 2-Column Grid with Perfect Card Size */
     @media (max-width: 768px) {
       .store-container { grid-template-columns: 1fr; gap: 20px; }
       .brand-sidebar { position: relative; top: 0; padding: 20px 10px; background: transparent; border: none; }
       .brand-logo-img { width: 180px; }
       .brand-title { font-size: 20px; }
-      .compact-card { min-width: 210px; max-width: 210px; }
+      
+      .multi-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        overflow-x: visible;
+        padding: 0;
+      }
+      .compact-card {
+        min-width: 100%;
+        max-width: 100%;
+      }
+      .compact-card .img-container {
+        height: 130px;
+      }
+      .scroll-controls {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- Top Navigation -->
   <div class="top-bar">
     <a href="index.html" class="btn-back">← Back</a>
   </div>
 
   <div class="store-container">
+    
+    <!-- Branding Header Sidebar (Centered) -->
     <aside class="brand-sidebar">
       <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग" class="brand-logo-img" onerror="this.src='https://via.placeholder.com/260?text=Logo'">
       <h1 class="brand-title">धर्मवीर ॲडव्हर्टायझिंग</h1>
       <p class="brand-subtitle">Premium PSD Templates</p>
     </aside>
 
+    <!-- Products Content -->
     <main class="products-content" id="storeMain">
       <p style="text-align:center; padding: 30px; color:#94a3b8;">PSD Store load hot ahe...</p>
     </main>
+
   </div>
 
+  <!-- QR Code Payment Modal -->
   <div class="modal-overlay" id="payModal" onclick="closeModalOutside(event, 'payModal')">
     <div class="pay-card" onclick="event.stopPropagation()">
       <h3 id="payTitle" style="font-size:16px;">PSD Name</h3>
@@ -316,6 +353,7 @@
     </div>
   </div>
 
+  <!-- Full Image Preview Modal (Lightbox) -->
   <div class="modal-overlay" id="imageModal" onclick="closeModalOutside(event, 'imageModal')">
     <img id="lightboxImg" class="lightbox-content" src="" alt="Full Preview">
   </div>
@@ -324,7 +362,6 @@
     const waNum = "919309860089";
     const UPI_ID = "9309860089@ybl";
 
-    // Fallback data jevha content.json fetch honar nahi tevha vaparla jail
     const fallbackData = [
       {
         "sectionTitle": "Indian Air Force Day",
@@ -359,7 +396,7 @@
       }
     ];
 
-    async function initStore() {
+    async function fetchStoreData() {
       let storeData = null;
       try {
         const res = await fetch('content.json?t=' + new Date().getTime());
@@ -368,10 +405,9 @@
           storeData = json.psdStore || json;
         }
       } catch (e) {
-        console.log("Fetch failed, using fallback");
+        console.log("Using fallback data");
       }
 
-      // Jar content.json madhun data ala nahi tar fallback data vaparel
       if (!storeData || (Array.isArray(storeData) && storeData.length === 0)) {
         storeData = fallbackData;
       }
@@ -448,37 +484,3 @@
       document.getElementById('lightboxImg').src = imgSrc;
       document.getElementById('imageModal').classList.add('active');
     }
-
-    function closeModalOutside(event, modalId) {
-      document.getElementById(modalId).classList.remove('active');
-    }
-
-    function copyItemLink(url) {
-      navigator.clipboard.writeText(url).then(() => {
-        alert("PSD chi link copy zali! 🔗");
-      }).catch(err => {
-        alert("Link copy hotana adchan ali.");
-      });
-    }
-
-    function scrollGrid(idx, dist) {
-      const grid = document.getElementById(`scroll_grid_${idx}`);
-      if(grid) grid.scrollBy({ left: dist, behavior: 'smooth' });
-    }
-
-    function openPay(title, price) {
-      document.getElementById('payTitle').innerText = title;
-      document.getElementById('payPrice').innerText = `₹${price}`;
-      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
-      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=` + encodeURIComponent('Namaskar, mi ' + title + ' (₹' + price + ') sathi payment kele ahe.');
-      document.getElementById('payModal').classList.add('active');
-    }
-
-    function escapeHtml(str) {
-      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-    }
-
-    window.onload = initStore;
-  </script>
-</body>
-</html>
