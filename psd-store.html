@@ -324,17 +324,50 @@
     const waNum = "919309860089";
     const UPI_ID = "9309860089@ybl";
 
-    async function initStore() {
-      try {
-        const res = await fetch('content.json');
-        const data = await res.json();
-        
-        if(data && data.themeColor) {
-          document.documentElement.style.setProperty('--store-bg', data.themeColor);
+    // थेट कोडच्या आतच डेटा टाकल्यामुळे कशाचीही गरज नाही, लोडिंगचा एरर कायमचा बंद!
+    const storeContentData = {
+      "themeColor": "#121212",
+      "psdStore": [
+        {
+          "sectionTitle": "Indian Air Force Day",
+          "items": [
+            {
+              "id": "airforce-1",
+              "title": "Indian Air Force Day Premium PSD Pack",
+              "price": "129",
+              "originalPrice": "299",
+              "previewImg": "assets/logo.png"
+            }
+          ]
+        },
+        {
+          "sectionTitle": "NAAVRAATRI SPECIAL PSD",
+          "items": [
+            {
+              "id": "navaratri-1",
+              "title": "नवरात्री उत्सव ९ दिवसाच्या PSD",
+              "price": "199",
+              "originalPrice": "499",
+              "previewImg": "assets/logo.png"
+            },
+            {
+              "id": "navaratri-2",
+              "title": "Navaratri Utsav Premium 4 PSD pack",
+              "price": "129",
+              "originalPrice": "299",
+              "previewImg": "assets/logo.png"
+            }
+          ]
         }
+      ]
+    };
 
-        const storeData = data.psdStore || data;
-        renderStore(storeData);
+    function initStore() {
+      try {
+        if(storeContentData.themeColor) {
+          document.documentElement.style.setProperty('--store-bg', storeContentData.themeColor);
+        }
+        renderStore(storeContentData.psdStore);
       } catch (e) {
         document.getElementById('storeMain').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
       }
@@ -372,4 +405,73 @@
               <div class="card-info">
                 <div>
                   <h3>${escapeHtml(item.title)}</h3>
-                  <div class="price-
+                  <div class="price-details">
+                    <div>
+                      <span class="price-current">₹${item.price}</span>
+                      <span class="price-old">₹${item.originalPrice}</span>
+                    </div>
+                    ${discount ? `<span class="discount-tag">${discount}</span>` : ''}
+                  </div>
+                </div>
+                <div class="action-row">
+                  <button class="btn-action" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it Now →</button>
+                  <div class="link-circle" title="يا PSD ची लिंक कॉपी करा" onclick="copyItemLink('${itemUrl}')">🔗</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        secBlock.innerHTML = `
+          <div class="section-header">${escapeHtml(sec.sectionTitle)}</div>
+          <div class="${isSingle ? '' : 'multi-cards-grid'}" id="scroll_grid_${idx}">${cardsHtml}</div>
+          ${!isSingle ? `
+            <div class="scroll-controls">
+              <button class="nav-arrow" onclick="scrollGrid(${idx}, -240)">←</button>
+              <button class="nav-arrow" onclick="scrollGrid(${idx}, 240)">→</button>
+            </div>
+          ` : ''}
+        `;
+
+        container.appendChild(secBlock);
+      });
+    }
+
+    function openImageLightbox(imgSrc) {
+      document.getElementById('lightboxImg').src = imgSrc;
+      document.getElementById('imageModal').classList.add('active');
+    }
+
+    function closeModalOutside(event, modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    function copyItemLink(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        alert("या PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\nआता तुम्ही ती WhatsApp किंवा Instagram वर पेस्ट करू शकता.");
+      }).catch(err => {
+        alert("लिंक कॉपी करताना अडचण आली.");
+      });
+    }
+
+    function scrollGrid(idx, dist) {
+      const grid = document.getElementById(`scroll_grid_${idx}`);
+      if(grid) grid.scrollBy({ left: dist, behavior: 'smooth' });
+    }
+
+    function openPay(title, price) {
+      document.getElementById('payTitle').innerText = title;
+      document.getElementById('payPrice').innerText = `₹${price}`;
+      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
+      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.')}`;
+      document.getElementById('payModal').classList.add('active');
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+    window.onload = initStore;
+  </script>
+</body>
+</html>
