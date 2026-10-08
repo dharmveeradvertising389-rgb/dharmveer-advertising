@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PSD Store | धर्मवीर ॲडव्हर्टायझिंग</title>
   
-  <!-- Favicon Tab Logo -->
   <link rel="icon" type="image/png" href="assets/logo.png">
   <link rel="apple-touch-icon" href="assets/logo.png">
 
@@ -21,7 +20,6 @@
       transition: background-color 0.3s;
     }
 
-    /* Top Navigation Header */
     .top-bar {
       max-width: 1200px;
       margin: 0 auto 20px;
@@ -44,7 +42,6 @@
     }
     .btn-back:hover { opacity: 0.9; }
 
-    /* Store Main Layout */
     .store-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -54,7 +51,6 @@
       align-items: start;
     }
 
-    /* Left Branding Sidebar */
     .brand-sidebar {
       text-align: center;
       padding: 40px 10px;
@@ -92,7 +88,6 @@
       text-align: center;
     }
 
-    /* Right Products Content Area */
     .products-content { width: 100%; min-width: 0; }
 
     .section-block { margin-bottom: 40px; }
@@ -107,7 +102,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Smart Dynamic Cards Grid (Horizontal Scroll for Multiple items) */
     .multi-cards-grid {
       display: flex;
       gap: 20px;
@@ -118,7 +112,6 @@
     .multi-cards-grid::-webkit-scrollbar { height: 6px; }
     .multi-cards-grid::-webkit-scrollbar-thumb { background: #ff5500; border-radius: 10px; }
 
-    /* Single Item: Large Banner View */
     .single-card-banner {
       width: 100%;
       background: #ffffff;
@@ -142,9 +135,7 @@
       object-fit: cover;
       transition: transform 0.3s;
     }
-    .single-card-banner .img-container img:hover { transform: scale(1.02); }
 
-    /* Multiple Items: Perfect Proportional Compact Cards */
     .compact-card {
       min-width: 240px;
       max-width: 240px;
@@ -172,7 +163,6 @@
       object-fit: cover;
       transition: transform 0.3s;
     }
-    .compact-card .img-container img:hover { transform: scale(1.02); }
 
     .card-info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
     .card-info h3 { font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 6px; line-height: 1.2; }
@@ -182,7 +172,6 @@
     .price-old { font-size: 11px; color: #94a3b8; text-decoration: line-through; margin-left: 4px; }
     .discount-tag { font-size: 10px; color: #16a34a; font-weight: 700; }
 
-    /* Action Row with Button and Share Link Button */
     .action-row {
       display: flex;
       align-items: center;
@@ -227,7 +216,6 @@
       background: #fff5f0;
     }
 
-    /* Scroll Navigation Controls */
     .scroll-controls {
       display: flex;
       justify-content: center;
@@ -251,7 +239,6 @@
     }
     .nav-arrow:hover { background: #ff5500; border-color: #ff5500; }
 
-    /* Modals Styling */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -276,7 +263,6 @@
       color: #fff;
     }
 
-    /* Full Image Lightbox */
     .lightbox-content {
       max-width: 90%;
       max-height: 90vh;
@@ -286,7 +272,6 @@
       border: 2px solid rgba(255,255,255,0.2);
     }
 
-    /* Mobile View Setup */
     @media (max-width: 768px) {
       .store-container { grid-template-columns: 1fr; gap: 20px; }
       .brand-sidebar { position: relative; top: 0; padding: 20px 10px; background: transparent; border: none; }
@@ -298,28 +283,22 @@
 </head>
 <body>
 
-  <!-- Top Navigation -->
   <div class="top-bar">
     <a href="index.html" class="btn-back">← Back</a>
   </div>
 
   <div class="store-container">
-    
-    <!-- Branding Header Sidebar -->
     <aside class="brand-sidebar">
       <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग" class="brand-logo-img" onerror="this.src='https://via.placeholder.com/260?text=Logo'">
       <h1 class="brand-title">धर्मवीर ॲडव्हर्टायझिंग</h1>
       <p class="brand-subtitle">Premium PSD Templates</p>
     </aside>
 
-    <!-- Products Content -->
     <main class="products-content" id="storeMain">
       <p style="text-align:center; padding: 30px; color:#94a3b8;">PSD Store लोड होत आहे...</p>
     </main>
-
   </div>
 
-  <!-- QR Code Payment Modal -->
   <div class="modal-overlay" id="payModal" onclick="closeModalOutside(event, 'payModal')">
     <div class="pay-card" onclick="event.stopPropagation()">
       <h3 id="payTitle" style="font-size:16px;">PSD Name</h3>
@@ -337,7 +316,6 @@
     </div>
   </div>
 
-  <!-- Full Image Preview Modal (Lightbox) -->
   <div class="modal-overlay" id="imageModal" onclick="closeModalOutside(event, 'imageModal')">
     <img id="lightboxImg" class="lightbox-content" src="" alt="Full Preview">
   </div>
@@ -346,8 +324,8 @@
     const waNum = "919309860089";
     const UPI_ID = "9309860089@ybl";
 
-    // Fallback data jar content.json fetch zali nahi tr hya dware store disel
-    const fallbackData = {
+    // थेट कोडच्या आतच डेटा टाकल्यामुळे कशाचीही गरज नाही, लोडिंगचा एरर कायमचा बंद!
+    const storeContentData = {
       "themeColor": "#121212",
       "psdStore": [
         {
@@ -361,34 +339,38 @@
               "previewImg": "assets/logo.png"
             }
           ]
+        },
+        {
+          "sectionTitle": "NAAVRAATRI SPECIAL PSD",
+          "items": [
+            {
+              "id": "navaratri-1",
+              "title": "नवरात्री उत्सव ९ दिवसाच्या PSD",
+              "price": "199",
+              "originalPrice": "499",
+              "previewImg": "assets/logo.png"
+            },
+            {
+              "id": "navaratri-2",
+              "title": "Navaratri Utsav Premium 4 PSD pack",
+              "price": "129",
+              "originalPrice": "299",
+              "previewImg": "assets/logo.png"
+            }
+          ]
         }
       ]
     };
 
-    async function initStore() {
-      let storeData = null;
+    function initStore() {
       try {
-        const res = await fetch('content.json?t=' + new Date().getTime());
-        if (res.ok) {
-          const json = await res.json();
-          if (json && (json.psdStore || Array.isArray(json))) {
-            storeData = json;
-          }
+        if(storeContentData.themeColor) {
+          document.documentElement.style.setProperty('--store-bg', storeContentData.themeColor);
         }
+        renderStore(storeContentData.psdStore);
       } catch (e) {
-        console.log("Using fallback data");
+        document.getElementById('storeMain').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
       }
-
-      if (!storeData) {
-        storeData = fallbackData;
-      }
-
-      if (storeData.themeColor) {
-        document.documentElement.style.setProperty('--store-bg', storeData.themeColor);
-      }
-
-      const itemsList = storeData.psdStore || storeData;
-      renderStore(itemsList);
     }
 
     function renderStore(data) {
@@ -418,7 +400,7 @@
           return `
             <div class="${isSingle ? 'single-card-banner' : 'compact-card'}" id="${item.id}">
               <div class="img-container" onclick="openImageLightbox('${escapeHtml(item.previewImg)}')">
-                <img src="${item.previewImg}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/logo.png'">
+                <img src="${item.previewImg}" alt="${item.title}" onerror="this.src='assets/logo.png'">
               </div>
               <div class="card-info">
                 <div>
@@ -433,7 +415,7 @@
                 </div>
                 <div class="action-row">
                   <button class="btn-action" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it Now →</button>
-                  <div class="link-circle" title="या PSD ची लिंक कॉपी करा" onclick="copyItemLink('${itemUrl}')">🔗</div>
+                  <div class="link-circle" title="يا PSD ची लिंक कॉपी करा" onclick="copyItemLink('${itemUrl}')">🔗</div>
                 </div>
               </div>
             </div>
@@ -466,7 +448,7 @@
 
     function copyItemLink(url) {
       navigator.clipboard.writeText(url).then(() => {
-        alert("या PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\nआता तुम्ही ती WhatsApp वर पेस्ट करू शकता.");
+        alert("या PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\nआता तुम्ही ती WhatsApp किंवा Instagram वर पेस्ट करू शकता.");
       }).catch(err => {
         alert("लिंक कॉपी करताना अडचण आली.");
       });
@@ -481,7 +463,7 @@
       document.getElementById('payTitle').innerText = title;
       document.getElementById('payPrice').innerText = `₹${price}`;
       document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
-      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=` + encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.');
+      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.')}`;
       document.getElementById('payModal').classList.add('active');
     }
 
