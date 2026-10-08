@@ -136,7 +136,6 @@
       transition: transform 0.3s;
     }
 
-    /* योग्य आकाराचे (Compact Proportional) कार्ड्स */
     .compact-card {
       min-width: 240px;
       max-width: 240px;
@@ -327,15 +326,15 @@
 
     async function initStore() {
       try {
-        const settingsRes = await fetch('/api/settings');
-        const settingsData = await settingsRes.json();
-        if(settingsData && settingsData.length > 0 && settingsData[0].theme_color) {
-          document.documentElement.style.setProperty('--store-bg', settingsData[0].theme_color);
+        const res = await fetch('content.json');
+        const data = await res.json();
+        
+        if(data && data.themeColor) {
+          document.documentElement.style.setProperty('--store-bg', data.themeColor);
         }
 
-        const res = await fetch('/api/psd-store');
-        const data = await res.json();
-        renderStore(data);
+        const storeData = data.psdStore || data;
+        renderStore(storeData);
       } catch (e) {
         document.getElementById('storeMain').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
       }
@@ -373,73 +372,4 @@
               <div class="card-info">
                 <div>
                   <h3>${escapeHtml(item.title)}</h3>
-                  <div class="price-details">
-                    <div>
-                      <span class="price-current">₹${item.price}</span>
-                      <span class="price-old">₹${item.originalPrice}</span>
-                    </div>
-                    ${discount ? `<span class="discount-tag">${discount}</span>` : ''}
-                  </div>
-                </div>
-                <div class="action-row">
-                  <button class="btn-action" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it Now →</button>
-                  <div class="link-circle" title="या PSD ची लिंक कॉपी करा" onclick="copyItemLink('${itemUrl}')">🔗</div>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('');
-
-        secBlock.innerHTML = `
-          <div class="section-header">${escapeHtml(sec.sectionTitle)}</div>
-          <div class="${isSingle ? '' : 'multi-cards-grid'}" id="scroll_grid_${idx}">${cardsHtml}</div>
-          ${!isSingle ? `
-            <div class="scroll-controls">
-              <button class="nav-arrow" onclick="scrollGrid(${idx}, -240)">←</button>
-              <button class="nav-arrow" onclick="scrollGrid(${idx}, 240)">→</button>
-            </div>
-          ` : ''}
-        `;
-
-        container.appendChild(secBlock);
-      });
-    }
-
-    function openImageLightbox(imgSrc) {
-      document.getElementById('lightboxImg').src = imgSrc;
-      document.getElementById('imageModal').classList.add('active');
-    }
-
-    function closeModalOutside(event, modalId) {
-      document.getElementById(modalId).classList.remove('active');
-    }
-
-    function copyItemLink(url) {
-      navigator.clipboard.writeText(url).then(() => {
-        alert("या PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\nआता तुम्ही ती WhatsApp किंवा Instagram वर पेस्ट करू शकता.");
-      }).catch(err => {
-        alert("लिंक कॉपी करताना अडचण आली.");
-      });
-    }
-
-    function scrollGrid(idx, dist) {
-      const grid = document.getElementById(`scroll_grid_${idx}`);
-      if(grid) grid.scrollBy({ left: dist, behavior: 'smooth' });
-    }
-
-    function openPay(title, price) {
-      document.getElementById('payTitle').innerText = title;
-      document.getElementById('payPrice').innerText = `₹${price}`;
-      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
-      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.')}`;
-      document.getElementById('payModal').classList.add('active');
-    }
-
-    function escapeHtml(str) {
-      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-    }
-
-    window.onload = initStore;
-  </script>
-</body>
-</html>
+                  <div class="price-
