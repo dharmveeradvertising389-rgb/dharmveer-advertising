@@ -10,8 +10,14 @@
   <link rel="apple-touch-icon" href="assets/logo.png">
 
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Devanagari', sans-serif; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+    }
 
     body {
       background-color: #121212;
@@ -41,7 +47,10 @@
       gap: 6px;
       transition: opacity 0.2s;
     }
-    .btn-back:hover { opacity: 0.9; }
+
+    .btn-back:hover {
+      opacity: 0.9;
+    }
 
     /* Store Main Layout */
     .store-container {
@@ -53,7 +62,7 @@
       align-items: start;
     }
 
-    /* Left Branding Sidebar (PC: Perfect Centered) */
+    /* Left Branding Sidebar */
     .brand-sidebar {
       text-align: center;
       padding: 40px 10px;
@@ -92,10 +101,15 @@
     }
 
     /* Right Products Content Area */
-    .products-content { width: 100%; min-width: 0; }
+    .products-content {
+      width: 100%;
+      min-width: 0;
+    }
 
-    .section-block { margin-bottom: 35px; }
-    
+    .section-block {
+      margin-bottom: 35px;
+    }
+
     .section-header {
       font-size: 16px;
       color: #cbd5e1;
@@ -104,15 +118,23 @@
       text-align: center;
     }
 
-    /* Smart Dynamic Cards Grid */
+    /* Multiple PSD Cards */
     .multi-cards-grid {
       display: flex;
       gap: 15px;
       overflow-x: auto;
       scroll-behavior: smooth;
       padding-bottom: 10px;
+      width: 100%;
     }
-    .multi-cards-grid::-webkit-scrollbar { display: none; }
+
+    .multi-cards-grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .multi-cards-grid {
+      scrollbar-width: none;
+    }
 
     /* Single Item: Large Banner View */
     .single-card-banner {
@@ -137,17 +159,21 @@
       object-fit: cover;
       transition: transform 0.3s;
     }
-    .single-card-banner .img-container img:hover { transform: scale(1.03); }
 
-    /* Multiple Items: Small Compact White Cards */
+    .single-card-banner .img-container img:hover {
+      transform: scale(1.03);
+    }
+
+    /* Multiple Items: Compact Cards */
     .compact-card {
-      min-width: 210px;
-      max-width: 220px;
+      min-width: 0;
+      width: calc((100% - 15px) / 2);
+      max-width: none;
       background: #ffffff;
       color: #1e293b;
       border-radius: 18px;
       overflow: hidden;
-      flex-shrink: 0;
+      flex: 0 0 calc((100% - 15px) / 2);
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
@@ -167,17 +193,53 @@
       object-fit: cover;
       transition: transform 0.3s;
     }
-    .compact-card .img-container img:hover { transform: scale(1.03); }
 
-    .card-info { padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .card-info h3 { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 4px; line-height: 1.2; }
+    .compact-card .img-container img:hover {
+      transform: scale(1.03);
+    }
 
-    .price-details { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
-    .price-current { font-size: 18px; font-weight: 800; color: #0f172a; }
-    .price-old { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-left: 4px; }
-    .discount-tag { font-size: 11px; color: #64748b; }
+    .card-info {
+      padding: 12px 14px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
 
-    /* Action Row with Button and Share Link Button */
+    .card-info h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .price-details {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .price-current {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .price-old {
+      font-size: 12px;
+      color: #94a3b8;
+      text-decoration: line-through;
+      margin-left: 4px;
+    }
+
+    .discount-tag {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    /* Action Row */
     .action-row {
       display: flex;
       align-items: center;
@@ -199,7 +261,10 @@
       text-decoration: none;
       transition: background 0.2s;
     }
-    .btn-action:hover { background: #e04b00; }
+
+    .btn-action:hover {
+      background: #e04b00;
+    }
 
     .link-circle {
       width: 32px;
@@ -216,6 +281,7 @@
       font-size: 14px;
       transition: all 0.2s;
     }
+
     .link-circle:hover {
       border-color: #ff5500;
       color: #ff5500;
@@ -244,19 +310,24 @@
       font-size: 16px;
     }
 
-    /* Modals Styling (Payment & Full Image Preview) */
+    /* Modals Styling */
     .modal-overlay {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: rgba(0,0,0,0.88);
       align-items: center;
       justify-content: center;
       z-index: 10000;
       padding: 20px;
     }
-    .modal-overlay.active { display: flex; }
+
+    .modal-overlay.active {
+      display: flex;
+    }
 
     .pay-card {
       background: #1e293b;
@@ -279,17 +350,92 @@
       border: 2px solid rgba(255,255,255,0.2);
     }
 
-    /* Mobile View Setup */
+    /* Mobile View */
     @media (max-width: 768px) {
-      .store-container { grid-template-columns: 1fr; gap: 20px; }
-      .brand-sidebar { position: relative; top: 0; padding: 20px 10px; background: transparent; border: none; }
-      .brand-logo-img { width: 180px; }
-      .brand-title { font-size: 20px; }
-      .compact-card { min-width: 47%; max-width: 48%; }
-      .multi-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-x: visible; }
+
+      .store-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .brand-sidebar {
+        position: relative;
+        top: 0;
+        padding: 20px 10px;
+        background: transparent;
+        border: none;
+      }
+
+      .brand-logo-img {
+        width: 180px;
+      }
+
+      .brand-title {
+        font-size: 20px;
+      }
+
+      /*
+        IMPORTANT:
+        Mobile वर 2 PSD cards एकाच वेळी दिसतील.
+        3rd/4th/5th card साठी horizontal scrolling राहील.
+      */
+      .multi-cards-grid {
+        display: flex;
+        grid-template-columns: none;
+        gap: 10px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        width: 100%;
+        padding-bottom: 10px;
+        scroll-snap-type: x proximity;
+      }
+
+      .compact-card {
+        min-width: calc((100% - 10px) / 2);
+        width: calc((100% - 10px) / 2);
+        max-width: calc((100% - 10px) / 2);
+        flex: 0 0 calc((100% - 10px) / 2);
+        scroll-snap-align: start;
+      }
+
+      .compact-card .img-container {
+        height: 180px;
+      }
+    }
+
+    /* Very Small Mobile Screens */
+    @media (max-width: 380px) {
+
+      .multi-cards-grid {
+        gap: 8px;
+      }
+
+      .compact-card {
+        min-width: calc((100% - 8px) / 2);
+        width: calc((100% - 8px) / 2);
+        max-width: calc((100% - 8px) / 2);
+        flex-basis: calc((100% - 8px) / 2);
+      }
+
+      .compact-card .img-container {
+        height: 165px;
+      }
+
+      .card-info {
+        padding: 10px;
+      }
+
+      .card-info h3 {
+        font-size: 13px;
+      }
+
+      .price-current {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- Top Navigation -->
@@ -299,41 +445,94 @@
 
   <div class="store-container">
     
-    <!-- Branding Header Sidebar (Centered) -->
+    <!-- Branding Header Sidebar -->
     <aside class="brand-sidebar">
-      <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग" class="brand-logo-img" onerror="this.src='https://via.placeholder.com/260?text=Logo'">
+      <img
+        src="assets/logo.png"
+        alt="धर्मवीर ॲडव्हर्टायझिंग"
+        class="brand-logo-img"
+        onerror="this.src='https://via.placeholder.com/260?text=Logo'"
+      >
+
       <h1 class="brand-title">धर्मवीर ॲडव्हर्टायझिंग</h1>
       <p class="brand-subtitle">Premium PSD Templates</p>
     </aside>
 
     <!-- Products Content -->
     <main class="products-content" id="storeMain">
-      <p style="text-align:center; padding: 30px; color:#94a3b8;">PSD Store लोड होत आहे...</p>
+      <p style="text-align:center; padding: 30px; color:#94a3b8;">
+        PSD Store लोड होत आहे...
+      </p>
     </main>
 
   </div>
 
   <!-- QR Code Payment Modal -->
   <div class="modal-overlay" id="payModal" onclick="closeModalOutside(event, 'payModal')">
+
     <div class="pay-card" onclick="event.stopPropagation()">
+
       <h3 id="payTitle" style="font-size:15px;">PSD Name</h3>
-      <p style="margin:6px 0; color:#ff5500; font-weight:800; font-size: 22px;" id="payPrice">₹0</p>
+
+      <p
+        style="margin:6px 0; color:#ff5500; font-weight:800; font-size: 22px;"
+        id="payPrice"
+      >
+        ₹0
+      </p>
       
-      <div style="background:#fff; padding:8px; border-radius:10px; display:inline-block; margin: 4px 0;">
-        <img id="qrImage" src="" style="width:160px; height:160px; display:block;">
+      <div
+        style="background:#fff; padding:8px; border-radius:10px; display:inline-block; margin: 4px 0;"
+      >
+        <img
+          id="qrImage"
+          src=""
+          style="width:160px; height:160px; display:block;"
+        >
       </div>
       
-      <p style="font-size:11px; color:#94a3b8; margin:8px 0 4px;">QR कोड स्कॅन करा किंवा UPI ID कॉपी करा:</p>
-      <button onclick="navigator.clipboard.writeText('9309860089@ybl'); alert('UPI ID कॉपी झाला!');" style="background:#0f172a; color:#fff; border:1px dashed #ff5500; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px; width: 100%;">Copy UPI: 9309860089@ybl</button>
+      <p style="font-size:11px; color:#94a3b8; margin:8px 0 4px;">
+        QR कोड स्कॅन करा किंवा UPI ID कॉपी करा:
+      </p>
 
-      <a id="waLink" href="#" target="_blank" style="display:block; background:#25D366; color:#fff; padding:10px; border-radius:8px; text-decoration:none; font-weight:bold; margin-top:10px; font-size:13px;">WhatsApp वर स्क्रीनशॉट पाठवा →</a>
-      <button onclick="document.getElementById('payModal').classList.remove('active')" style="background:transparent; color:#94a3b8; border:none; margin-top:8px; cursor:pointer; font-size:12px;">रद्द करा</button>
+      <button
+        onclick="navigator.clipboard.writeText('9309860089@ybl'); alert('UPI ID कॉपी झाला!');"
+        style="background:#0f172a; color:#fff; border:1px dashed #ff5500; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px; width: 100%;"
+      >
+        Copy UPI: 9309860089@ybl
+      </button>
+
+      <a
+        id="waLink"
+        href="#"
+        target="_blank"
+        style="display:block; background:#25D366; color:#fff; padding:10px; border-radius:8px; text-decoration:none; font-weight:bold; margin-top:10px; font-size:13px;"
+      >
+        WhatsApp वर स्क्रीनशॉट पाठवा →
+      </a>
+
+      <button
+        onclick="document.getElementById('payModal').classList.remove('active')"
+        style="background:transparent; color:#94a3b8; border:none; margin-top:8px; cursor:pointer; font-size:12px;"
+      >
+        रद्द करा
+      </button>
+
     </div>
   </div>
 
-  <!-- Full Image Preview Modal (Lightbox) -->
-  <div class="modal-overlay" id="imageModal" onclick="closeModalOutside(event, 'imageModal')">
-    <img id="lightboxImg" class="lightbox-content" src="" alt="Full Preview">
+  <!-- Full Image Preview Modal -->
+  <div
+    class="modal-overlay"
+    id="imageModal"
+    onclick="closeModalOutside(event, 'imageModal')"
+  >
+    <img
+      id="lightboxImg"
+      class="lightbox-content"
+      src=""
+      alt="Full Preview"
+    >
   </div>
 
   <script>
@@ -346,20 +545,24 @@
         const data = await res.json();
         renderStore(data);
       } catch (e) {
-        document.getElementById('storeMain').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
+        document.getElementById('storeMain').innerHTML =
+          "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
       }
     }
 
     function renderStore(data) {
+
       const container = document.getElementById('storeMain');
       container.innerHTML = '';
 
       if (!data || data.length === 0) {
-        container.innerHTML = "<p style='text-align:center; color:#94a3b8;'>सध्या कोणतीही PSD उपलब्ध नाही.</p>";
+        container.innerHTML =
+          "<p style='text-align:center; color:#94a3b8;'>सध्या कोणतीही PSD उपलब्ध नाही.</p>";
         return;
       }
 
       data.forEach((sec, idx) => {
+
         if (!sec.items || sec.items.length === 0) return;
 
         const secBlock = document.createElement('div');
@@ -368,49 +571,136 @@
         const isSingle = sec.items.length === 1;
 
         let cardsHtml = sec.items.map(item => {
-          const discount = item.originalPrice && Number(item.originalPrice) > Number(item.price)
-            ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) + '%Off'
-            : '';
 
-          const itemUrl = window.location.origin + window.location.pathname + '#' + item.id;
+          const discount =
+            item.originalPrice &&
+            Number(item.originalPrice) > Number(item.price)
+
+              ? Math.round(
+                  ((item.originalPrice - item.price) /
+                  item.originalPrice) * 100
+                ) + '%Off'
+
+              : '';
+
+          const itemUrl =
+            window.location.origin +
+            window.location.pathname +
+            '#' +
+            item.id;
 
           return `
-            <div class="${isSingle ? 'single-card-banner' : 'compact-card'}" id="${item.id}">
-              <div class="img-container" onclick="openImageLightbox('${escapeHtml(item.previewImg)}')">
-                <img src="${item.previewImg}" alt="${item.title}" onerror="this.src='assets/logo.png'">
+            <div
+              class="${isSingle ? 'single-card-banner' : 'compact-card'}"
+              id="${item.id}"
+            >
+
+              <div
+                class="img-container"
+                onclick="openImageLightbox('${escapeHtml(item.previewImg)}')"
+              >
+                <img
+                  src="${item.previewImg}"
+                  alt="${item.title}"
+                  onerror="this.src='assets/logo.png'"
+                >
               </div>
+
               <div class="card-info">
+
                 <div>
+
                   <h3>${escapeHtml(item.title)}</h3>
+
                   <div class="price-details">
+
                     <div>
-                      <span class="price-current">₹${item.price}</span>
-                      <span class="price-old">₹${item.originalPrice}</span>
+                      <span class="price-current">
+                        ₹${item.price}
+                      </span>
+
+                      <span class="price-old">
+                        ₹${item.originalPrice}
+                      </span>
                     </div>
-                    ${discount ? `<span class="discount-tag">${discount}</span>` : ''}
+
+                    ${
+                      discount
+                        ? `<span class="discount-tag">${discount}</span>`
+                        : ''
+                    }
+
                   </div>
+
                 </div>
+
                 <div class="action-row">
-                  <button class="btn-action" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it Now →</button>
-                  <div class="link-circle" title="या PSD ची लिंक कॉपी करा" onclick="copyItemLink('${itemUrl}')">🔗</div>
+
+                  <button
+                    class="btn-action"
+                    onclick="openPay('${escapeHtml(item.title)}', '${item.price}')"
+                  >
+                    Get it Now →
+                  </button>
+
+                  <div
+                    class="link-circle"
+                    title="या PSD ची लिंक कॉपी करा"
+                    onclick="copyItemLink('${itemUrl}')"
+                  >
+                    🔗
+                  </div>
+
                 </div>
+
               </div>
+
             </div>
           `;
+
         }).join('');
 
         secBlock.innerHTML = `
-          <div class="section-header">${escapeHtml(sec.sectionTitle)}</div>
-          <div class="${isSingle ? '' : 'multi-cards-grid'}" id="scroll_grid_${idx}">${cardsHtml}</div>
-          ${!isSingle ? `
-            <div class="scroll-controls">
-              <button class="nav-arrow" onclick="scrollGrid(${idx}, -200)">←</button>
-              <button class="nav-arrow" onclick="scrollGrid(${idx}, 200)">→</button>
-            </div>
-          ` : ''}
+
+          <div class="section-header">
+            ${escapeHtml(sec.sectionTitle)}
+          </div>
+
+          <div
+            class="${isSingle ? '' : 'multi-cards-grid'}"
+            id="scroll_grid_${idx}"
+          >
+            ${cardsHtml}
+          </div>
+
+          ${
+            !isSingle
+              ? `
+                <div class="scroll-controls">
+
+                  <button
+                    class="nav-arrow"
+                    onclick="scrollGrid(${idx}, -200)"
+                  >
+                    ←
+                  </button>
+
+                  <button
+                    class="nav-arrow"
+                    onclick="scrollGrid(${idx}, 200)"
+                  >
+                    →
+                  </button>
+
+                </div>
+              `
+              : ''
+          }
+
         `;
 
         container.appendChild(secBlock);
+
       });
     }
 
@@ -424,31 +714,74 @@
     }
 
     function copyItemLink(url) {
-      navigator.clipboard.writeText(url).then(() => {
-        alert("या PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\nआता तुम्ही ती WhatsApp किंवा Instagram वर पेस्ट करू शकता.");
-      }).catch(err => {
-        alert("लिंक कॉपी करताना अडचण आली.");
-      });
+
+      navigator.clipboard.writeText(url)
+        .then(() => {
+
+          alert(
+            "या PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\n" +
+            "आता तुम्ही ती WhatsApp किंवा Instagram वर पेस्ट करू शकता."
+          );
+
+        })
+        .catch(err => {
+
+          alert("लिंक कॉपी करताना अडचण आली.");
+
+        });
+
     }
 
     function scrollGrid(idx, dist) {
-      const grid = document.getElementById(`scroll_grid_${idx}`);
-      if(grid) grid.scrollBy({ left: dist, behavior: 'smooth' });
+
+      const grid =
+        document.getElementById(`scroll_grid_${idx}`);
+
+      if (grid) {
+        grid.scrollBy({
+          left: dist,
+          behavior: 'smooth'
+        });
+      }
+
     }
 
     function openPay(title, price) {
+
       document.getElementById('payTitle').innerText = title;
-      document.getElementById('payPrice').innerText = `₹${price}`;
-      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
-      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.')}`;
-      document.getElementById('payModal').classList.add('active');
+
+      document.getElementById('payPrice').innerText =
+        `₹${price}`;
+
+      document.getElementById('qrImage').src =
+        `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
+
+      document.getElementById('waLink').href =
+        `https://wa.me/${waNum}?text=${encodeURIComponent(
+          'नमस्कार, मी ' +
+          title +
+          ' (₹' +
+          price +
+          ') साठी पेमेंट केले आहे.'
+        )}`;
+
+      document.getElementById('payModal')
+        .classList.add('active');
     }
 
     function escapeHtml(str) {
-      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
     }
 
     window.onload = fetchStoreData;
   </script>
+
 </body>
 </html>
