@@ -829,7 +829,7 @@
 
       /* =========================
          HERO
-      ========================== */
+      ========================= */
 
       const hero = document.createElement('section');
 
@@ -1069,8 +1069,8 @@
 
 
       /* =========================
-         NEW: DIRECT PSD HASH LINK
-         ========================= */
+         DIRECT PSD HASH LINK
+      ========================= */
 
       scrollToHashItem();
 
@@ -1078,7 +1078,8 @@
 
 
     /* =========================
-       NEW: DIRECT PSD SCROLL
+       DIRECT PSD SCROLL
+       VERTICAL + HORIZONTAL
     ========================= */
 
     function scrollToHashItem() {
@@ -1104,52 +1105,156 @@
         return;
       }
 
-      const rect =
-        target.getBoundingClientRect();
-
-      const isVisible =
-        rect.top >= 0 &&
-        rect.bottom <= window.innerHeight;
 
       /*
-        PSD आधीच screen वर दिसत असेल तर
-        कोणताही scroll करू नये.
+        आधी target card चा vertical position तपासा.
       */
 
-      if (isVisible) {
+      const targetRect =
+        target.getBoundingClientRect();
+
+
+      /*
+        PSD card ज्या horizontal scroll container
+        मध्ये आहे तो शोधा.
+      */
+
+      const grid =
+        target.closest('.multi-cards-grid');
+
+
+      /*
+        Horizontal visibility तपासा.
+      */
+
+      let horizontallyVisible = true;
+
+      if (grid) {
+
+        const gridRect =
+          grid.getBoundingClientRect();
+
+        horizontallyVisible =
+          targetRect.left >= gridRect.left &&
+          targetRect.right <= gridRect.right;
+
+      }
+
+
+      /*
+        Vertical visibility तपासा.
+      */
+
+      const verticallyVisible =
+        targetRect.top >= 0 &&
+        targetRect.bottom <= window.innerHeight;
+
+
+      /*
+        Card पूर्णपणे screen वर आणि
+        horizontal section मध्ये दिसत असेल
+        तर काहीही करू नका.
+      */
+
+      if (
+        verticallyVisible &&
+        horizontallyVisible
+      ) {
         return;
       }
 
+
       /*
-        PSD screen वर नसेल तर
-        फक्त त्या PSD card पर्यंत scroll.
+        आधी vertical scroll.
+        Card screen च्या बाहेर असेल तर
+        त्या card च्या जवळ page नेतो.
       */
 
-      window.scrollTo({
-        top:
-          window.pageYOffset +
-          rect.top -
-          25,
-        behavior: 'smooth'
-      });
+      if (!verticallyVisible) {
+
+        window.scrollTo({
+
+          top:
+            window.pageYOffset +
+            targetRect.top -
+            25,
+
+          behavior: 'smooth'
+
+        });
+
+      }
+
+
+      /*
+        Horizontal scroll.
+        Card ज्या side-scroll section मध्ये आहे
+        तिथे फक्त आवश्यक तेवढाच side scroll.
+      */
+
+      if (grid && !horizontallyVisible) {
+
+        const gridRect =
+          grid.getBoundingClientRect();
+
+        const targetRectNow =
+          target.getBoundingClientRect();
+
+
+        if (targetRectNow.left < gridRect.left) {
+
+          grid.scrollBy({
+
+            left:
+              targetRectNow.left -
+              gridRect.left -
+              10,
+
+            behavior: 'smooth'
+
+          });
+
+        }
+        else if (
+          targetRectNow.right >
+          gridRect.right
+        ) {
+
+          grid.scrollBy({
+
+            left:
+              targetRectNow.right -
+              gridRect.right +
+              10,
+
+            behavior: 'smooth'
+
+          });
+
+        }
+
+      }
 
     }
 
 
     /* =========================
-       NEW: HASH CHANGE
+       HASH CHANGE
     ========================== */
 
-    window.addEventListener('hashchange', function() {
+    window.addEventListener(
+      'hashchange',
+      function() {
 
-      scrollToHashItem();
+        scrollToHashItem();
 
-    });
+      }
+    );
 
 
     /* =========================
        IMAGE LIGHTBOX
-    ========================== */
+    ========================= */
 
     function openImageLightbox(imgSrc) {
 
@@ -1174,7 +1279,7 @@
 
     /* =========================
        COPY PSD LINK
-    ========================== */
+    ========================= */
 
     function copyItemLink(url) {
 
@@ -1200,7 +1305,7 @@
 
     /* =========================
        SCROLL PSD
-    ========================== */
+    ========================= */
 
     function scrollGrid(idx, dist) {
 
@@ -1252,7 +1357,7 @@
 
 
       /* =========================
-         NEW: FREE PSD LINK
+         FREE PSD LINK
          ========================= */
 
       const freePsdLink =
@@ -1312,7 +1417,7 @@
 
     /* =========================
        LOAD
-    ========================== */
+    ========================= */
 
     window.onload = fetchStoreData;
 
