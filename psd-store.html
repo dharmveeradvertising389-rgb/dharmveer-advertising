@@ -144,13 +144,13 @@
     }
     .single-card-banner .img-container img:hover { transform: scale(1.02); }
 
-    /* Multiple Items: Vertical Rectangular Cards (Uba aayat akar) */
+    /* Multiple Items: Standard Proportional White Cards (Not stretched) */
     .compact-card {
-      min-width: 250px;
-      max-width: 250px;
+      min-width: 280px;
+      max-width: 280px;
       background: #ffffff;
       color: #1e293b;
-      border-radius: 20px;
+      border-radius: 18px;
       overflow: hidden;
       flex-shrink: 0;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
@@ -160,7 +160,7 @@
 
     .compact-card .img-container {
       width: 100%;
-      height: 250px;
+      height: 200px;
       background: #000;
       overflow: hidden;
       cursor: zoom-in;
@@ -174,30 +174,30 @@
     }
     .compact-card .img-container img:hover { transform: scale(1.02); }
 
-    .card-info { padding: 14px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .card-info h3 { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 6px; line-height: 1.3; }
+    .card-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .card-info h3 { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 8px; line-height: 1.3; }
 
-    .price-details { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
-    .price-current { font-size: 18px; font-weight: 800; color: #0f172a; }
-    .price-old { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-left: 4px; }
-    .discount-tag { font-size: 11px; color: #16a34a; font-weight: 700; }
+    .price-details { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+    .price-current { font-size: 20px; font-weight: 800; color: #0f172a; }
+    .price-old { font-size: 13px; color: #94a3b8; text-decoration: line-through; margin-left: 6px; }
+    .discount-tag { font-size: 12px; color: #16a34a; font-weight: 700; }
 
     /* Action Row with Button and Share Link Button */
     .action-row {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 10px;
+      margin-top: 14px;
     }
 
     .btn-action {
       background: #ff5500;
       color: #ffffff;
       border: none;
-      padding: 9px 12px;
+      padding: 10px 14px;
       border-radius: 18px;
       font-weight: 700;
-      font-size: 12px;
+      font-size: 13px;
       cursor: pointer;
       flex-grow: 1;
       text-align: center;
@@ -207,8 +207,8 @@
     .btn-action:hover { background: #e04b00; }
 
     .link-circle {
-      width: 34px;
-      height: 34px;
+      width: 36px;
+      height: 36px;
       border: 2px solid #cbd5e1;
       border-radius: 50%;
       background: #f8fafc;
@@ -218,7 +218,7 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      font-size: 14px;
+      font-size: 15px;
       transition: all 0.2s;
     }
     .link-circle:hover {
@@ -292,7 +292,7 @@
       .brand-sidebar { position: relative; top: 0; padding: 20px 10px; background: transparent; border: none; }
       .brand-logo-img { width: 180px; }
       .brand-title { font-size: 20px; }
-      .compact-card { min-width: 220px; max-width: 220px; }
+      .compact-card { min-width: 240px; max-width: 240px; }
     }
   </style>
 </head>
@@ -348,15 +348,15 @@
 
     async function initStore() {
       try {
-        const res = await fetch('content.json');
-        const data = await res.json();
-        
-        if(data && data.themeColor) {
-          document.documentElement.style.setProperty('--store-bg', data.themeColor);
+        const settingsRes = await fetch('/api/settings');
+        const settingsData = await settingsRes.json();
+        if(settingsData && settingsData.length > 0 && settingsData[0].theme_color) {
+          document.documentElement.style.setProperty('--store-bg', settingsData[0].theme_color);
         }
 
-        const storeData = data.psdStore || data;
-        renderStore(storeData);
+        const res = await fetch('/api/psd-store');
+        const data = await res.json();
+        renderStore(data);
       } catch (e) {
         document.getElementById('storeMain').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
       }
@@ -404,7 +404,7 @@
                 </div>
                 <div class="action-row">
                   <button class="btn-action" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it Now →</button>
-                  <div class="link-circle" title="يا PSD ची लिंक कॉपी करा" onclick="copyItemLink('${itemUrl}')">🔗</div>
+                  <div class="link-circle" title="या PSD ची लिंक कॉपी करा" onclick="copyItemLink('${itemUrl}')">🔗</div>
                 </div>
               </div>
             </div>
@@ -416,8 +416,8 @@
           <div class="${isSingle ? '' : 'multi-cards-grid'}" id="scroll_grid_${idx}">${cardsHtml}</div>
           ${!isSingle ? `
             <div class="scroll-controls">
-              <button class="nav-arrow" onclick="scrollGrid(${idx}, -260)">←</button>
-              <button class="nav-arrow" onclick="scrollGrid(${idx}, 260)">→</button>
+              <button class="nav-arrow" onclick="scrollGrid(${idx}, -280)">←</button>
+              <button class="nav-arrow" onclick="scrollGrid(${idx}, 280)">→</button>
             </div>
           ` : ''}
         `;
@@ -437,7 +437,7 @@
 
     function copyItemLink(url) {
       navigator.clipboard.writeText(url).then(() => {
-        alert("يا PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\nआता तुम्ही ती WhatsApp किंवा Instagram वर पेस्ट करू शकता.");
+        alert("या PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\nआता तुम्ही ती WhatsApp किंवा Instagram वर पेस्ट करू शकता.");
       }).catch(err => {
         alert("लिंक कॉपी करताना अडचण आली.");
       });
