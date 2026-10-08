@@ -782,6 +782,29 @@
 
     window.onload = fetchStoreData;
   </script>
+/* Premium PSD Card Touch / Hover Effect */
+.compact-card,
+.single-card-banner {
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+  will-change: transform;
+}
 
+/* PC Mouse Hover */
+@media (hover: hover) {
+  .compact-card:hover,
+  .single-card-banner:hover {
+    transform: translateY(-6px) scale(1.015);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Mobile Touch Effect */
+.compact-card:active,
+.single-card-banner:active {
+  transform: translateY(-4px) scale(0.985);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+}
 </body>
 </html>
