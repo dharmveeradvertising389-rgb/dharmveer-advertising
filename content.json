@@ -1,0 +1,17 @@
+{
+  "themeColor": "#121212",
+  "psdStore": [
+    {
+      "sectionTitle": "तुमचे सेक्शनचे नाव (उदा. Banner PSD)",
+      "items": [
+        {
+          "id": "psd-1",
+          "title": "येथे तुमच्या PSD चे नाव लिहा",
+          "price": "129",
+          "originalPrice": "299",
+          "previewImg": "येथे तुमच्या फोटोची एक्सटर्नल लिंक टाका"
+        }
+      ]
+    }
+  ]
+}
