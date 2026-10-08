@@ -3,19 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>PSD Store | धर्मवीर ॲडव्हर्टायझिंग</title>
 
   <link rel="icon" type="image/png" href="assets/logo.png">
   <link rel="apple-touch-icon" href="assets/logo.png">
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-
     * {
       margin: 0;
       padding: 0;
@@ -24,20 +19,20 @@
     }
 
     body {
-      background-color: #121212;
+      background: #121212;
       color: #ffffff;
       min-height: 100vh;
-      padding: 20px 15px;
+      padding: 18px 15px 40px;
+      overflow-x: hidden;
     }
 
-
     /* =========================
-       BACK BUTTON
-    ========================= */
+       TOP BAR
+    ========================== */
 
     .top-bar {
       max-width: 1200px;
-      margin: 0 auto 20px;
+      margin: 0 auto 10px;
       display: flex;
       justify-content: flex-end;
     }
@@ -45,358 +40,185 @@
     .btn-back {
       background: #ff5500;
       color: #ffffff;
-      padding: 8px 18px;
+      padding: 9px 19px;
       border-radius: 22px;
       text-decoration: none;
       font-weight: 700;
-      font-size: 14px;
-
+      font-size: 15px;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-
-      transition: all 0.25s ease;
+      transition: 0.2s;
     }
 
     .btn-back:hover {
       opacity: 0.9;
-      transform: translateX(-2px);
+      transform: translateY(-1px);
     }
 
-
     /* =========================
-       MAIN LAYOUT
-    ========================= */
+       MAIN STORE
+    ========================== */
 
     .store-container {
       max-width: 1200px;
       margin: 0 auto;
-
-      display: grid;
-      grid-template-columns: 350px 1fr;
-
-      gap: 40px;
-      align-items: start;
-    }
-
-
-    /* =========================
-       LEFT BRAND SIDEBAR
-    ========================= */
-
-    .brand-sidebar {
-      text-align: center;
-
-      padding: 40px 10px;
-
-      position: sticky;
-      top: 40px;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      background: rgba(255, 255, 255, 0.02);
-
-      border: 1px solid rgba(255, 255, 255, 0.05);
-
-      border-radius: 24px;
-    }
-
-    .brand-logo-img {
-      width: 260px;
-      height: auto;
-
-      margin: 0 auto 18px;
-
       display: block;
-
-      filter:
-        drop-shadow(
-          0px 10px 25px
-          rgba(255, 85, 0, 0.35)
-        );
     }
-
-    .brand-title {
-      font-size: 26px;
-      font-weight: 800;
-
-      color: #ffffff;
-
-      margin-bottom: 6px;
-
-      text-align: center;
-    }
-
-    .brand-subtitle {
-      font-size: 15px;
-
-      color: #cbd5e1;
-
-      font-weight: 500;
-
-      text-align: center;
-    }
-
-
-    /* =========================
-       PRODUCTS AREA
-    ========================= */
 
     .products-content {
       width: 100%;
       min-width: 0;
     }
 
-
     /* =========================
-       PSD HERO
-    ========================= */
+       BRAND / HERO
+    ========================== */
 
-    .psd-hero {
-
+    .store-hero {
+      width: 100%;
+      max-width: 850px;
+      margin: 0 auto 45px;
+      min-height: 620px;
       position: relative;
 
-      width: 100%;
-
-      min-height: 430px;
-
-      margin-bottom: 25px;
-
-      overflow: hidden;
-
       display: flex;
-
       flex-direction: column;
-
       align-items: center;
+      justify-content: center;
 
-      justify-content: flex-start;
+      text-align: center;
+      overflow: hidden;
+      padding: 30px 15px 20px;
 
       background:
         radial-gradient(
           circle at center,
-
-          rgba(255, 85, 0, 0.18) 0%,
-
-          rgba(255, 85, 0, 0.07) 35%,
-
-          transparent 68%
+          rgba(255, 85, 0, 0.16) 0%,
+          rgba(255, 85, 0, 0.07) 25%,
+          rgba(18,18,18,0) 58%
         );
     }
 
+    /* Logo */
 
-    /* =========================
-       HERO LOGO
-    ========================= */
+    .hero-logo {
+      width: 330px;
+      max-width: 72vw;
+      height: auto;
+      display: block;
 
-    .hero-logo-wrap {
-
-      width: 290px;
-      height: 290px;
-
-      display: flex;
-
-      align-items: center;
-      justify-content: center;
-
-      margin-top: 10px;
+      filter:
+        drop-shadow(0 0 18px rgba(255,85,0,0.28))
+        drop-shadow(0 15px 30px rgba(255,85,0,0.16));
 
       position: relative;
-
       z-index: 2;
     }
 
-    .hero-logo-wrap img {
-
-      width: 100%;
-      height: 100%;
-
-      object-fit: contain;
-
-      filter:
-        drop-shadow(
-          0 0 20px
-          rgba(255, 85, 0, 0.25)
-        )
-
-        drop-shadow(
-          0 10px 25px
-          rgba(0, 0, 0, 0.5)
-        );
-    }
-
-
     /* =========================
-       HERO TAGS
-    ========================= */
+       THREE FLOATING LABELS
+    ========================== */
 
-    .hero-tag {
-
+    .hero-label {
       position: absolute;
 
-      background:
-        rgba(18, 18, 18, 0.96);
+      background: rgba(18,18,18,0.94);
+      border: 1px solid rgba(255,255,255,0.18);
 
-      border:
-        1px solid
-        rgba(255, 255, 255, 0.20);
+      padding: 15px 25px;
+      border-radius: 18px;
 
-      color: #ffffff;
-
-      padding: 13px 20px;
-
-      border-radius: 16px;
-
-      font-size: 15px;
-
-      font-weight: 700;
-
-      box-shadow:
-        0 8px 25px
-        rgba(0, 0, 0, 0.35);
-
-      z-index: 5;
-
-      white-space: nowrap;
-
-      transition:
-        transform 0.25s ease,
-        border-color 0.25s ease;
-    }
-
-    .hero-tag span {
-
-      color: #ff5500;
-
-      margin-right: 5px;
-    }
-
-    .hero-tag:hover {
-
-      transform: translateY(-4px);
-
-      border-color: #ff5500;
-    }
-
-
-    /* Creative */
-
-    .creative-tag {
-
-      left: 4%;
-
-      top: 105px;
-    }
-
-
-    /* Branding */
-
-    .branding-tag {
-
-      right: 4%;
-
-      top: 175px;
-    }
-
-
-    /* Marketing */
-
-    .marketing-tag {
-
-      left: 1%;
-
-      top: 300px;
-    }
-
-
-    /* =========================
-       HERO TEXT
-    ========================= */
-
-    .psd-intro {
-
-      position: relative;
-
-      z-index: 6;
-
-      width: 100%;
-
-      text-align: center;
-
-      margin-top: 0;
-    }
-
-    .psd-intro-main {
-
-      color: #ff5500;
-
-      font-size: 18px;
-
+      font-size: 20px;
       font-weight: 800;
 
-      letter-spacing: 1.5px;
+      box-shadow:
+        0 10px 30px rgba(0,0,0,0.35),
+        inset 0 0 20px rgba(255,85,0,0.03);
 
-      line-height: 1.4;
+      white-space: nowrap;
+      z-index: 4;
     }
 
-    .psd-intro-sub {
+    .hero-label span {
+      color: #ff5500;
+      margin-right: 7px;
+    }
 
+    .label-creative {
+      left: 8%;
+      top: 28%;
+    }
+
+    .label-branding {
+      right: 7%;
+      top: 43%;
+    }
+
+    .label-marketing {
+      left: 6%;
+      bottom: 23%;
+    }
+
+    /* =========================
+       HERO BOTTOM TEXT
+    ========================== */
+
+    .hero-bottom {
+      position: absolute;
+      bottom: 5%;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      z-index: 5;
+      padding: 0 10px;
+    }
+
+    .hero-main-line {
+      color: #ff5500;
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    .hero-sub-line {
+      margin-top: 8px;
       color: #ffffff;
-
-      font-size: 15px;
-
+      font-size: 18px;
       font-weight: 500;
-
-      margin-top: 5px;
-
       letter-spacing: 0.5px;
     }
 
-
     /* =========================
        SECTION
-    ========================= */
+    ========================== */
 
     .section-block {
-
-      margin-bottom: 35px;
+      margin-bottom: 42px;
+      width: 100%;
     }
 
     .section-header {
-
-      font-size: 16px;
-
+      font-size: 20px;
       color: #cbd5e1;
-
       font-weight: 500;
-
-      margin-bottom: 12px;
-
+      margin-bottom: 15px;
       text-align: center;
     }
 
-
     /* =========================
-       MULTIPLE CARDS
-    ========================= */
+       MULTIPLE PSD CARDS
+    ========================== */
 
     .multi-cards-grid {
-
       display: flex;
-
       gap: 15px;
-
-      overflow-x: auto;
-
-      scroll-behavior: smooth;
-
-      padding-bottom: 10px;
-
       width: 100%;
-
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 3px 2px 12px;
       scrollbar-width: none;
     }
 
@@ -404,876 +226,550 @@
       display: none;
     }
 
-
     /* =========================
-       SINGLE CARD
-    ========================= */
+       SINGLE PSD
+    ========================== */
 
     .single-card-banner {
-
+      width: 100%;
       background: #ffffff;
-
       color: #1e293b;
-
       border-radius: 20px;
-
       overflow: hidden;
-
-      box-shadow:
-        0 6px 20px
-        rgba(0, 0, 0, 0.4);
-
-      transition:
-        transform 0.22s ease,
-        box-shadow 0.22s ease;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     }
 
-    .single-card-banner
-    .img-container {
-
+    .single-card-banner .img-container {
       width: 100%;
-
       height: 280px;
-
       background: #000;
-
       overflow: hidden;
-
       cursor: zoom-in;
     }
 
-    .single-card-banner
-    .img-container img {
-
+    .single-card-banner .img-container img {
       width: 100%;
       height: 100%;
-
       object-fit: cover;
-
-      transition:
-        transform 0.3s;
+      display: block;
+      transition: transform 0.3s;
     }
 
-    .single-card-banner
-    .img-container img:hover {
-
+    .single-card-banner .img-container img:hover {
       transform: scale(1.03);
     }
 
-
     /* =========================
-       COMPACT PSD CARD
-    ========================= */
+       MULTIPLE PSD
+       IMPORTANT:
+       2 cards mobile = proper width
+    ========================== */
 
     .compact-card {
-
-      min-width: 0;
-
-      width:
-        calc((100% - 15px) / 2);
-
-      max-width: none;
-
-      flex:
-        0 0
-        calc((100% - 15px) / 2);
+      flex: 0 0 calc((100% - 15px) / 2);
+      min-width: calc((100% - 15px) / 2);
+      max-width: calc((100% - 15px) / 2);
 
       background: #ffffff;
-
       color: #1e293b;
 
       border-radius: 18px;
-
       overflow: hidden;
 
-      box-shadow:
-        0 4px 15px
-        rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 
       display: flex;
-
       flex-direction: column;
-
-      transition:
-        transform 0.22s ease,
-        box-shadow 0.22s ease;
     }
 
-    .compact-card
-    .img-container {
-
+    .compact-card .img-container {
       width: 100%;
-
-      height: 180px;
-
+      height: 250px;
       background: #000;
-
       overflow: hidden;
-
       cursor: zoom-in;
     }
 
-    .compact-card
-    .img-container img {
-
+    .compact-card .img-container img {
       width: 100%;
       height: 100%;
-
       object-fit: cover;
-
-      transition:
-        transform 0.3s;
+      display: block;
+      transition: transform 0.3s;
     }
 
-    .compact-card
-    .img-container img:hover {
-
+    .compact-card .img-container img:hover {
       transform: scale(1.03);
     }
 
-
-    /* =========================
-       CARD HOVER
-    ========================= */
-
-    @media (hover: hover) {
-
-      .compact-card:hover,
-      .single-card-banner:hover {
-
-        transform:
-          translateY(-6px)
-          scale(1.015);
-
-        box-shadow:
-          0 14px 30px
-          rgba(0, 0, 0, 0.55);
-      }
-
-    }
-
-
-    /* =========================
-       TOUCH EFFECT
-    ========================= */
-
-    .compact-card:active,
-    .single-card-banner:active {
-
-      transform:
-        translateY(-4px)
-        scale(0.985);
-
-      box-shadow:
-        0 10px 25px
-        rgba(0, 0, 0, 0.5);
-    }
-
-
     /* =========================
        CARD INFO
-    ========================= */
+    ========================== */
 
     .card-info {
-
       padding: 12px 14px;
-
       flex-grow: 1;
 
       display: flex;
-
       flex-direction: column;
-
       justify-content: space-between;
     }
 
     .card-info h3 {
-
       font-size: 14px;
-
       font-weight: 700;
-
       color: #0f172a;
-
       margin-bottom: 4px;
-
-      line-height: 1.2;
+      line-height: 1.25;
     }
 
     .price-details {
-
       display: flex;
-
       align-items: center;
-
       justify-content: space-between;
-
       margin-top: 8px;
+      gap: 5px;
     }
 
     .price-current {
-
       font-size: 18px;
-
       font-weight: 800;
-
       color: #0f172a;
     }
 
     .price-old {
-
       font-size: 12px;
-
       color: #94a3b8;
-
       text-decoration: line-through;
-
       margin-left: 4px;
     }
 
     .discount-tag {
-
       font-size: 11px;
-
       color: #64748b;
+      white-space: nowrap;
     }
-
 
     /* =========================
        ACTION
-    ========================= */
+    ========================== */
 
     .action-row {
-
       display: flex;
-
       align-items: center;
-
       gap: 8px;
-
       margin-top: 10px;
     }
 
     .btn-action {
-
       background: #ff5500;
-
       color: #ffffff;
-
       border: none;
 
       padding: 9px 12px;
-
       border-radius: 18px;
 
       font-weight: 700;
-
       font-size: 12px;
 
       cursor: pointer;
-
       flex-grow: 1;
-
       text-align: center;
-
       text-decoration: none;
 
-      transition:
-        background 0.2s;
+      transition: background 0.2s;
     }
 
     .btn-action:hover {
-
       background: #e04b00;
     }
 
     .link-circle {
-
       width: 32px;
-
       height: 32px;
 
-      border:
-        2px solid
-        #cbd5e1;
-
+      border: 2px solid #cbd5e1;
       border-radius: 50%;
 
       background: #f8fafc;
-
       color: #475569;
 
       cursor: pointer;
 
       display: flex;
-
       align-items: center;
-
       justify-content: center;
 
       flex-shrink: 0;
-
       font-size: 14px;
 
       transition: all 0.2s;
     }
 
     .link-circle:hover {
-
       border-color: #ff5500;
-
       color: #ff5500;
-
       background: #fff5f0;
     }
 
-
     /* =========================
-       SCROLL BUTTONS
-    ========================= */
+       SCROLL CONTROLS
+    ========================== */
 
     .scroll-controls {
-
       display: flex;
-
       justify-content: center;
-
       gap: 10px;
-
       margin-top: 15px;
     }
 
     .nav-arrow {
-
-      width: 36px;
-
-      height: 36px;
+      width: 42px;
+      height: 42px;
 
       border-radius: 50%;
-
-      border:
-        1px solid
-        #ffffff;
+      border: 1px solid #ffffff;
 
       background: transparent;
-
       color: #ffffff;
 
       display: flex;
-
       align-items: center;
-
       justify-content: center;
 
       cursor: pointer;
-
-      font-size: 16px;
+      font-size: 18px;
     }
 
-
     /* =========================
-       MODAL
-    ========================= */
+       MODALS
+    ========================== */
 
     .modal-overlay {
-
       display: none;
 
       position: fixed;
-
       top: 0;
       left: 0;
 
       width: 100%;
       height: 100%;
 
-      background:
-        rgba(0, 0, 0, 0.88);
+      background: rgba(0,0,0,0.88);
 
       align-items: center;
-
       justify-content: center;
 
       z-index: 10000;
-
       padding: 20px;
     }
 
     .modal-overlay.active {
-
       display: flex;
     }
 
     .pay-card {
-
       background: #1e293b;
-
-      border:
-        1px solid
-        #ff5500;
+      border: 1px solid #ff5500;
 
       padding: 20px;
-
       border-radius: 18px;
 
       width: 90%;
-
       max-width: 350px;
 
       text-align: center;
-
       color: #fff;
     }
 
-
-    /* =========================
-       LIGHTBOX
-    ========================= */
-
     .lightbox-content {
-
       max-width: 90%;
-
       max-height: 90vh;
 
       border-radius: 12px;
-
       object-fit: contain;
 
-      box-shadow:
-        0 10px 40px
-        rgba(0, 0, 0, 0.8);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
 
-      border:
-        2px solid
-        rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255,255,255,0.2);
     }
 
+    /* =========================
+       TABLET
+    ========================== */
+
+    @media (max-width: 900px) {
+
+      .store-hero {
+        min-height: 570px;
+      }
+
+      .hero-logo {
+        width: 300px;
+      }
+
+      .hero-label {
+        font-size: 17px;
+        padding: 12px 19px;
+      }
+
+      .label-creative {
+        left: 5%;
+      }
+
+      .label-branding {
+        right: 4%;
+      }
+
+      .label-marketing {
+        left: 4%;
+      }
+    }
 
     /* =========================
        MOBILE
-    ========================= */
+    ========================== */
 
     @media (max-width: 768px) {
 
       body {
-
-        padding:
-          15px 12px;
+        padding: 12px 10px 35px;
       }
 
-      .store-container {
-
-        grid-template-columns: 1fr;
-
-        gap: 20px;
+      .top-bar {
+        margin-bottom: 5px;
       }
 
-      .brand-sidebar {
-
-        position: relative;
-
-        top: 0;
-
-        padding:
-          20px 10px;
-
-        background: transparent;
-
-        border: none;
+      .btn-back {
+        font-size: 15px;
+        padding: 8px 17px;
       }
-
-      .brand-logo-img {
-
-        width: 180px;
-      }
-
-      .brand-title {
-
-        font-size: 20px;
-      }
-
-      .brand-subtitle {
-
-        font-size: 14px;
-      }
-
 
       /* HERO */
 
-      .psd-hero {
-
-        min-height: 390px;
-
-        margin-bottom: 20px;
+      .store-hero {
+        min-height: 570px;
+        margin-bottom: 30px;
+        padding-top: 10px;
       }
 
-      .hero-logo-wrap {
-
-        width: 260px;
-
-        height: 260px;
-
-        margin-top: 5px;
+      .hero-logo {
+        width: 300px;
+        max-width: 78vw;
       }
 
-      .hero-tag {
-
-        font-size: 13px;
-
-        padding:
-          10px 15px;
-
-        border-radius: 14px;
+      .hero-label {
+        font-size: 16px;
+        padding: 12px 17px;
+        border-radius: 15px;
       }
 
-      .creative-tag {
-
-        left: 1%;
-
-        top: 85px;
+      .label-creative {
+        left: 2%;
+        top: 29%;
       }
 
-      .branding-tag {
-
+      .label-branding {
         right: 1%;
-
-        top: 145px;
+        top: 43%;
       }
 
-      .marketing-tag {
-
-        left: 0;
-
-        top: 260px;
+      .label-marketing {
+        left: 2%;
+        bottom: 22%;
       }
 
-      .psd-intro-main {
-
-        font-size: 14px;
-
-        letter-spacing: 0.8px;
+      .hero-main-line {
+        font-size: 15px;
+        letter-spacing: 1px;
       }
 
-      .psd-intro-sub {
-
-        font-size: 13px;
+      .hero-sub-line {
+        font-size: 16px;
+        margin-top: 6px;
       }
 
+      /* PSD CARDS */
 
-      /* TWO PSD CARDS */
+      .section-header {
+        font-size: 17px;
+      }
 
       .multi-cards-grid {
-
-        display: flex;
-
         gap: 10px;
-
-        overflow-x: auto;
-
-        overflow-y: hidden;
-
-        width: 100%;
-
-        padding-bottom: 10px;
-
-        scroll-snap-type:
-          x proximity;
-
-        -webkit-overflow-scrolling:
-          touch;
       }
+
+      /*
+        दोन PSD = screen वर दोन व्यवस्थित
+        तीन/जास्त = पुढे scroll
+      */
 
       .compact-card {
-
-        min-width:
-          calc((100% - 10px) / 2);
-
-        width:
-          calc((100% - 10px) / 2);
-
-        max-width:
-          calc((100% - 10px) / 2);
-
-        flex:
-          0 0
-          calc((100% - 10px) / 2);
-
-        scroll-snap-align: start;
+        flex: 0 0 calc((100% - 10px) / 2);
+        min-width: calc((100% - 10px) / 2);
+        max-width: calc((100% - 10px) / 2);
+        border-radius: 15px;
       }
 
-      .compact-card
-      .img-container {
-
-        height: 180px;
-      }
-
-    }
-
-
-    /* =========================
-       SMALL MOBILE
-    ========================= */
-
-    @media (max-width: 380px) {
-
-      .psd-hero {
-
-        min-height: 350px;
-      }
-
-      .hero-logo-wrap {
-
-        width: 230px;
-
-        height: 230px;
-      }
-
-      .hero-tag {
-
-        font-size: 12px;
-
-        padding:
-          8px 12px;
-      }
-
-      .creative-tag {
-
-        top: 75px;
-      }
-
-      .branding-tag {
-
-        top: 125px;
-      }
-
-      .marketing-tag {
-
-        top: 225px;
-      }
-
-      .psd-intro-main {
-
-        font-size: 12px;
-      }
-
-      .psd-intro-sub {
-
-        font-size: 12px;
-      }
-
-
-      .multi-cards-grid {
-
-        gap: 8px;
-      }
-
-      .compact-card {
-
-        min-width:
-          calc((100% - 8px) / 2);
-
-        width:
-          calc((100% - 8px) / 2);
-
-        max-width:
-          calc((100% - 8px) / 2);
-
-        flex-basis:
-          calc((100% - 8px) / 2);
-      }
-
-      .compact-card
-      .img-container {
-
-        height: 165px;
+      .compact-card .img-container {
+        height: 205px;
       }
 
       .card-info {
-
         padding: 10px;
       }
 
       .card-info h3 {
-
-        font-size: 13px;
+        font-size: 12px;
       }
 
       .price-current {
-
         font-size: 16px;
       }
 
+      .price-old {
+        font-size: 10px;
+      }
+
+      .discount-tag {
+        font-size: 9px;
+      }
+
+      .btn-action {
+        font-size: 11px;
+        padding: 8px 8px;
+      }
+
+      .link-circle {
+        width: 29px;
+        height: 29px;
+        font-size: 12px;
+      }
+
+      .single-card-banner .img-container {
+        height: 250px;
+      }
     }
 
+    /* =========================
+       SMALL MOBILE
+    ========================== */
+
+    @media (max-width: 420px) {
+
+      .store-hero {
+        min-height: 520px;
+      }
+
+      .hero-logo {
+        width: 265px;
+      }
+
+      .hero-label {
+        font-size: 14px;
+        padding: 10px 14px;
+      }
+
+      .label-creative {
+        left: 0;
+        top: 30%;
+      }
+
+      .label-branding {
+        right: 0;
+        top: 44%;
+      }
+
+      .label-marketing {
+        left: 0;
+        bottom: 23%;
+      }
+
+      .hero-main-line {
+        font-size: 13px;
+      }
+
+      .hero-sub-line {
+        font-size: 14px;
+      }
+
+      .compact-card .img-container {
+        height: 175px;
+      }
+
+      .card-info {
+        padding: 8px;
+      }
+
+      .action-row {
+        gap: 5px;
+      }
+    }
   </style>
 </head>
 
-
 <body>
 
-
   <!-- =========================
-       BACK
-  ========================= -->
+       BACK BUTTON
+  ========================== -->
 
   <div class="top-bar">
-
-    <a
-      href="index.html"
-      class="btn-back"
-    >
-      ← Back
-    </a>
-
+    <a href="index.html" class="btn-back">← Back</a>
   </div>
 
 
   <div class="store-container">
 
+    <main class="products-content" id="storeMain">
 
-    <!-- =========================
-         LEFT BRAND
-    ========================= -->
-
-    <aside class="brand-sidebar">
-
-      <img
-        src="assets/logo.png"
-        alt="धर्मवीर ॲडव्हर्टायझिंग"
-        class="brand-logo-img"
-
-        onerror="
-          this.src='https://via.placeholder.com/260?text=Logo'
-        "
-      >
-
-      <h1 class="brand-title">
-        धर्मवीर ॲडव्हर्टायझिंग
-      </h1>
-
-      <p class="brand-subtitle">
-        Premium PSD Templates
-      </p>
-
-    </aside>
-
-
-    <!-- =========================
-         PRODUCTS
-    ========================= -->
-
-    <main
-      class="products-content"
-      id="storeMain"
-    >
-
-      <p
-        style="
-          text-align:center;
-          padding:30px;
-          color:#94a3b8;
-        "
-      >
+      <!-- Loading -->
+      <p style="text-align:center; padding:30px; color:#94a3b8;">
         PSD Store लोड होत आहे...
       </p>
 
     </main>
 
-
   </div>
 
 
   <!-- =========================
-       PAYMENT MODAL
-  ========================= -->
+       QR PAYMENT MODAL
+  ========================== -->
 
-  <div
-    class="modal-overlay"
-    id="payModal"
+  <div class="modal-overlay"
+       id="payModal"
+       onclick="closeModalOutside(event, 'payModal')">
 
-    onclick="
-      closeModalOutside(
-        event,
-        'payModal'
-      )
-    "
-  >
+    <div class="pay-card"
+         onclick="event.stopPropagation()">
 
-    <div
-      class="pay-card"
-
-      onclick="
-        event.stopPropagation()
-      "
-    >
-
-      <h3
-        id="payTitle"
-        style="font-size:15px;"
-      >
+      <h3 id="payTitle" style="font-size:15px;">
         PSD Name
       </h3>
 
-
       <p
-        id="payPrice"
-
-        style="
-          margin:6px 0;
-          color:#ff5500;
-          font-weight:800;
-          font-size:22px;
-        "
-      >
+        style="margin:6px 0; color:#ff5500; font-weight:800; font-size:22px;"
+        id="payPrice">
         ₹0
       </p>
 
-
       <div
-        style="
-          background:#fff;
-          padding:8px;
-          border-radius:10px;
-          display:inline-block;
-          margin:4px 0;
-        "
-      >
+        style="background:#fff; padding:8px; border-radius:10px; display:inline-block; margin:4px 0;">
 
         <img
           id="qrImage"
           src=""
-
-          style="
-            width:160px;
-            height:160px;
-            display:block;
-          "
-        >
-
+          style="width:160px; height:160px; display:block;">
       </div>
 
-
       <p
-        style="
-          font-size:11px;
-          color:#94a3b8;
-          margin:8px 0 4px;
-        "
-      >
+        style="font-size:11px; color:#94a3b8; margin:8px 0 4px;">
         QR कोड स्कॅन करा किंवा UPI ID कॉपी करा:
       </p>
 
-
       <button
-
-        onclick="
-          navigator.clipboard
-          .writeText('9309860089@ybl');
-
-          alert('UPI ID कॉपी झाला!');
-        "
-
+        onclick="navigator.clipboard.writeText('9309860089@ybl'); alert('UPI ID कॉपी झाला!');"
         style="
           background:#0f172a;
           color:#fff;
@@ -1282,20 +778,14 @@
           border-radius:6px;
           cursor:pointer;
           font-size:12px;
-          width:100%;
-        "
-      >
-
+          width:100%;">
         Copy UPI: 9309860089@ybl
-
       </button>
-
 
       <a
         id="waLink"
         href="#"
         target="_blank"
-
         style="
           display:block;
           background:#25D366;
@@ -1305,120 +795,68 @@
           text-decoration:none;
           font-weight:bold;
           margin-top:10px;
-          font-size:13px;
-        "
-      >
-
+          font-size:13px;">
         WhatsApp वर स्क्रीनशॉट पाठवा →
-
       </a>
 
-
       <button
-
-        onclick="
-          document
-          .getElementById('payModal')
-          .classList
-          .remove('active')
-        "
-
+        onclick="document.getElementById('payModal').classList.remove('active')"
         style="
           background:transparent;
           color:#94a3b8;
           border:none;
           margin-top:8px;
           cursor:pointer;
-          font-size:12px;
-        "
-      >
-
+          font-size:12px;">
         रद्द करा
-
       </button>
 
-
     </div>
-
   </div>
 
 
   <!-- =========================
-       IMAGE LIGHTBOX
-  ========================= -->
+       IMAGE PREVIEW
+  ========================== -->
 
   <div
     class="modal-overlay"
     id="imageModal"
-
-    onclick="
-      closeModalOutside(
-        event,
-        'imageModal'
-      )
-    "
-  >
+    onclick="closeModalOutside(event, 'imageModal')">
 
     <img
       id="lightboxImg"
       class="lightbox-content"
       src=""
-      alt="Full Preview"
-    >
+      alt="Full Preview">
 
   </div>
 
 
   <script>
 
-
-    /* =========================
-       PAYMENT SETTINGS
-    ========================= */
-
-    const waNum =
-      "919309860089";
-
-    const UPI_ID =
-      "9309860089@ybl";
+    const waNum = "919309860089";
+    const UPI_ID = "9309860089@ybl";
 
 
     /* =========================
-       LOAD STORE
-    ========================= */
+       FETCH PSD DATA
+    ========================== */
 
     async function fetchStoreData() {
 
       try {
 
-        const res =
-          await fetch(
-            '/api/psd-store'
-          );
+        const res = await fetch('/api/psd-store');
 
-
-        const data =
-          await res.json();
-
+        const data = await res.json();
 
         renderStore(data);
 
-      }
+      } catch (e) {
 
-      catch (e) {
-
-        document
-          .getElementById('storeMain')
-          .innerHTML =
-          `
-            <p
-              style="
-                text-align:center;
-              "
-            >
-              डेटा लोड करण्यात अडचण आली.
-            </p>
-          `;
+        document.getElementById('storeMain').innerHTML =
+          "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
 
       }
 
@@ -1427,623 +865,334 @@
 
     /* =========================
        RENDER STORE
-    ========================= */
+    ========================== */
 
     function renderStore(data) {
 
-
       const container =
-        document.getElementById(
-          'storeMain'
-        );
+        document.getElementById('storeMain');
+
+      container.innerHTML = '';
 
 
-      container.innerHTML =
-        '';
-
-
-      if (
-        !data ||
-        data.length === 0
-      ) {
+      if (!data || data.length === 0) {
 
         container.innerHTML =
-
-          `
-            <p
-              style="
-                text-align:center;
-                color:#94a3b8;
-              "
-            >
-              सध्या कोणतीही PSD उपलब्ध नाही.
-            </p>
-          `;
+          "<p style='text-align:center; color:#94a3b8;'>सध्या कोणतीही PSD उपलब्ध नाही.</p>";
 
         return;
       }
 
 
       /* =========================
-         HERO SECTION
-      ========================= */
+         HERO
+      ========================== */
 
-      const hero =
-        document.createElement(
-          'div'
-        );
+      const hero = document.createElement('section');
 
-
-      hero.className =
-        'psd-hero';
-
+      hero.className = 'store-hero';
 
       hero.innerHTML = `
 
-        <!-- LOGO -->
+        <img
+          src="assets/logo.png"
+          alt="धर्मवीर ॲडव्हर्टायझिंग"
+          class="hero-logo"
+          onerror="this.style.display='none'">
 
-        <div
-          class="hero-logo-wrap"
-        >
 
-          <img
-            src="assets/logo.png"
-            alt="धर्मवीर ॲडव्हर्टायझिंग"
-
-            onerror="
-              this.src='https://via.placeholder.com/300?text=Logo'
-            "
-          >
-
+        <div class="hero-label label-creative">
+          <span>✦</span> Creative
         </div>
 
 
-        <!-- CREATIVE -->
-
-        <div
-          class="hero-tag creative-tag"
-        >
-
-          <span>✦</span>
-          Creative
-
+        <div class="hero-label label-branding">
+          <span>◇</span> Branding
         </div>
 
 
-        <!-- BRANDING -->
-
-        <div
-          class="hero-tag branding-tag"
-        >
-
-          <span>◇</span>
-          Branding
-
+        <div class="hero-label label-marketing">
+          <span>↗</span> Marketing
         </div>
 
 
-        <!-- MARKETING -->
+        <div class="hero-bottom">
 
-        <div
-          class="hero-tag marketing-tag"
-        >
-
-          <span>↗</span>
-          Marketing
-
-        </div>
-
-
-        <!-- TEXT -->
-
-        <div
-          class="psd-intro"
-        >
-
-          <div
-            class="psd-intro-main"
-          >
-
-            CREATIVE DESIGN
-            •
-            DIGITAL MARKETING
-
+          <div class="hero-main-line">
+            CREATIVE DESIGN • DIGITAL MARKETING
           </div>
 
-
-          <div
-            class="psd-intro-sub"
-          >
-
+          <div class="hero-sub-line">
             Premium PSD Templates
-
           </div>
 
         </div>
 
       `;
 
-
-      container.appendChild(
-        hero
-      );
+      container.appendChild(hero);
 
 
       /* =========================
          PSD SECTIONS
-      ========================= */
+      ========================== */
 
-      data.forEach(
-        (sec, idx) => {
+      data.forEach((sec, idx) => {
 
-
-          if (
-            !sec.items ||
-            sec.items.length === 0
-          ) {
-
-            return;
-          }
+        if (!sec.items || sec.items.length === 0) {
+          return;
+        }
 
 
-          const secBlock =
-            document.createElement(
-              'div'
-            );
+        const secBlock =
+          document.createElement('div');
+
+        secBlock.className =
+          'section-block';
 
 
-          secBlock.className =
-            'section-block';
+        const isSingle =
+          sec.items.length === 1;
 
 
-          const isSingle =
-            sec.items.length === 1;
+        let cardsHtml =
+          sec.items.map(item => {
 
+            const discount =
+              item.originalPrice &&
+              Number(item.originalPrice) >
+              Number(item.price)
 
-          let cardsHtml =
-            sec.items
-            .map(
-              item => {
-
-
-                const discount =
-
-                  item.originalPrice &&
-                  Number(
+              ? Math.round(
+                  (
+                    (item.originalPrice - item.price) /
                     item.originalPrice
-                  ) >
-                  Number(
-                    item.price
-                  )
+                  ) * 100
+                ) + '%Off'
 
-                  ?
+              : '';
 
-                  Math.round(
 
-                    (
-                      (
-                        item.originalPrice -
-                        item.price
-                      )
+            const itemUrl =
+              window.location.origin +
+              window.location.pathname +
+              '#' +
+              item.id;
 
-                      /
 
-                      item.originalPrice
-                    )
+            return `
 
-                    *
+              <div
+                class="${isSingle ? 'single-card-banner' : 'compact-card'}"
+                id="${item.id}">
 
-                    100
-
-                  ) + '%Off'
-
-                  :
-
-                  '';
-
-
-                const itemUrl =
-
-                  window.location.origin +
-
-                  window.location.pathname +
-
-                  '#' +
-
-                  item.id;
-
-
-                return `
-
-                  <div
-
-                    class="${
-                      isSingle
-                      ? 'single-card-banner'
-                      : 'compact-card'
-                    }"
-
-                    id="${item.id}"
-
-                  >
-
-
-                    <!-- IMAGE -->
-
-                    <div
-
-                      class="img-container"
-
-                      onclick="
-                        openImageLightbox(
-                          '${escapeHtml(
-                            item.previewImg
-                          )}'
-                        )
-                      "
-
-                    >
-
-                      <img
-
-                        src="${item.previewImg}"
-
-                        alt="${item.title}"
-
-                        onerror="
-                          this.src='assets/logo.png'
-                        "
-
-                      >
-
-                    </div>
-
-
-                    <!-- CARD INFO -->
-
-                    <div
-                      class="card-info"
-                    >
-
-                      <div>
-
-
-                        <h3>
-
-                          ${escapeHtml(
-                            item.title
-                          )}
-
-                        </h3>
-
-
-                        <div
-                          class="price-details"
-                        >
-
-
-                          <div>
-
-                            <span
-                              class="price-current"
-                            >
-
-                              ₹${item.price}
-
-                            </span>
-
-
-                            <span
-                              class="price-old"
-                            >
-
-                              ₹${item.originalPrice}
-
-                            </span>
-
-                          </div>
-
-
-                          ${
-                            discount
-
-                            ?
-
-                            `
-                              <span
-                                class="discount-tag"
-                              >
-
-                                ${discount}
-
-                              </span>
-                            `
-
-                            :
-
-                            ''
-                          }
-
-
-                        </div>
-
-
-                      </div>
-
-
-                      <!-- ACTIONS -->
-
-                      <div
-                        class="action-row"
-                      >
-
-
-                        <button
-
-                          class="btn-action"
-
-                          onclick="
-                            openPay(
-                              '${escapeHtml(
-                                item.title
-                              )}',
-                              '${item.price}'
-                            )
-                          "
-
-                        >
-
-                          Get it Now →
-
-                        </button>
-
-
-                        <div
-
-                          class="link-circle"
-
-                          title="
-                            या PSD ची लिंक कॉपी करा
-                          "
-
-                          onclick="
-                            copyItemLink(
-                              '${itemUrl}'
-                            )
-                          "
-
-                        >
-
-                          🔗
-
-                        </div>
-
-
-                      </div>
-
-
-                    </div>
-
-
-                  </div>
-
-                `;
-
-              }
-            )
-            .join('');
-
-
-          /* =========================
-             SECTION HTML
-          ========================= */
-
-          secBlock.innerHTML = `
-
-
-            <div
-              class="section-header"
-            >
-
-              ${escapeHtml(
-                sec.sectionTitle
-              )}
-
-            </div>
-
-
-            <div
-
-              class="${
-                isSingle
-                ? ''
-                : 'multi-cards-grid'
-              }"
-
-              id="scroll_grid_${idx}"
-
-            >
-
-              ${cardsHtml}
-
-            </div>
-
-
-            ${
-              !isSingle
-
-              ?
-
-              `
 
                 <div
-                  class="scroll-controls"
-                >
+                  class="img-container"
+                  onclick="openImageLightbox('${escapeHtml(item.previewImg)}')">
 
-
-                  <button
-
-                    class="nav-arrow"
-
-                    onclick="
-                      scrollGrid(
-                        ${idx},
-                        -200
-                      )
-                    "
-
-                  >
-
-                    ←
-
-                  </button>
-
-
-                  <button
-
-                    class="nav-arrow"
-
-                    onclick="
-                      scrollGrid(
-                        ${idx},
-                        200
-                      )
-                    "
-
-                  >
-
-                    →
-
-                  </button>
-
+                  <img
+                    src="${item.previewImg}"
+                    alt="${escapeHtml(item.title)}"
+                    onerror="this.src='assets/logo.png'">
 
                 </div>
 
-              `
 
-              :
+                <div class="card-info">
 
-              ''
-            }
+                  <div>
 
-
-          `;
-
-
-          container.appendChild(
-            secBlock
-          );
+                    <h3>
+                      ${escapeHtml(item.title)}
+                    </h3>
 
 
-        }
-      );
+                    <div class="price-details">
+
+                      <div>
+
+                        <span class="price-current">
+                          ₹${item.price}
+                        </span>
+
+                        <span class="price-old">
+                          ₹${item.originalPrice}
+                        </span>
+
+                      </div>
+
+
+                      ${
+                        discount
+                        ?
+                        `<span class="discount-tag">${discount}</span>`
+                        :
+                        ''
+                      }
+
+                    </div>
+
+                  </div>
+
+
+                  <div class="action-row">
+
+                    <button
+                      class="btn-action"
+                      onclick="openPay(
+                        '${escapeHtml(item.title)}',
+                        '${item.price}'
+                      )">
+
+                      Get it Now →
+
+                    </button>
+
+
+                    <div
+                      class="link-circle"
+                      title="या PSD ची लिंक कॉपी करा"
+                      onclick="copyItemLink('${itemUrl}')">
+
+                      🔗
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            `;
+
+          }).join('');
+
+
+        secBlock.innerHTML = `
+
+          <div class="section-header">
+            ${escapeHtml(sec.sectionTitle)}
+          </div>
+
+
+          <div
+            class="${isSingle ? '' : 'multi-cards-grid'}"
+            id="scroll_grid_${idx}">
+
+            ${cardsHtml}
+
+          </div>
+
+
+          ${
+            !isSingle
+            ?
+
+            `
+
+              <div class="scroll-controls">
+
+                <button
+                  class="nav-arrow"
+                  onclick="scrollGrid(${idx}, -220)">
+                  ←
+                </button>
+
+
+                <button
+                  class="nav-arrow"
+                  onclick="scrollGrid(${idx}, 220)">
+                  →
+                </button>
+
+              </div>
+
+            `
+
+            :
+
+            ''
+          }
+
+        `;
+
+
+        container.appendChild(secBlock);
+
+      });
 
     }
 
 
     /* =========================
        IMAGE LIGHTBOX
-    ========================= */
+    ========================== */
 
-    function openImageLightbox(
-      imgSrc
-    ) {
+    function openImageLightbox(imgSrc) {
 
-      document
-        .getElementById(
-          'lightboxImg'
-        )
-        .src = imgSrc;
-
+      document.getElementById('lightboxImg').src =
+        imgSrc;
 
       document
-        .getElementById(
-          'imageModal'
-        )
-        .classList
-        .add('active');
+        .getElementById('imageModal')
+        .classList.add('active');
 
     }
 
 
-    /* =========================
-       CLOSE MODAL
-    ========================= */
-
-    function closeModalOutside(
-      event,
-      modalId
-    ) {
+    function closeModalOutside(event, modalId) {
 
       document
-        .getElementById(
-          modalId
-        )
-        .classList
-        .remove('active');
+        .getElementById(modalId)
+        .classList.remove('active');
 
     }
 
 
     /* =========================
        COPY PSD LINK
-    ========================= */
+    ========================== */
 
-    function copyItemLink(
-      url
-    ) {
+    function copyItemLink(url) {
 
-      navigator
-        .clipboard
+      navigator.clipboard
         .writeText(url)
+        .then(() => {
 
-        .then(
-          () => {
+          alert(
+            "या PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\nआता तुम्ही ती WhatsApp किंवा Instagram वर पेस्ट करू शकता."
+          );
 
-            alert(
-              "या PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\n" +
-              "आता तुम्ही ती WhatsApp किंवा Instagram वर पेस्ट करू शकता."
-            );
+        })
+        .catch(() => {
 
-          }
-        )
+          alert(
+            "लिंक कॉपी करताना अडचण आली."
+          );
 
-        .catch(
-          () => {
-
-            alert(
-              "लिंक कॉपी करताना अडचण आली."
-            );
-
-          }
-        );
+        });
 
     }
 
 
     /* =========================
        SCROLL PSD
-    ========================= */
+    ========================== */
 
-    function scrollGrid(
-      idx,
-      dist
-    ) {
+    function scrollGrid(idx, dist) {
 
       const grid =
         document.getElementById(
           `scroll_grid_${idx}`
         );
 
-
       if (grid) {
 
         grid.scrollBy({
-
           left: dist,
-
           behavior: 'smooth'
-
         });
 
       }
@@ -2053,116 +1202,62 @@
 
     /* =========================
        PAYMENT
-    ========================= */
+    ========================== */
 
-    function openPay(
-      title,
-      price
-    ) {
+    function openPay(title, price) {
 
-
-      document
-        .getElementById(
-          'payTitle'
-        )
-        .innerText =
-        title;
+      document.getElementById('payTitle')
+        .innerText = title;
 
 
-      document
-        .getElementById(
-          'payPrice'
-        )
-        .innerText =
-        `₹${price}`;
+      document.getElementById('payPrice')
+        .innerText = `₹${price}`;
 
 
-      document
-        .getElementById(
-          'qrImage'
-        )
-        .src =
-
+      document.getElementById('qrImage').src =
         `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
 
 
-      document
-        .getElementById(
-          'waLink'
-        )
-        .href =
-
-        `https://wa.me/${waNum}?text=${encodeURIComponent(
-
-          'नमस्कार, मी ' +
-
-          title +
-
-          ' (₹' +
-
-          price +
-
-          ') साठी पेमेंट केले आहे.'
-
-        )}`;
+      document.getElementById('waLink').href =
+        `https://wa.me/${waNum}?text=${
+          encodeURIComponent(
+            'नमस्कार, मी ' +
+            title +
+            ' (₹' +
+            price +
+            ') साठी पेमेंट केले आहे.'
+          )
+        }`;
 
 
       document
-        .getElementById(
-          'payModal'
-        )
-        .classList
-        .add('active');
+        .getElementById('payModal')
+        .classList.add('active');
 
     }
 
 
     /* =========================
-       ESCAPE HTML
-    ========================= */
+       HTML ESCAPE
+    ========================== */
 
-    function escapeHtml(
-      str
-    ) {
+    function escapeHtml(str) {
 
-      return String(
-        str || ''
-      )
-
-        .replace(
-          /&/g,
-          '&amp;'
-        )
-
-        .replace(
-          /</g,
-          '&lt;'
-        )
-
-        .replace(
-          />/g,
-          '&gt;'
-        )
-
-        .replace(
-          /"/g,
-          '&quot;'
-        )
-
-        .replace(
-          /'/g,
-          '&#039;'
-        );
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 
     }
 
 
     /* =========================
-       START
-    ========================= */
+       LOAD
+    ========================== */
 
-    window.onload =
-      fetchStoreData;
+    window.onload = fetchStoreData;
 
   </script>
 
