@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PSD Store | धर्मवीर ॲडव्हर्टायझिंग</title>
   
-  <!-- Favicon Tab Logo -->
   <link rel="icon" type="image/png" href="assets/logo.png">
   <link rel="apple-touch-icon" href="assets/logo.png">
 
@@ -21,7 +20,6 @@
       transition: background-color 0.3s;
     }
 
-    /* Top Navigation Header */
     .top-bar {
       max-width: 1200px;
       margin: 0 auto 20px;
@@ -44,7 +42,6 @@
     }
     .btn-back:hover { opacity: 0.9; }
 
-    /* Store Main Layout */
     .store-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -54,7 +51,6 @@
       align-items: start;
     }
 
-    /* Left Branding Sidebar */
     .brand-sidebar {
       text-align: center;
       padding: 40px 10px;
@@ -92,7 +88,6 @@
       text-align: center;
     }
 
-    /* Right Products Content Area */
     .products-content { width: 100%; min-width: 0; }
 
     .section-block { margin-bottom: 40px; }
@@ -107,7 +102,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Smart Dynamic Cards Grid (Horizontal Scroll for Multiple items) */
     .multi-cards-grid {
       display: flex;
       gap: 20px;
@@ -118,7 +112,6 @@
     .multi-cards-grid::-webkit-scrollbar { height: 6px; }
     .multi-cards-grid::-webkit-scrollbar-thumb { background: #ff5500; border-radius: 10px; }
 
-    /* Single Item: Large Banner View */
     .single-card-banner {
       width: 100%;
       background: #ffffff;
@@ -142,9 +135,8 @@
       object-fit: cover;
       transition: transform 0.3s;
     }
-    .single-card-banner .img-container img:hover { transform: scale(1.02); }
 
-    /* Multiple Items: Perfect Proportional Compact Cards (Like Image 2) */
+    /* योग्य आकाराचे (Compact Proportional) कार्ड्स */
     .compact-card {
       min-width: 240px;
       max-width: 240px;
@@ -160,7 +152,7 @@
 
     .compact-card .img-container {
       width: 100%;
-      height: 180px; /* योग्य उंची जेणेकरून जास्त लांब होणार नाही */
+      height: 180px; 
       background: #000;
       overflow: hidden;
       cursor: zoom-in;
@@ -172,7 +164,6 @@
       object-fit: cover;
       transition: transform 0.3s;
     }
-    .compact-card .img-container img:hover { transform: scale(1.02); }
 
     .card-info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
     .card-info h3 { font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 6px; line-height: 1.2; }
@@ -182,7 +173,6 @@
     .price-old { font-size: 11px; color: #94a3b8; text-decoration: line-through; margin-left: 4px; }
     .discount-tag { font-size: 10px; color: #16a34a; font-weight: 700; }
 
-    /* Action Row with Button and Share Link Button */
     .action-row {
       display: flex;
       align-items: center;
@@ -227,7 +217,6 @@
       background: #fff5f0;
     }
 
-    /* Scroll Navigation Controls */
     .scroll-controls {
       display: flex;
       justify-content: center;
@@ -251,7 +240,6 @@
     }
     .nav-arrow:hover { background: #ff5500; border-color: #ff5500; }
 
-    /* Modals Styling */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -276,7 +264,6 @@
       color: #fff;
     }
 
-    /* Full Image Lightbox */
     .lightbox-content {
       max-width: 90%;
       max-height: 90vh;
@@ -286,7 +273,6 @@
       border: 2px solid rgba(255,255,255,0.2);
     }
 
-    /* Mobile View Setup */
     @media (max-width: 768px) {
       .store-container { grid-template-columns: 1fr; gap: 20px; }
       .brand-sidebar { position: relative; top: 0; padding: 20px 10px; background: transparent; border: none; }
@@ -298,28 +284,22 @@
 </head>
 <body>
 
-  <!-- Top Navigation -->
   <div class="top-bar">
     <a href="index.html" class="btn-back">← Back</a>
   </div>
 
   <div class="store-container">
-    
-    <!-- Branding Header Sidebar -->
     <aside class="brand-sidebar">
       <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग" class="brand-logo-img" onerror="this.src='https://via.placeholder.com/260?text=Logo'">
       <h1 class="brand-title">धर्मवीर ॲडव्हर्टायझिंग</h1>
       <p class="brand-subtitle">Premium PSD Templates</p>
     </aside>
 
-    <!-- Products Content -->
     <main class="products-content" id="storeMain">
       <p style="text-align:center; padding: 30px; color:#94a3b8;">PSD Store लोड होत आहे...</p>
     </main>
-
   </div>
 
-  <!-- QR Code Payment Modal -->
   <div class="modal-overlay" id="payModal" onclick="closeModalOutside(event, 'payModal')">
     <div class="pay-card" onclick="event.stopPropagation()">
       <h3 id="payTitle" style="font-size:16px;">PSD Name</h3>
@@ -337,7 +317,6 @@
     </div>
   </div>
 
-  <!-- Full Image Preview Modal (Lightbox) -->
   <div class="modal-overlay" id="imageModal" onclick="closeModalOutside(event, 'imageModal')">
     <img id="lightboxImg" class="lightbox-content" src="" alt="Full Preview">
   </div>
@@ -348,15 +327,15 @@
 
     async function initStore() {
       try {
-        const res = await fetch('content.json');
-        const data = await res.json();
-        
-        if(data && data.themeColor) {
-          document.documentElement.style.setProperty('--store-bg', data.themeColor);
+        const settingsRes = await fetch('/api/settings');
+        const settingsData = await settingsRes.json();
+        if(settingsData && settingsData.length > 0 && settingsData[0].theme_color) {
+          document.documentElement.style.setProperty('--store-bg', settingsData[0].theme_color);
         }
 
-        const storeData = data.psdStore || data;
-        renderStore(storeData);
+        const res = await fetch('/api/psd-store');
+        const data = await res.json();
+        renderStore(data);
       } catch (e) {
         document.getElementById('storeMain').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
       }
