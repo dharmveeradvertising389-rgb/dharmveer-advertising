@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="mr">
 <head>
@@ -26,10 +27,6 @@
       overflow-x: hidden;
     }
 
-    /* =========================
-       TOP BAR
-    ========================== */
-
     .top-bar {
       max-width: 1200px;
       margin: 0 auto 10px;
@@ -56,10 +53,6 @@
       transform: translateY(-1px);
     }
 
-    /* =========================
-       MAIN STORE
-    ========================== */
-
     .store-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -70,10 +63,6 @@
       width: 100%;
       min-width: 0;
     }
-
-    /* =========================
-       BRAND / HERO
-    ========================== */
 
     .store-hero {
       width: 100%;
@@ -100,8 +89,6 @@
         );
     }
 
-    /* Logo */
-
     .hero-logo {
       width: 330px;
       max-width: 72vw;
@@ -115,10 +102,6 @@
       position: relative;
       z-index: 2;
     }
-
-    /* =========================
-       THREE FLOATING LABELS
-    ========================== */
 
     .hero-label {
       position: absolute;
@@ -160,10 +143,6 @@
       bottom: 23%;
     }
 
-    /* =========================
-       HERO BOTTOM TEXT
-    ========================== */
-
     .hero-bottom {
       position: absolute;
       bottom: 5%;
@@ -191,10 +170,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* =========================
-       SECTION
-    ========================== */
-
     .section-block {
       margin-bottom: 42px;
       width: 100%;
@@ -207,10 +182,6 @@
       margin-bottom: 15px;
       text-align: center;
     }
-
-    /* =========================
-       MULTIPLE PSD CARDS
-    ========================== */
 
     .multi-cards-grid {
       display: flex;
@@ -225,10 +196,6 @@
     .multi-cards-grid::-webkit-scrollbar {
       display: none;
     }
-
-    /* =========================
-       SINGLE PSD
-    ========================== */
 
     .single-card-banner {
       width: 100%;
@@ -258,12 +225,6 @@
     .single-card-banner .img-container img:hover {
       transform: scale(1.03);
     }
-
-    /* =========================
-       MULTIPLE PSD
-       IMPORTANT:
-       2 cards mobile = proper width
-    ========================== */
 
     .compact-card {
       flex: 0 0 calc((100% - 15px) / 2);
@@ -301,10 +262,6 @@
     .compact-card .img-container img:hover {
       transform: scale(1.03);
     }
-
-    /* =========================
-       CARD INFO
-    ========================== */
 
     .card-info {
       padding: 12px 14px;
@@ -349,10 +306,6 @@
       color: #64748b;
       white-space: nowrap;
     }
-
-    /* =========================
-       ACTION
-    ========================== */
 
     .action-row {
       display: flex;
@@ -412,10 +365,6 @@
       background: #fff5f0;
     }
 
-    /* =========================
-       SCROLL CONTROLS
-    ========================== */
-
     .scroll-controls {
       display: flex;
       justify-content: center;
@@ -440,10 +389,6 @@
       cursor: pointer;
       font-size: 18px;
     }
-
-    /* =========================
-       MODALS
-    ========================== */
 
     .modal-overlay {
       display: none;
@@ -494,10 +439,6 @@
       border: 2px solid rgba(255,255,255,0.2);
     }
 
-    /* =========================
-       TABLET
-    ========================== */
-
     @media (max-width: 900px) {
 
       .store-hero {
@@ -526,10 +467,6 @@
       }
     }
 
-    /* =========================
-       MOBILE
-    ========================== */
-
     @media (max-width: 768px) {
 
       body {
@@ -544,8 +481,6 @@
         font-size: 15px;
         padding: 8px 17px;
       }
-
-      /* HERO */
 
       .store-hero {
         min-height: 570px;
@@ -589,8 +524,6 @@
         margin-top: 6px;
       }
 
-      /* PSD CARDS */
-
       .section-header {
         font-size: 17px;
       }
@@ -598,11 +531,6 @@
       .multi-cards-grid {
         gap: 10px;
       }
-
-      /*
-        दोन PSD = screen वर दोन व्यवस्थित
-        तीन/जास्त = पुढे scroll
-      */
 
       .compact-card {
         flex: 0 0 calc((100% - 10px) / 2);
@@ -650,10 +578,6 @@
         height: 250px;
       }
     }
-
-    /* =========================
-       SMALL MOBILE
-    ========================== */
 
     @media (max-width: 420px) {
 
@@ -710,20 +634,14 @@
 
 <body>
 
-  <!-- =========================
-       BACK BUTTON
-  ========================== -->
-
   <div class="top-bar">
     <a href="index.html" class="btn-back">← Back</a>
   </div>
-
 
   <div class="store-container">
 
     <main class="products-content" id="storeMain">
 
-      <!-- Loading -->
       <p style="text-align:center; padding:30px; color:#94a3b8;">
         PSD Store लोड होत आहे...
       </p>
@@ -798,6 +716,31 @@
           font-size:13px;">
         WhatsApp वर स्क्रीनशॉट पाठवा →
       </a>
+
+
+      <!-- =========================
+           NEW: FREE PSD BUTTON
+           फक्त downloadUrl असल्यास दिसेल
+      ========================== -->
+
+      <a
+        id="freePsdLink"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        style="
+          display:none;
+          background:#16803c;
+          color:#fff;
+          padding:10px;
+          border-radius:8px;
+          text-decoration:none;
+          font-weight:bold;
+          margin-top:10px;
+          font-size:13px;">
+        Free PSD इथून घ्या →
+      </a>
+
 
       <button
         onclick="document.getElementById('payModal').classList.remove('active')"
@@ -1042,7 +985,8 @@
                       class="btn-action"
                       onclick="openPay(
                         '${escapeHtml(item.title)}',
-                        '${item.price}'
+                        '${item.price}',
+                        '${escapeHtml(item.downloadUrl || '')}'
                       )">
 
                       Get it Now →
@@ -1123,7 +1067,84 @@
 
       });
 
+
+      /* =========================
+         NEW: DIRECT PSD HASH LINK
+         ========================= */
+
+      scrollToHashItem();
+
     }
+
+
+    /* =========================
+       NEW: DIRECT PSD SCROLL
+    ========================= */
+
+    function scrollToHashItem() {
+
+      const hash = window.location.hash;
+
+      if (!hash) {
+        return;
+      }
+
+      const itemId = decodeURIComponent(
+        hash.substring(1)
+      );
+
+      if (!itemId) {
+        return;
+      }
+
+      const target =
+        document.getElementById(itemId);
+
+      if (!target) {
+        return;
+      }
+
+      const rect =
+        target.getBoundingClientRect();
+
+      const isVisible =
+        rect.top >= 0 &&
+        rect.bottom <= window.innerHeight;
+
+      /*
+        PSD आधीच screen वर दिसत असेल तर
+        कोणताही scroll करू नये.
+      */
+
+      if (isVisible) {
+        return;
+      }
+
+      /*
+        PSD screen वर नसेल तर
+        फक्त त्या PSD card पर्यंत scroll.
+      */
+
+      window.scrollTo({
+        top:
+          window.pageYOffset +
+          rect.top -
+          25,
+        behavior: 'smooth'
+      });
+
+    }
+
+
+    /* =========================
+       NEW: HASH CHANGE
+    ========================== */
+
+    window.addEventListener('hashchange', function() {
+
+      scrollToHashItem();
+
+    });
 
 
     /* =========================
@@ -1202,9 +1223,9 @@
 
     /* =========================
        PAYMENT
-    ========================== */
+    ========================= */
 
-    function openPay(title, price) {
+    function openPay(title, price, downloadUrl) {
 
       document.getElementById('payTitle')
         .innerText = title;
@@ -1228,6 +1249,42 @@
             ') साठी पेमेंट केले आहे.'
           )
         }`;
+
+
+      /* =========================
+         NEW: FREE PSD LINK
+         ========================= */
+
+      const freePsdLink =
+        document.getElementById('freePsdLink');
+
+
+      /*
+        downloadUrl रिकामा किंवा "#"
+        असेल तर button hide.
+      */
+
+      if (
+        downloadUrl &&
+        downloadUrl.trim() !== '' &&
+        downloadUrl.trim() !== '#'
+      ) {
+
+        freePsdLink.href =
+          downloadUrl.trim();
+
+        freePsdLink.style.display =
+          'block';
+
+      } else {
+
+        freePsdLink.href =
+          '#';
+
+        freePsdLink.style.display =
+          'none';
+
+      }
 
 
       document
@@ -1263,3 +1320,4 @@
 
 </body>
 </html>
+```
