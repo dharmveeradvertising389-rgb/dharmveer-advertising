@@ -324,52 +324,22 @@
     const waNum = "919309860089";
     const UPI_ID = "9309860089@ybl";
 
-    // थेट कोडच्या आतच डेटा टाकल्यामुळे कशाचीही गरज नाही, लोडिंगचा एरर कायमचा बंद!
-    const storeContentData = {
-      "themeColor": "#121212",
-      "psdStore": [
-        {
-          "sectionTitle": "Indian Air Force Day",
-          "items": [
-            {
-              "id": "airforce-1",
-              "title": "Indian Air Force Day Premium PSD Pack",
-              "price": "129",
-              "originalPrice": "299",
-              "previewImg": "assets/logo.png"
-            }
-          ]
-        },
-        {
-          "sectionTitle": "NAAVRAATRI SPECIAL PSD",
-          "items": [
-            {
-              "id": "navaratri-1",
-              "title": "नवरात्री उत्सव ९ दिवसाच्या PSD",
-              "price": "199",
-              "originalPrice": "499",
-              "previewImg": "assets/logo.png"
-            },
-            {
-              "id": "navaratri-2",
-              "title": "Navaratri Utsav Premium 4 PSD pack",
-              "price": "129",
-              "originalPrice": "299",
-              "previewImg": "assets/logo.png"
-            }
-          ]
-        }
-      ]
-    };
-
-    function initStore() {
+    async function initStore() {
       try {
-        if(storeContentData.themeColor) {
-          document.documentElement.style.setProperty('--store-bg', storeContentData.themeColor);
+        // Cache buster ?t=... lavlay mhanje admin panel varun save kelele navin photos lages distil
+        const res = await fetch('content.json?t=' + new Date().getTime());
+        if (!res.ok) throw new Error('Network response was not ok');
+        
+        const data = await res.json();
+        
+        if (data && data.themeColor) {
+          document.documentElement.style.setProperty('--store-bg', data.themeColor);
         }
-        renderStore(storeContentData.psdStore);
+
+        const storeData = data.psdStore || data;
+        renderStore(storeData);
       } catch (e) {
-        document.getElementById('storeMain').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
+        document.getElementById('storeMain').innerHTML = "<p style='text-align:center; color:#ff5500;'>डेटा लोड करण्यात अडचण आली. कृपया content.json फाईल तपासा.</p>";
       }
     }
 
@@ -396,11 +366,12 @@
             : '';
 
           const itemUrl = window.location.origin + window.location.pathname + '#' + item.id;
+          const imgSource = item.previewImg || 'assets/logo.png';
 
           return `
             <div class="${isSingle ? 'single-card-banner' : 'compact-card'}" id="${item.id}">
-              <div class="img-container" onclick="openImageLightbox('${escapeHtml(item.previewImg)}')">
-                <img src="${item.previewImg}" alt="${item.title}" onerror="this.src='assets/logo.png'">
+              <div class="img-container" onclick="openImageLightbox('${escapeHtml(imgSource)}')">
+                <img src="${imgSource}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/logo.png'">
               </div>
               <div class="card-info">
                 <div>
@@ -415,7 +386,7 @@
                 </div>
                 <div class="action-row">
                   <button class="btn-action" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it Now →</button>
-                  <div class="link-circle" title="يا PSD ची लिंक कॉपी करा" onclick="copyItemLink('${itemUrl}')">🔗</div>
+                  <div class="link-circle" title="या PSD ची लिंक कॉपी करा" onclick="copyItemLink('${itemUrl}')">🔗</div>
                 </div>
               </div>
             </div>
@@ -463,7 +434,7 @@
       document.getElementById('payTitle').innerText = title;
       document.getElementById('payPrice').innerText = `₹${price}`;
       document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
-      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.')}`;
+      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=` + encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.');
       document.getElementById('payModal').classList.add('active');
     }
 
