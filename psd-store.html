@@ -1,486 +1,454 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PSD Store | धर्मवीर ॲडव्हर्टायझिंग</title>
-  
-  <!-- Favicon Tab Logo -->
-  <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="apple-touch-icon" href="assets/logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PSD Store | धर्मवीर ॲडव्हर्टायझिंग</title>
+  
+  <!-- Favicon Tab Logo -->
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
 
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Devanagari', sans-serif; }
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Noto Sans Devanagari', sans-serif; }
 
-    body {
-      background-color: #121212;
-      color: #ffffff;
-      min-height: 100vh;
-      padding: 20px 15px;
-    }
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 20px 15px;
+    }
 
-    /* Top Navigation Header */
-    .top-bar {
-      max-width: 1200px;
-      margin: 0 auto 20px;
-      display: flex;
-      justify-content: flex-end;
-    }
+    /* Top Navigation Header */
+    .top-bar {
+      max-width: 1200px;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
 
-    .btn-back {
-      background: #ff5500;
-      color: #ffffff;
-      padding: 8px 18px;
-      border-radius: 20px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: opacity 0.2s;
-    }
-    .btn-back:hover { opacity: 0.9; }
+    .btn-back {
+      background: #ff5500;
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s;
+    }
+    .btn-back:hover { opacity: 0.9; }
 
-    /* Store Main Layout */
-    .store-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 350px 1fr;
-      gap: 40px;
-      align-items: start;
-    }
+    /* Store Main Layout */
+    .store-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 40px;
+      align-items: start;
+    }
 
-    /* Left Branding Sidebar (PC: Perfect Centered) */
-    .brand-sidebar {
-      text-align: center;
-      padding: 40px 10px;
-      position: sticky;
-      top: 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 24px;
-    }
+    /* Left Branding Sidebar (PC: Perfect Centered) */
+    .brand-sidebar {
+      text-align: center;
+      padding: 40px 10px;
+      position: sticky;
+      top: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+    }
 
-    .brand-logo-img {
-      width: 260px;
-      height: auto;
-      margin: 0 auto 18px;
-      display: block;
-      filter: drop-shadow(0px 10px 25px rgba(255, 85, 0, 0.35));
-    }
+    .brand-logo-img {
+      width: 260px;
+      height: auto;
+      margin: 0 auto 18px;
+      display: block;
+      filter: drop-shadow(0px 10px 25px rgba(255, 85, 0, 0.35));
+    }
 
-    .brand-title {
-      font-size: 26px;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 6px;
-      text-align: center;
-    }
+    .brand-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 6px;
+      text-align: center;
+    }
 
-    .brand-subtitle {
-      font-size: 15px;
-      color: #cbd5e1;
-      font-weight: 500;
-      text-align: center;
-    }
+    .brand-subtitle {
+      font-size: 15px;
+      color: #cbd5e1;
+      font-weight: 500;
+      text-align: center;
+    }
 
-    /* Right Products Content Area */
-    .products-content { width: 100%; min-width: 0; }
+    /* Right Products Content Area */
+    .products-content { width: 100%; min-width: 0; }
 
-    .section-block { margin-bottom: 35px; }
-    
-    .section-header {
-      font-size: 18px;
-      color: #ff5500;
-      font-weight: 700;
-      margin-bottom: 15px;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    .section-block { margin-bottom: 35px; }
+    
+    .section-header {
+      font-size: 16px;
+      color: #cbd5e1;
+      font-weight: 500;
+      margin-bottom: 12px;
+      text-align: center;
+    }
 
-    /* Smart Dynamic Cards Grid (PC horizontal scroll) */
-    .multi-cards-grid {
-      display: flex;
-      gap: 20px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding: 5px 5px 15px 5px;
-    }
-    .multi-cards-grid::-webkit-scrollbar { height: 6px; }
-    .multi-cards-grid::-webkit-scrollbar-thumb { background: #ff5500; border-radius: 10px; }
+    /* Smart Dynamic Cards Grid */
+    .multi-cards-grid {
+      display: flex;
+      gap: 15px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding-bottom: 10px;
+    }
+    .multi-cards-grid::-webkit-scrollbar { display: none; }
 
-    /* Single Item: Large Banner View */
-    .single-card-banner {
-      width: 100%;
-      background: #ffffff;
-      color: #1e293b;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-    }
+    /* Single Item: Large Banner View */
+    .single-card-banner {
+      background: #ffffff;
+      color: #1e293b;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
 
-    .single-card-banner .img-container {
-      width: 100%;
-      height: 320px;
-      background: #000;
-      overflow: hidden;
-      cursor: zoom-in;
-    }
+    .single-card-banner .img-container {
+      width: 100%;
+      height: 280px;
+      background: #000;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
 
-    .single-card-banner .img-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s;
-    }
-    .single-card-banner .img-container img:hover { transform: scale(1.03); }
+    .single-card-banner .img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .single-card-banner .img-container img:hover { transform: scale(1.03); }
 
-    /* Multiple Items: Small Compact White Cards */
-    .compact-card {
-      min-width: 240px;
-      max-width: 240px;
-      background: #ffffff;
-      color: #1e293b;
-      border-radius: 18px;
-      overflow: hidden;
-      flex-shrink: 0;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-    }
+    /* Multiple Items: Small Compact White Cards */
+    .compact-card {
+      min-width: 210px;
+      max-width: 220px;
+      background: #ffffff;
+      color: #1e293b;
+      border-radius: 18px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+    }
 
-    .compact-card .img-container {
-      width: 100%;
-      height: 180px;
-      background: #000;
-      overflow: hidden;
-      cursor: zoom-in;
-    }
+    .compact-card .img-container {
+      width: 100%;
+      height: 180px;
+      background: #000;
+      overflow: hidden;
+      cursor: zoom-in;
+    }
 
-    .compact-card .img-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s;
-    }
-    .compact-card .img-container img:hover { transform: scale(1.03); }
+    .compact-card .img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    .compact-card .img-container img:hover { transform: scale(1.03); }
 
-    .card-info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .card-info h3 { font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 6px; line-height: 1.2; }
+    .card-info { padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .card-info h3 { font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 4px; line-height: 1.2; }
 
-    .price-details { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
-    .price-current { font-size: 16px; font-weight: 800; color: #0f172a; }
-    .price-old { font-size: 11px; color: #94a3b8; text-decoration: line-through; margin-left: 4px; }
-    .discount-tag { font-size: 10px; color: #16a34a; font-weight: 700; }
+    .price-details { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+    .price-current { font-size: 18px; font-weight: 800; color: #0f172a; }
+    .price-old { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-left: 4px; }
+    .discount-tag { font-size: 11px; color: #64748b; }
 
-    /* Action Row with Button and Share Link Button */
-    .action-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 10px;
-    }
+    /* Action Row with Button and Share Link Button */
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
 
-    .btn-action {
-      background: #ff5500;
-      color: #ffffff;
-      border: none;
-      padding: 8px 10px;
-      border-radius: 16px;
-      font-weight: 700;
-      font-size: 11px;
-      cursor: pointer;
-      flex-grow: 1;
-      text-align: center;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-    .btn-action:hover { background: #e04b00; }
+    .btn-action {
+      background: #ff5500;
+      color: #ffffff;
+      border: none;
+      padding: 9px 12px;
+      border-radius: 18px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      flex-grow: 1;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-action:hover { background: #e04b00; }
 
-    .link-circle {
-      width: 30px;
-      height: 30px;
-      border: 2px solid #cbd5e1;
-      border-radius: 50%;
-      background: #f8fafc;
-      color: #475569;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 13px;
-      transition: all 0.2s;
-    }
-    .link-circle:hover {
-      border-color: #ff5500;
-      color: #ff5500;
-      background: #fff5f0;
-    }
+    .link-circle {
+      width: 32px;
+      height: 32px;
+      border: 2px solid #cbd5e1;
+      border-radius: 50%;
+      background: #f8fafc;
+      color: #475569;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .link-circle:hover {
+      border-color: #ff5500;
+      color: #ff5500;
+      background: #fff5f0;
+    }
 
-    /* Scroll Navigation Controls */
-    .scroll-controls {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 15px;
-    }
+    /* Scroll Navigation Controls */
+    .scroll-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
 
-    .nav-arrow {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.3);
-      background: rgba(255,255,255,0.05);
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 18px;
-      transition: background 0.2s;
-    }
-    .nav-arrow:hover { background: #ff5500; border-color: #ff5500; }
+    .nav-arrow {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid #ffffff;
+      background: transparent;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-    /* Modals Styling (Payment & Full Image Preview) */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.88);
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      padding: 20px;
-    }
-    .modal-overlay.active { display: flex; }
+    /* Modals Styling (Payment & Full Image Preview) */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.88);
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
 
-    .pay-card {
-      background: #1e293b;
-      border: 1px solid #ff5500;
-      padding: 22px;
-      border-radius: 18px;
-      width: 90%;
-      max-width: 350px;
-      text-align: center;
-      color: #fff;
-    }
+    .pay-card {
+      background: #1e293b;
+      border: 1px solid #ff5500;
+      padding: 20px;
+      border-radius: 18px;
+      width: 90%;
+      max-width: 350px;
+      text-align: center;
+      color: #fff;
+    }
 
-    /* Full Image Lightbox */
-    .lightbox-content {
-      max-width: 90%;
-      max-height: 90vh;
-      border-radius: 12px;
-      object-fit: contain;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-      border: 2px solid rgba(255,255,255,0.2);
-    }
+    /* Full Image Lightbox */
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 90vh;
+      border-radius: 12px;
+      object-fit: contain;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      border: 2px solid rgba(255,255,255,0.2);
+    }
 
-    /* Mobile View Setup: Clean 2-Column Grid with Perfect Card Size */
-    @media (max-width: 768px) {
-      .store-container { grid-template-columns: 1fr; gap: 20px; }
-      .brand-sidebar { position: relative; top: 0; padding: 20px 10px; background: transparent; border: none; }
-      .brand-logo-img { width: 180px; }
-      .brand-title { font-size: 20px; }
-      
-      .multi-cards-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        overflow-x: visible;
-        padding: 0;
-      }
-      .compact-card {
-        min-width: 100%;
-        max-width: 100%;
-      }
-      .compact-card .img-container {
-        height: 130px;
-      }
-      .scroll-controls {
-        display: none;
-      }
-    }
-  </style>
+    /* Mobile View Setup */
+    @media (max-width: 768px) {
+      .store-container { grid-template-columns: 1fr; gap: 20px; }
+      .brand-sidebar { position: relative; top: 0; padding: 20px 10px; background: transparent; border: none; }
+      .brand-logo-img { width: 180px; }
+      .brand-title { font-size: 20px; }
+      .compact-card { min-width: 47%; max-width: 48%; }
+      .multi-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; overflow-x: visible; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Top Navigation -->
-  <div class="top-bar">
-    <a href="index.html" class="btn-back">← Back</a>
-  </div>
+  <!-- Top Navigation -->
+  <div class="top-bar">
+    <a href="index.html" class="btn-back">← Back</a>
+  </div>
 
-  <div class="store-container">
-    
-    <!-- Branding Header Sidebar (Centered) -->
-    <aside class="brand-sidebar">
-      <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग" class="brand-logo-img" onerror="this.src='https://via.placeholder.com/260?text=Logo'">
-      <h1 class="brand-title">धर्मवीर ॲडव्हर्टायझिंग</h1>
-      <p class="brand-subtitle">Premium PSD Templates</p>
-    </aside>
+  <div class="store-container">
+    
+    <!-- Branding Header Sidebar (Centered) -->
+    <aside class="brand-sidebar">
+      <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग" class="brand-logo-img" onerror="this.src='https://via.placeholder.com/260?text=Logo'">
+      <h1 class="brand-title">धर्मवीर ॲडव्हर्टायझिंग</h1>
+      <p class="brand-subtitle">Premium PSD Templates</p>
+    </aside>
 
-    <!-- Products Content -->
-    <main class="products-content" id="storeMain">
-      <p style="text-align:center; padding: 30px; color:#94a3b8;">PSD Store load hot ahe...</p>
-    </main>
+    <!-- Products Content -->
+    <main class="products-content" id="storeMain">
+      <p style="text-align:center; padding: 30px; color:#94a3b8;">PSD Store लोड होत आहे...</p>
+    </main>
 
-  </div>
+  </div>
 
-  <!-- QR Code Payment Modal -->
-  <div class="modal-overlay" id="payModal" onclick="closeModalOutside(event, 'payModal')">
-    <div class="pay-card" onclick="event.stopPropagation()">
-      <h3 id="payTitle" style="font-size:16px;">PSD Name</h3>
-      <p style="margin:8px 0; color:#ff5500; font-weight:800; font-size: 24px;" id="payPrice">₹0</p>
-      
-      <div style="background:#fff; padding:8px; border-radius:10px; display:inline-block; margin: 4px 0;">
-        <img id="qrImage" src="" style="width:160px; height:160px; display:block;">
-      </div>
-      
-      <p style="font-size:11px; color:#94a3b8; margin:8px 0 4px;">QR kod scan kara kinva UPI ID copy kara:</p>
-      <button onclick="navigator.clipboard.writeText('9309860089@ybl'); alert('UPI ID copy zala!');" style="background:#0f172a; color:#fff; border:1px dashed #ff5500; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px; width: 100%;">Copy UPI: 9309860089@ybl</button>
+  <!-- QR Code Payment Modal -->
+  <div class="modal-overlay" id="payModal" onclick="closeModalOutside(event, 'payModal')">
+    <div class="pay-card" onclick="event.stopPropagation()">
+      <h3 id="payTitle" style="font-size:15px;">PSD Name</h3>
+      <p style="margin:6px 0; color:#ff5500; font-weight:800; font-size: 22px;" id="payPrice">₹0</p>
+      
+      <div style="background:#fff; padding:8px; border-radius:10px; display:inline-block; margin: 4px 0;">
+        <img id="qrImage" src="" style="width:160px; height:160px; display:block;">
+      </div>
+      
+      <p style="font-size:11px; color:#94a3b8; margin:8px 0 4px;">QR कोड स्कॅन करा किंवा UPI ID कॉपी करा:</p>
+      <button onclick="navigator.clipboard.writeText('9309860089@ybl'); alert('UPI ID कॉपी झाला!');" style="background:#0f172a; color:#fff; border:1px dashed #ff5500; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px; width: 100%;">Copy UPI: 9309860089@ybl</button>
 
-      <a id="waLink" href="#" target="_blank" style="display:block; background:#25D366; color:#fff; padding:10px; border-radius:8px; text-decoration:none; font-weight:bold; margin-top:10px; font-size:13px;">WhatsApp var screenshot pathva →</a>
-      <button onclick="document.getElementById('payModal').classList.remove('active')" style="background:transparent; color:#94a3b8; border:none; margin-top:8px; cursor:pointer; font-size:12px;">Radd kara</button>
-    </div>
-  </div>
+      <a id="waLink" href="#" target="_blank" style="display:block; background:#25D366; color:#fff; padding:10px; border-radius:8px; text-decoration:none; font-weight:bold; margin-top:10px; font-size:13px;">WhatsApp वर स्क्रीनशॉट पाठवा →</a>
+      <button onclick="document.getElementById('payModal').classList.remove('active')" style="background:transparent; color:#94a3b8; border:none; margin-top:8px; cursor:pointer; font-size:12px;">रद्द करा</button>
+    </div>
+  </div>
 
-  <!-- Full Image Preview Modal (Lightbox) -->
-  <div class="modal-overlay" id="imageModal" onclick="closeModalOutside(event, 'imageModal')">
-    <img id="lightboxImg" class="lightbox-content" src="" alt="Full Preview">
-  </div>
+  <!-- Full Image Preview Modal (Lightbox) -->
+  <div class="modal-overlay" id="imageModal" onclick="closeModalOutside(event, 'imageModal')">
+    <img id="lightboxImg" class="lightbox-content" src="" alt="Full Preview">
+  </div>
 
-  <script>
-    const waNum = "919309860089";
-    const UPI_ID = "9309860089@ybl";
+  <script>
+    const waNum = "919309860089";
+    const UPI_ID = "9309860089@ybl";
 
-    const fallbackData = [
-      {
-        "sectionTitle": "Indian Air Force Day",
-        "items": [
-          {
-            "id": "airforce-1",
-            "title": "Indian Air Force Day Premium PSD Pack",
-            "price": "129",
-            "originalPrice": "299",
-            "previewImg": "assets/logo.png"
-          }
-        ]
-      },
-      {
-        "sectionTitle": "NAAVRAATRI SPECIAL PSD",
-        "items": [
-          {
-            "id": "navaratri-1",
-            "title": "नवरात्री उत्सव ९ दिवसाच्या PSD",
-            "price": "199",
-            "originalPrice": "499",
-            "previewImg": "assets/logo.png"
-          },
-          {
-            "id": "navaratri-2",
-            "title": "Navaratri Utsav Premium 4 PSD pack",
-            "price": "129",
-            "originalPrice": "299",
-            "previewImg": "assets/logo.png"
-          }
-        ]
-      }
-    ];
+    async function fetchStoreData() {
+      try {
+        const res = await fetch('/api/psd-store');
+        const data = await res.json();
+        renderStore(data);
+      } catch (e) {
+        document.getElementById('storeMain').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
+      }
+    }
 
-    async function fetchStoreData() {
-      let storeData = null;
-      try {
-        const res = await fetch('content.json?t=' + new Date().getTime());
-        if (res.ok) {
-          const json = await res.json();
-          storeData = json.psdStore || json;
-        }
-      } catch (e) {
-        console.log("Using fallback data");
-      }
+    function renderStore(data) {
+      const container = document.getElementById('storeMain');
+      container.innerHTML = '';
 
-      if (!storeData || (Array.isArray(storeData) && storeData.length === 0)) {
-        storeData = fallbackData;
-      }
+      if (!data || data.length === 0) {
+        container.innerHTML = "<p style='text-align:center; color:#94a3b8;'>सध्या कोणतीही PSD उपलब्ध नाही.</p>";
+        return;
+      }
 
-      renderStore(storeData);
-    }
+      data.forEach((sec, idx) => {
+        if (!sec.items || sec.items.length === 0) return;
 
-    function renderStore(data) {
-      const container = document.getElementById('storeMain');
-      container.innerHTML = '';
+        const secBlock = document.createElement('div');
+        secBlock.className = 'section-block';
 
-      if (!data || data.length === 0) {
-        container.innerHTML = "<p style='text-align:center; color:#94a3b8;'>Sadhya kontihi PSD uplabdh nahi.</p>";
-        return;
-      }
+        const isSingle = sec.items.length === 1;
 
-      data.forEach((sec, idx) => {
-        if (!sec.items || sec.items.length === 0) return;
+        let cardsHtml = sec.items.map(item => {
+          const discount = item.originalPrice && Number(item.originalPrice) > Number(item.price)
+            ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) + '%Off'
+            : '';
 
-        const secBlock = document.createElement('div');
-        secBlock.className = 'section-block';
+          const itemUrl = window.location.origin + window.location.pathname + '#' + item.id;
 
-        const isSingle = sec.items.length === 1;
+          return `
+            <div class="${isSingle ? 'single-card-banner' : 'compact-card'}" id="${item.id}">
+              <div class="img-container" onclick="openImageLightbox('${escapeHtml(item.previewImg)}')">
+                <img src="${item.previewImg}" alt="${item.title}" onerror="this.src='assets/logo.png'">
+              </div>
+              <div class="card-info">
+                <div>
+                  <h3>${escapeHtml(item.title)}</h3>
+                  <div class="price-details">
+                    <div>
+                      <span class="price-current">₹${item.price}</span>
+                      <span class="price-old">₹${item.originalPrice}</span>
+                    </div>
+                    ${discount ? `<span class="discount-tag">${discount}</span>` : ''}
+                  </div>
+                </div>
+                <div class="action-row">
+                  <button class="btn-action" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it Now →</button>
+                  <div class="link-circle" title="या PSD ची लिंक कॉपी करा" onclick="copyItemLink('${itemUrl}')">🔗</div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
 
-        let cardsHtml = sec.items.map(item => {
-          const discount = item.originalPrice && Number(item.originalPrice) > Number(item.price)
-            ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) + '% Off'
-            : '';
+        secBlock.innerHTML = `
+          <div class="section-header">${escapeHtml(sec.sectionTitle)}</div>
+          <div class="${isSingle ? '' : 'multi-cards-grid'}" id="scroll_grid_${idx}">${cardsHtml}</div>
+          ${!isSingle ? `
+            <div class="scroll-controls">
+              <button class="nav-arrow" onclick="scrollGrid(${idx}, -200)">←</button>
+              <button class="nav-arrow" onclick="scrollGrid(${idx}, 200)">→</button>
+            </div>
+          ` : ''}
+        `;
 
-          const itemUrl = window.location.origin + window.location.pathname + '#' + item.id;
-          const imgSrc = item.previewImg || 'assets/logo.png';
+        container.appendChild(secBlock);
+      });
+    }
 
-          return `
-            <div class="${isSingle ? 'single-card-banner' : 'compact-card'}" id="${item.id}">
-              <div class="img-container" onclick="openImageLightbox('${escapeHtml(imgSrc)}')">
-                <img src="${imgSrc}" alt="${escapeHtml(item.title)}" onerror="this.src='assets/logo.png'">
-              </div>
-              <div class="card-info">
-                <div>
-                  <h3>${escapeHtml(item.title)}</h3>
-                  <div class="price-details">
-                    <div>
-                      <span class="price-current">₹${item.price}</span>
-                      <span class="price-old">₹${item.originalPrice}</span>
-                    </div>
-                    ${discount ? `<span class="discount-tag">${discount}</span>` : ''}
-                  </div>
-                </div>
-                <div class="action-row">
-                  <button class="btn-action" onclick="openPay('${escapeHtml(item.title)}', '${item.price}')">Get it Now →</button>
-                  <div class="link-circle" title="Link copy kara" onclick="copyItemLink('${itemUrl}')">🔗</div>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('');
+    function openImageLightbox(imgSrc) {
+      document.getElementById('lightboxImg').src = imgSrc;
+      document.getElementById('imageModal').classList.add('active');
+    }
 
-        secBlock.innerHTML = `
-          <div class="section-header">${escapeHtml(sec.sectionTitle)}</div>
-          <div class="${isSingle ? '' : 'multi-cards-grid'}" id="scroll_grid_${idx}">${cardsHtml}</div>
-          ${!isSingle ? `
-            <div class="scroll-controls">
-              <button class="nav-arrow" onclick="scrollGrid(${idx}, -240)">←</button>
-              <button class="nav-arrow" onclick="scrollGrid(${idx}, 240)">→</button>
-            </div>
-          ` : ''}
-        `;
+    function closeModalOutside(event, modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
 
-        container.appendChild(secBlock);
-      });
-    }
+    function copyItemLink(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        alert("या PSD ची डायरेक्ट लिंक कॉपी झाली! 🔗\nआता तुम्ही ती WhatsApp किंवा Instagram वर पेस्ट करू शकता.");
+      }).catch(err => {
+        alert("लिंक कॉपी करताना अडचण आली.");
+      });
+    }
 
-    function openImageLightbox(imgSrc) {
-      document.getElementById('lightboxImg').src = imgSrc;
-      document.getElementById('imageModal').classList.add('active');
-    }
+    function scrollGrid(idx, dist) {
+      const grid = document.getElementById(`scroll_grid_${idx}`);
+      if(grid) grid.scrollBy({ left: dist, behavior: 'smooth' });
+    }
+
+    function openPay(title, price) {
+      document.getElementById('payTitle').innerText = title;
+      document.getElementById('payPrice').innerText = `₹${price}`;
+      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${UPI_ID}%26pn=DharmveerAdvertising%26am=${price}%26cu=INR`;
+      document.getElementById('waLink').href = `https://wa.me/${waNum}?text=${encodeURIComponent('नमस्कार, मी ' + title + ' (₹' + price + ') साठी पेमेंट केले आहे.')}`;
+      document.getElementById('payModal').classList.add('active');
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+    window.onload = fetchStoreData;
+  </script>
+</body>
+</html>
