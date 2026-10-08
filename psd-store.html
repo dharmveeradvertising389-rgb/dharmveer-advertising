@@ -346,21 +346,49 @@
     const waNum = "919309860089";
     const UPI_ID = "9309860089@ybl";
 
-    async function initStore() {
-      try {
-        // Cache-busting (?t=...) लावले आहे जेणेकरून Admin Panel चे फोटो लगेच लोड होतील
-        const res = await fetch('content.json?t=' + new Date().getTime());
-        const data = await res.json();
-        
-        if(data && data.themeColor) {
-          document.documentElement.style.setProperty('--store-bg', data.themeColor);
+    // Fallback data jar content.json fetch zali nahi tr hya dware store disel
+    const fallbackData = {
+      "themeColor": "#121212",
+      "psdStore": [
+        {
+          "sectionTitle": "Indian Air Force Day",
+          "items": [
+            {
+              "id": "airforce-1",
+              "title": "Indian Air Force Day Premium PSD Pack",
+              "price": "129",
+              "originalPrice": "299",
+              "previewImg": "assets/logo.png"
+            }
+          ]
         }
+      ]
+    };
 
-        const storeData = data.psdStore || data;
-        renderStore(storeData);
+    async function initStore() {
+      let storeData = null;
+      try {
+        const res = await fetch('content.json?t=' + new Date().getTime());
+        if (res.ok) {
+          const json = await res.json();
+          if (json && (json.psdStore || Array.isArray(json))) {
+            storeData = json;
+          }
+        }
       } catch (e) {
-        document.getElementById('storeMain').innerHTML = "<p style='text-align:center;'>डेटा लोड करण्यात अडचण आली.</p>";
+        console.log("Using fallback data");
       }
+
+      if (!storeData) {
+        storeData = fallbackData;
+      }
+
+      if (storeData.themeColor) {
+        document.documentElement.style.setProperty('--store-bg', storeData.themeColor);
+      }
+
+      const itemsList = storeData.psdStore || storeData;
+      renderStore(itemsList);
     }
 
     function renderStore(data) {
