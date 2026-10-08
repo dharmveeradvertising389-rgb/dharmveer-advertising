@@ -24,91 +24,6 @@
       min-height: 100vh;
       padding: 18px 15px 40px;
       overflow-x: hidden;
-      overflow-y: auto;
-    }
-
-    /* =========================
-       TOP BLACK HEADER
-       ========================= */
-
-    .site-header {
-      width: 100%;
-      background: #080808;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      box-shadow: 0 4px 18px rgba(0,0,0,0.45);
-      margin: -18px -15px 18px;
-      width: calc(100% + 30px);
-    }
-
-    .site-header-inner {
-      max-width: 1200px;
-      min-height: 68px;
-      margin: 0 auto;
-      padding: 8px 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    }
-
-    .brand-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: #ffffff;
-      min-width: 0;
-    }
-
-    .brand-link img {
-      width: 48px;
-      height: 48px;
-      object-fit: contain;
-      display: block;
-      flex-shrink: 0;
-    }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.15;
-      min-width: 0;
-    }
-
-    .brand-name {
-      color: #ffffff;
-      font-size: 18px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .brand-subtitle {
-      color: #ff5500;
-      font-size: 12px;
-      font-weight: 600;
-      margin-top: 3px;
-      white-space: nowrap;
-    }
-
-    .home-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 88px;
-      padding: 9px 18px;
-      border-radius: 22px;
-      background: #ff5500;
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 800;
-      transition: 0.2s;
-      flex-shrink: 0;
-    }
-
-    .home-btn:hover {
-      background: #e04b00;
-      transform: translateY(-1px);
     }
 
     .top-bar {
@@ -272,31 +187,13 @@
       gap: 15px;
       width: 100%;
       overflow-x: auto;
-      overflow-y: hidden;
       scroll-behavior: smooth;
-      padding: 3px 2px 14px;
-      scrollbar-width: thin;
-      scrollbar-color: #ff5500 #242424;
+      padding: 3px 2px 12px;
+      scrollbar-width: none;
     }
 
     .multi-cards-grid::-webkit-scrollbar {
-      height: 10px;
-      display: block;
-    }
-
-    .multi-cards-grid::-webkit-scrollbar-track {
-      background: #242424;
-      border-radius: 10px;
-    }
-
-    .multi-cards-grid::-webkit-scrollbar-thumb {
-      background: #ff5500;
-      border-radius: 10px;
-      border: 2px solid #242424;
-    }
-
-    .multi-cards-grid::-webkit-scrollbar-thumb:hover {
-      background: #ff6a1a;
+      display: none;
     }
 
     .single-card-banner {
@@ -575,35 +472,6 @@
         padding: 12px 10px 35px;
       }
 
-      .site-header {
-        margin: -12px -10px 18px;
-        width: calc(100% + 20px);
-      }
-
-      .site-header-inner {
-        padding: 8px 10px;
-        min-height: 60px;
-      }
-
-      .brand-link img {
-        width: 42px;
-        height: 42px;
-      }
-
-      .brand-name {
-        font-size: 15px;
-      }
-
-      .brand-subtitle {
-        font-size: 10px;
-      }
-
-      .home-btn {
-        min-width: 76px;
-        padding: 8px 13px;
-        font-size: 13px;
-      }
-
       .top-bar {
         margin-bottom: 5px;
       }
@@ -661,10 +529,6 @@
 
       .multi-cards-grid {
         gap: 10px;
-      }
-
-      .multi-cards-grid::-webkit-scrollbar {
-        height: 9px;
       }
 
       .compact-card {
@@ -764,6 +628,105 @@
         gap: 5px;
       }
     }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 9999;
+      width: 100%;
+      background: #050505;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+      padding: 8px 15px;
+      margin-bottom: 14px;
+    }
+    .site-header-inner {
+      max-width: 1200px;
+      min-height: 48px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      text-decoration: none;
+      min-width: 0;
+    }
+    .brand-link img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .brand-title {
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .brand-subtitle {
+      margin-top: 2px;
+      font-size: 10px;
+      color: #ff5500;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .home-link {
+      color: #fff;
+      text-decoration: none;
+      background: #ff5500;
+      padding: 8px 17px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .home-link:hover { background: #e04b00; }
+
+    /* Keep scrolling visible so users can see that cards can scroll. */
+    .multi-cards-grid {
+      scrollbar-width: thin;
+      scrollbar-color: #ff5500 #2a2a2a;
+    }
+    .multi-cards-grid::-webkit-scrollbar {
+      display: block;
+      height: 8px;
+    }
+    .multi-cards-grid::-webkit-scrollbar-track {
+      background: #2a2a2a;
+      border-radius: 10px;
+    }
+    .multi-cards-grid::-webkit-scrollbar-thumb {
+      background: #ff5500;
+      border-radius: 10px;
+    }
+    .card-info {
+      overflow: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #ff5500 #e5e7eb;
+    }
+    .card-info::-webkit-scrollbar { width: 6px; }
+    .card-info::-webkit-scrollbar-track { background: #e5e7eb; }
+    .card-info::-webkit-scrollbar-thumb {
+      background: #ff5500;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .site-header { padding: 7px 10px; }
+      .site-header-inner { min-height: 44px; }
+      .brand-link img { width: 36px; height: 36px; }
+      .brand-title { font-size: 14px; }
+      .brand-subtitle { font-size: 9px; }
+      .home-link { font-size: 12px; padding: 7px 13px; }
+    }
+
   </style>
 </head>
 
@@ -771,27 +734,17 @@
 
   <header class="site-header">
     <div class="site-header-inner">
-
       <a href="index.html" class="brand-link">
-        <img
-          src="assets/logo.png"
-          alt="धर्मवीर ॲडव्हर्टायझिंग"
-          onerror="this.style.display='none'">
-
-        <div class="brand-text">
-          <div class="brand-name">धर्मवीर ॲडव्हर्टायझिंग</div>
+        <img src="assets/logo.png" alt="धर्मवीर ॲडव्हर्टायझिंग">
+        <div>
+          <div class="brand-title">धर्मवीर ॲडव्हर्टायझिंग</div>
           <div class="brand-subtitle">Graphics • Marketing</div>
         </div>
       </a>
-
-      <a href="index.html" class="home-btn">Home</a>
-
+      <a href="index.html" class="home-link">Home</a>
     </div>
   </header>
 
-  <div class="top-bar">
-    <a href="index.html" class="btn-back">← Back</a>
-  </div>
 
   <div class="store-container">
 
@@ -1227,7 +1180,9 @@
          DIRECT PSD HASH LINK
       ========================= */
 
-      scrollToHashItem();
+      requestAnimationFrame(() => {
+        requestAnimationFrame(scrollToHashItem);
+      });
 
     }
 
@@ -1238,76 +1193,55 @@
     ========================= */
 
     function scrollToHashItem() {
-
       const hash = window.location.hash;
-
-      if (!hash) {
-        return;
-      }
+      if (!hash) return;
 
       const itemId = decodeURIComponent(hash.substring(1));
-
-      if (!itemId) {
-        return;
-      }
+      if (!itemId) return;
 
       const target = document.getElementById(itemId);
-
-      if (!target) {
-        return;
-      }
+      if (!target) return;
 
       const grid = target.closest('.multi-cards-grid');
+
+      // First move vertically to the card.
       const targetRect = target.getBoundingClientRect();
+      const header = document.querySelector('.site-header');
+      const headerHeight = header ? header.getBoundingClientRect().height : 0;
 
-      let horizontallyVisible = true;
+      const verticalTop =
+        window.pageYOffset + targetRect.top - headerHeight - 18;
 
-      if (grid) {
-        const gridRect = grid.getBoundingClientRect();
-
-        horizontallyVisible =
-          targetRect.left >= gridRect.left &&
-          targetRect.right <= gridRect.right;
-      }
-
-      const verticallyVisible =
-        targetRect.top >= 0 &&
-        targetRect.bottom <= window.innerHeight;
-
-      /* Card already visible: do nothing. */
-      if (verticallyVisible && horizontallyVisible) {
-        return;
-      }
-
-      /* Scroll page vertically only when required. */
-      if (!verticallyVisible) {
+      if (
+        targetRect.top < headerHeight ||
+        targetRect.bottom > window.innerHeight
+      ) {
         window.scrollTo({
-          top: Math.max(0, window.pageYOffset + targetRect.top - 25),
+          top: Math.max(0, verticalTop),
           behavior: 'smooth'
         });
       }
 
-      /* Scroll the correct horizontal PSD section only when required. */
-      if (grid && !horizontallyVisible) {
+      // Then move the horizontal container so the linked card is clearly visible.
+      if (grid) {
+        setTimeout(() => {
+          const gridRect = grid.getBoundingClientRect();
+          const cardRect = target.getBoundingClientRect();
 
-        const gridRect = grid.getBoundingClientRect();
-        const targetRectNow = target.getBoundingClientRect();
+          if (
+            cardRect.left < gridRect.left ||
+            cardRect.right > gridRect.right
+          ) {
+            const amount =
+              (cardRect.left + cardRect.width / 2) -
+              (gridRect.left + gridRect.width / 2);
 
-        if (targetRectNow.left < gridRect.left) {
-
-          grid.scrollBy({
-            left: targetRectNow.left - gridRect.left - 10,
-            behavior: 'smooth'
-          });
-
-        } else if (targetRectNow.right > gridRect.right) {
-
-          grid.scrollBy({
-            left: targetRectNow.right - gridRect.right + 10,
-            behavior: 'smooth'
-          });
-
-        }
+            grid.scrollBy({
+              left: amount,
+              behavior: 'smooth'
+            });
+          }
+        }, 250);
       }
     }
 
@@ -1318,9 +1252,9 @@
     window.addEventListener(
       'hashchange',
       function() {
-
-        scrollToHashItem();
-
+        requestAnimationFrame(() => {
+          requestAnimationFrame(scrollToHashItem);
+        });
       }
     );
 
