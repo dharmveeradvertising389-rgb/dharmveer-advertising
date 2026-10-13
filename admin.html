@@ -238,10 +238,17 @@ nav button.active{background:#e67e22}
 
       <input id="portfolioTitle" placeholder="Design / Poster title">
 
-      <input id="portfolioCategory"
-        placeholder="Category e.g. Business, Political, Festival">
+      <label for="portfolioEntryMainCategory">Main Category निवडा</label>
+      <select id="portfolioEntryMainCategory" onchange="refreshPortfolioSubcategoryOptions()" required>
+        <option value="">आधी Main Category निवडा</option>
+      </select>
 
-      <input id="portfolioImage" placeholder="Image URL">
+      <label for="portfolioEntrySubcategory">Subcategory निवडा</label>
+      <select id="portfolioEntrySubcategory" required disabled>
+        <option value="">आधी Main Category निवडा</option>
+      </select>
+
+      <input id="portfolioImage" placeholder="Image URL" required>
 
       <button class="success" onclick="addPortfolio()">
         Add Design
@@ -781,22 +788,25 @@ function renderPortfolioList() {
 
 async function addPortfolio(){
   const title=getValue("portfolioTitle");
-  const category=getValue("portfolioCategory");
+  const mainCategory=getValue("portfolioEntryMainCategory");
+  const subcategory=getValue("portfolioEntrySubcategory");
   const image_url=getValue("portfolioImage");
+  const mainCat = portfolioCategories.find(cat => cat.id === mainCategory || cat.name === mainCategory);
 
-  if(!title||!category||!image_url){
-    alert("Title, Category आणि Image URL भरा.");
+  if(!title || !mainCat || !subcategory || !image_url){
+    alert("Title, Main Category, Subcategory आणि Image URL भरा.");
     return;
   }
 
   try{
     await api("/api/portfolio",{
       method:"POST",
-      body:JSON.stringify({ title, category, image_url })
+      body:JSON.stringify({ title, category: mainCat.name, subcategory, image_url })
     });
 
     setValue("portfolioTitle","");
-    setValue("portfolioCategory","");
+    setValue("portfolioEntryMainCategory","");
+    refreshPortfolioSubcategoryOptions();
     setValue("portfolioImage","");
 
     await loadPortfolio();
@@ -926,11 +936,48 @@ async function loadPortfolioCategories() {
   renderPortfolioCategories();
 }
 
+function refreshPortfolioEntryMainOptions() {
+  const mainSelect = document.getElementById("portfolioEntryMainCategory");
+  if (!mainSelect) return;
+  const previous = mainSelect.value;
+  mainSelect.innerHTML = '<option value="">Main Category निवडा</option>';
+  portfolioCategories.forEach(cat => {
+    const option = document.createElement("option");
+    option.value = cat.id || cat.name;
+    option.textContent = cat.name;
+    mainSelect.appendChild(option);
+  });
+  if ([...mainSelect.options].some(option => option.value === previous)) mainSelect.value = previous;
+  refreshPortfolioSubcategoryOptions();
+}
+
+function refreshPortfolioSubcategoryOptions() {
+  const mainSelect = document.getElementById("portfolioEntryMainCategory");
+  const subSelect = document.getElementById("portfolioEntrySubcategory");
+  if (!mainSelect || !subSelect) return;
+  const cat = portfolioCategories.find(item => (item.id || item.name) === mainSelect.value || item.name === mainSelect.value);
+  const previous = subSelect.value;
+  subSelect.innerHTML = '<option value="">Subcategory निवडा</option>';
+  const subs = cat && Array.isArray(cat.subcategories) ? cat.subcategories : [];
+  subs.forEach(sub => {
+    const option = document.createElement("option");
+    option.value = sub.name;
+    option.textContent = sub.name;
+    subSelect.appendChild(option);
+  });
+  subSelect.disabled = subs.length === 0;
+  if (subs.some(sub => sub.name === previous)) subSelect.value = previous;
+  if (!subs.length) {
+    subSelect.innerHTML = '<option value="">या Main Category मध्ये Subcategory नाही</option>';
+  }
+}
+
 function renderPortfolioCategories() {
   const select = document.getElementById("portfolioMainCategorySelect");
   const list = document.getElementById("portfolioCategoryManager");
   if (!select || !list) return;
 
+  refreshPortfolioEntryMainOptions();
   const previous = select.value;
   select.innerHTML = "";
   portfolioCategories.forEach((cat, index) => {
