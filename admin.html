@@ -486,7 +486,7 @@ function showSection(id,btn){
   document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
   btn.classList.add("active");
 
-  if(id === 'portfolio') { loadPortfolio(); loadPortfolioCategories(); }
+  if(id === 'portfolio') { loadPortfolio().then(() => loadPortfolioCategories()); }
   if(id === 'settings') loadAppearanceSettings();
   if(id === 'psdstore') loadPsdStoreData();
 }
@@ -850,6 +850,7 @@ function movePortfolio(index, direction) {
 
 /* NEW: PORTFOLIO CATEGORY / SUBCATEGORY MANAGEMENT */
 let portfolioCategories = [];
+let portfolioCategoriesMigrationPending = false;
 
 function categorySlug(value) {
   return String(value || "")
@@ -863,37 +864,63 @@ function categorySlug(value) {
 
 async function loadPortfolioCategories() {
   try {
+    // Load existing portfolio designs first so legacy Main Categories are available to manage.
+    if (!Array.isArray(portfolioData) || !portfolioData.length) {
+      try {
+        portfolioData = await fetch(API_URL + "/api/portfolio").then(r => r.json());
+      } catch (_) {}
+    }
+
     const data = await fetch(API_URL + "/api/content").then(r => r.json());
     const saved = Array.isArray(data) ? data.find(x => x.content_key === "portfolio_categories") : null;
+    const migrated = Array.isArray(data) && data.some(x => x.content_key === "portfolio_categories_migrated_v2" && String(x.content_value).toLowerCase() === "true");
 
+    let savedCategories = [];
     if (saved && saved.content_value) {
-      // Once the manager has been saved, use its list as the source of truth.
-      // This lets the user intentionally delete old categories without them returning.
-      const parsed = JSON.parse(saved.content_value);
-      if (Array.isArray(parsed)) portfolioCategories = parsed.map(cat => ({...cat, aliases: Array.isArray(cat.aliases) ? cat.aliases : [], subcategories: Array.isArray(cat.subcategories) ? cat.subcategories : []}));
-    } else {
-      // First-time setup: import categories already used by existing portfolio designs,
-      // so those old categories can also be renamed or removed in this manager.
+      try {
+        const parsed = JSON.parse(saved.content_value);
+        if (Array.isArray(parsed)) savedCategories = parsed.map(cat => ({
+          ...cat,
+          aliases: Array.isArray(cat.aliases) ? cat.aliases : [],
+          subcategories: Array.isArray(cat.subcategories) ? cat.subcategories : []
+        }));
+      } catch (_) {}
+    }
+
+    portfolioCategories = savedCategories;
+
+    // One-time migration: add old categories from existing designs to an already-saved manager list.
+    // After the first save, deleted categories will not be automatically re-added.
+    if (!migrated) {
       const existingNames = [...new Set((Array.isArray(portfolioData) ? portfolioData : [])
         .map(item => String(item.category || "").trim())
         .filter(Boolean))];
-      portfolioCategories = existingNames.map(name => ({
-        id: categorySlug(name),
-        name,
-        aliases: [],
-        subcategories: []
-      }));
-      if (portfolioCategories.length) {
-        message("जुन्या Portfolio designs मधील categories आणल्या आहेत. बदल करून Save करा.");
-      }
+
+      existingNames.forEach(name => {
+        const alreadyKnown = portfolioCategories.some(cat =>
+          String(cat.name || "").trim().toLowerCase() === name.toLowerCase() ||
+          (Array.isArray(cat.aliases) && cat.aliases.some(alias => String(alias).trim().toLowerCase() === name.toLowerCase()))
+        );
+        if (!alreadyKnown) {
+          portfolioCategories.push({ id: categorySlug(name), name, aliases: [], subcategories: [] });
+        }
+      });
+      portfolioCategoriesMigrationPending = true;
+      if (existingNames.length) message("जुन्या Portfolio designs मधील Main Categories आणल्या आहेत. बदल करून Save करा.");
+    } else {
+      portfolioCategoriesMigrationPending = false;
+    }
+
+    // If no saved categories exist, the imported old categories are shown for first-time setup.
+    if (!saved && !portfolioCategories.length) {
+      portfolioCategories = [];
     }
   } catch (e) {
     console.log("Portfolio category settings load issue:", e.message);
-    // If the categories API is temporarily unavailable, still make existing design
-    // categories manageable in the current session.
     if (!portfolioCategories.length && Array.isArray(portfolioData)) {
       const existingNames = [...new Set(portfolioData.map(item => String(item.category || "").trim()).filter(Boolean))];
-      portfolioCategories = existingNames.map(name => ({ id: categorySlug(name), name, subcategories: [] }));
+      portfolioCategories = existingNames.map(name => ({ id: categorySlug(name), name, aliases: [], subcategories: [] }));
+      portfolioCategoriesMigrationPending = true;
     }
   }
   renderPortfolioCategories();
@@ -1021,6 +1048,18 @@ async function savePortfolioCategories() {
         content_value: JSON.stringify(portfolioCategories)
       })
     });
+
+    // Record the one-time import so intentionally deleted legacy categories stay deleted.
+    if (portfolioCategoriesMigrationPending) {
+      await api("/api/content", {
+        method: "POST",
+        body: JSON.stringify({
+          content_key: "portfolio_categories_migrated_v2",
+          content_value: "true"
+        })
+      });
+      portfolioCategoriesMigrationPending = false;
+    }
     message("Portfolio Categories सेव्ह झाल्या ✅");
   } catch (e) {
     alert("Categories सेव्ह करताना अडचण: " + e.message);
