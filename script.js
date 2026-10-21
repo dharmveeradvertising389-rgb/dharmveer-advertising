@@ -183,25 +183,61 @@ if (!document.getElementById("portfolio-custom-styles")) {
       box-shadow: 0 4px 15px rgba(255,102,0,0.5) !important;
     }
 
-    .toggle-portfolio-btn {
-      display: inline-block !important;
-      margin: 30px auto 10px auto !important;
-      padding: 10px 25px !important;
-      background: #ff6600 !important;
-      color: #ffffff !important;
-      border: none !important;
-      border-radius: 25px !important;
-      font-size: 15px !important;
-      font-weight: 600 !important;
-      cursor: pointer !important;
-      box-shadow: 0 4px 15px rgba(255,102,0,0.4) !important;
-      transition: all 0.3s ease !important;
+    /* Portfolio: एका आडव्या रांगेत cards + side scrolling */
+    #portfolioGrid {
+      display: flex !important;
+      flex-flow: row nowrap !important;
+      align-items: stretch !important;
+      gap: 22px !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      padding: 12px 4px 24px !important;
+      scroll-behavior: smooth !important;
+      overscroll-behavior-x: contain !important;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: thin;
+      scrollbar-color: #ff6600 rgba(255,255,255,0.08);
+      box-sizing: border-box !important;
     }
 
-    .toggle-portfolio-btn:hover {
-      background: #e65c00 !important;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255,102,0,0.6) !important;
+    #portfolioGrid::-webkit-scrollbar { height: 9px; }
+    #portfolioGrid::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.08);
+      border-radius: 20px;
+    }
+    #portfolioGrid::-webkit-scrollbar-thumb {
+      background: #ff6600;
+      border-radius: 20px;
+    }
+
+    #portfolioGrid > .portfolio-card {
+      display: flex !important;
+      flex: 0 0 300px !important;
+      flex-direction: column !important;
+      width: 300px !important;
+      min-width: 300px !important;
+      max-width: 300px !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+      border-radius: 12px !important;
+      transform: translateY(22px) scale(0.88);
+      opacity: 0;
+      transition:
+        opacity 650ms ease,
+        transform 650ms cubic-bezier(.2,.75,.25,1),
+        box-shadow 300ms ease !important;
+      will-change: transform, opacity;
+    }
+
+    #portfolioGrid > .portfolio-card.is-visible {
+      opacity: 1 !important;
+      transform: translateY(0) scale(1) !important;
+    }
+
+    #portfolioGrid > .portfolio-card:hover {
+      box-shadow: 0 14px 35px rgba(0,0,0,0.28) !important;
     }
 
     .portfolio-visual::before,
@@ -217,13 +253,13 @@ if (!document.getElementById("portfolio-custom-styles")) {
       position: relative !important;
       overflow: hidden !important;
       height: 280px !important;
-      border-radius: 12px !important;
+      min-height: 280px !important;
+      flex: 0 0 280px !important;
+      border-radius: 12px 12px 0 0 !important;
       background-color: #1a1a1a !important;
     }
 
-    .portfolio-visual.has-img {
-      cursor: pointer;
-    }
+    .portfolio-visual.has-img { cursor: pointer; }
 
     .portfolio-visual img {
       width: 100% !important;
@@ -234,11 +270,69 @@ if (!document.getElementById("portfolio-custom-styles")) {
       visibility: visible !important;
       position: relative !important;
       z-index: 10 !important;
-      transition: transform 0.3s ease !important;
+      transition: transform 0.35s ease !important;
     }
 
     .portfolio-card:hover .portfolio-visual img {
-      transform: scale(1.05) !important;
+      transform: scale(1.045) !important;
+    }
+
+    /* फोटोखाली गडद पट्टी आणि स्पष्ट डिझाइन नाव */
+    #portfolioGrid .portfolio-info {
+      display: block !important;
+      flex: 1 0 auto !important;
+      min-height: 58px !important;
+      padding: 14px 16px !important;
+      margin: 0 !important;
+      background: linear-gradient(135deg, #202020, #343434) !important;
+      color: #fff !important;
+      border-radius: 0 0 12px 12px !important;
+      box-sizing: border-box !important;
+    }
+
+    #portfolioGrid .portfolio-info h3 {
+      color: #fff !important;
+      font-size: 16px !important;
+      line-height: 1.45 !important;
+      font-weight: 700 !important;
+      margin: 0 !important;
+      overflow-wrap: anywhere !important;
+    }
+
+    #portfolioGrid .portfolio-info .tag,
+    #portfolioGrid .portfolio-info p {
+      display: none !important;
+    }
+
+    .portfolio-empty-message {
+      flex: 0 0 100% !important;
+      color: #888 !important;
+      text-align: center !important;
+      padding: 40px 20px !important;
+    }
+
+    @media (max-width: 600px) {
+      #portfolioGrid { gap: 14px !important; }
+      #portfolioGrid > .portfolio-card {
+        flex-basis: min(78vw, 300px) !important;
+        width: min(78vw, 300px) !important;
+        min-width: min(78vw, 300px) !important;
+        max-width: min(78vw, 300px) !important;
+      }
+      .portfolio-visual {
+        height: 250px !important;
+        min-height: 250px !important;
+        flex-basis: 250px !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #portfolioGrid { scroll-behavior: auto !important; }
+      #portfolioGrid > .portfolio-card {
+        transition: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
     }
 
     .img-modal {
@@ -389,19 +483,22 @@ async function loadPortfolioData() {
 
     const data = await response.json();
 
-    if (Array.isArray(data) && data.length > 0) {
+    if (Array.isArray(data)) {
+      // API ने रिकामी यादी दिली तरी जुने items ठेवू नयेत.
       dynamicPortfolioItems = data.map(item => {
-        const imgUrl = getImageUrl(item);
-        const rawCat = item.category || "Other";
+        const rawCat = item.category || item.main_category || "Other";
+        const cleanCat = cleanCategoryName(rawCat);
 
         return {
-          title: item.title || "Untitled Design",
-          category: cleanCategoryName(rawCat),
+          ...item,
+          title: item.title || item.name || "Untitled Design",
+          category: cleanCat,
+          subcategory: item.subcategory || item.sub_category || item.subCategory || "",
           desc:
             item.desc ||
             item.description ||
-            `${cleanCategoryName(rawCat)} Creative`,
-          image: imgUrl
+            `${cleanCat} Creative`,
+          image: getImageUrl(item)
         };
       });
     }
@@ -614,28 +711,70 @@ const translations = {
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 
+let activePortfolioCategory = "Personal";
+let portfolioRevealObserver = null;
+
+function escapeHTML(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, ch => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[ch]);
+}
+
+function observePortfolioCards() {
+  const cards = document.querySelectorAll("#portfolioGrid .portfolio-card");
+
+  if (portfolioRevealObserver) {
+    portfolioRevealObserver.disconnect();
+    portfolioRevealObserver = null;
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    cards.forEach(card => card.classList.add("is-visible"));
+    return;
+  }
+
+  portfolioRevealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        portfolioRevealObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    root: document.getElementById("portfolioGrid"),
+    threshold: 0.12
+  });
+
+  cards.forEach(card => portfolioRevealObserver.observe(card));
+}
+
 function renderPortfolio(category = "Personal", isExpanded = false) {
   const grid = $("#portfolioGrid");
   if (!grid) return;
+
+  activePortfolioCategory = category || "All";
 
   const currentItems = dynamicPortfolioItems.length > 0
     ? dynamicPortfolioItems
     : defaultPortfolioItems;
 
-  const defaultCats = [
-    "Business", "Social Media", "Festival",
-    "Political", "Personal", "Other"
-  ];
-
+  const defaultCats = ["Business", "Social Media", "Festival", "Political", "Personal", "Other"];
+  const managedCats = managedPortfolioCategories
+    .map(item => String(item.name || "").trim())
+    .filter(Boolean);
   const dynamicCats = currentItems
-    .map(x => cleanCategoryName(x.category))
+    .map(item => cleanCategoryName(item.category))
     .filter(Boolean);
 
   const uniqueCategoryList = [];
-
-  [...defaultCats, ...dynamicCats].forEach(cat => {
+  // Admin मधील categories प्रथम; fallback categories जुन्या साइटसाठी.
+  [...managedCats, ...defaultCats, ...dynamicCats].forEach(cat => {
     const clean = cleanCategoryName(cat);
-    if (!uniqueCategoryList.includes(clean)) {
+    if (clean && !uniqueCategoryList.some(existing => existing.toLowerCase() === clean.toLowerCase())) {
       uniqueCategoryList.push(clean);
     }
   });
@@ -644,71 +783,67 @@ function renderPortfolio(category = "Personal", isExpanded = false) {
   const filtersEl = $("#filters");
 
   if (filtersEl) {
-    filtersEl.innerHTML = allCats.map(c =>
-      `<button class="filter-btn ${c.toLowerCase() === category.toLowerCase() ? "active" : ""}" data-category="${c}">${c}</button>`
-    ).join("");
+    filtersEl.innerHTML = allCats.map(cat => {
+      const active = cat.toLowerCase() === activePortfolioCategory.toLowerCase();
+      return `<button type="button" class="filter-btn ${active ? "active" : ""}" data-category="${escapeHTML(cat)}">${escapeHTML(cat)}</button>`;
+    }).join("");
   }
 
-  let filteredItems = currentItems.filter(x => {
-    if (category === "All") return true;
-    return x.category &&
-      x.category.toLowerCase() === category.toLowerCase();
+  const filteredItems = currentItems.filter(item => {
+    if (activePortfolioCategory === "All") return true;
+    const itemCat = cleanCategoryName(item.category);
+    const itemSub = String(item.subcategory || "").trim();
+    return itemCat.toLowerCase() === activePortfolioCategory.toLowerCase()
+      || itemSub.toLowerCase() === activePortfolioCategory.toLowerCase();
   });
 
-  const existingToggleBtn = document.getElementById("portfolioToggleBtn");
-  if (existingToggleBtn) existingToggleBtn.remove();
-
-  if (filteredItems.length === 0 && category !== "All") {
-    grid.innerHTML = `
-      <div style="grid-column:1/-1;text-align:center;color:#888;padding:40px;font-size:16px;">
-        या कॅटेगरीमध्ये सध्या डिझाईन जोडलेले नाही.
-      </div>`;
+  if (filteredItems.length === 0) {
+    grid.innerHTML = `<div class="portfolio-empty-message">या कॅटेगरीमध्ये सध्या डिझाईन जोडलेले नाही.</div>`;
   } else {
-    const itemsToDisplay = isExpanded
-      ? filteredItems
-      : filteredItems.slice(0, 2);
-
-    grid.innerHTML = itemsToDisplay.map((x, i) => {
-      const imgUrl = getImageUrl(x);
+    // Side scrolling साठी सर्व डिझाइन्स एकाच रांगेत दाखवा.
+    grid.innerHTML = filteredItems.map((item, index) => {
+      const imgUrl = getImageUrl(item);
+      const safeUrl = escapeHTML(imgUrl);
+      const safeTitle = escapeHTML(item.title || "Untitled Design");
+      const safeCategory = escapeHTML(item.category || "Design");
+      const safeDesc = escapeHTML(item.desc || "");
       const hasImage = Boolean(imgUrl);
 
       return `
         <article class="portfolio-card">
-          <div class="portfolio-visual ${hasImage ? "has-img" : ""}"
-               style="${hasImage ? `background-image:url('${imgUrl}') !important;background-size:cover !important;background-position:center !important;` : ""}"
-               ${hasImage ? `onclick="openModal('${imgUrl}', '${x.title}')"` : ""}>
+          <div class="portfolio-visual ${hasImage ? "has-img" : ""}">
             ${hasImage
-              ? `<img src="${imgUrl}" alt="${x.title}" style="width:100% !important;height:100% !important;object-fit:cover !important;display:block !important;position:relative !important;z-index:10 !important;">`
-              : `<span style="color:#888;">${String(i + 1).padStart(2, "0")}</span>`
+              ? `<img src="${safeUrl}" alt="${safeTitle}" loading="${index < 3 ? "eager" : "lazy"}" decoding="async">`
+              : `<span style="color:#888;display:flex;width:100%;height:100%;align-items:center;justify-content:center;">${String(index + 1).padStart(2, "0")}</span>`
             }
           </div>
           <div class="portfolio-info">
-            <span class="tag">${x.category || "Design"}</span>
-            <h3>${x.title}</h3>
-            <p>${x.desc || ""}</p>
+            <span class="tag">${safeCategory}</span>
+            <h3>${safeTitle}</h3>
+            <p>${safeDesc}</p>
           </div>
         </article>`;
     }).join("");
 
-    if (filteredItems.length > 2) {
-      const toggleBtn = document.createElement("button");
-      toggleBtn.id = "portfolioToggleBtn";
-      toggleBtn.className = "toggle-portfolio-btn";
-      toggleBtn.innerText = isExpanded ? "कमी पहा" : "अधिक पहा";
-
-      toggleBtn.onclick = () => {
-        renderPortfolio(category, !isExpanded);
-      };
-
-      if (grid.parentNode) {
-        grid.parentNode.insertBefore(toggleBtn, grid.nextSibling);
+    // Click handling is attached safely after rendering.
+    grid.querySelectorAll(".portfolio-card").forEach((card, index) => {
+      const item = filteredItems[index];
+      const image = card.querySelector(".portfolio-visual img");
+      if (image) {
+        image.addEventListener("click", () => openModal(getImageUrl(item), item.title || ""));
       }
-    }
+    });
   }
 
-  $$(".filter-btn").forEach(b => {
-    b.onclick = () => renderPortfolio(b.dataset.category, false);
-  });
+  if (filtersEl) {
+    filtersEl.querySelectorAll(".filter-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        renderPortfolio(button.dataset.category || "All", false);
+      });
+    });
+  }
+
+  observePortfolioCards();
 }
 
 function setupBeforeAfterClick() {
@@ -906,3 +1041,40 @@ if (document.readyState === "complete" || document.readyState === "interactive")
 
 // Emergency Fallback: 1.2s नंतर loader auto-close होईल
 setTimeout(forceHideLoader, 1200);
+/* Admin Panel मध्ये नवीन बदल झाल्यास refresh न करता साइटवर दाखवण्याचा प्रयत्न.
+   API उपलब्ध नसल्यास सध्याची वेबसाइट चालूच राहते. */
+let portfolioSyncBusy = false;
+async function syncPortfolioFromAdmin() {
+  if (portfolioSyncBusy || document.visibilityState === "hidden") return;
+  portfolioSyncBusy = true;
+
+  try {
+    const previousItems = JSON.stringify(dynamicPortfolioItems);
+    const previousCategories = JSON.stringify(managedPortfolioCategories);
+
+    await loadManagedPortfolioCategories();
+    await loadPortfolioData();
+
+    const changed =
+      previousItems !== JSON.stringify(dynamicPortfolioItems) ||
+      previousCategories !== JSON.stringify(managedPortfolioCategories);
+
+    if (changed) {
+      const selected = managedPortfolioCategories.some(cat =>
+        String(cat.name || "").toLowerCase() === String(activePortfolioCategory).toLowerCase()
+      ) || activePortfolioCategory === "All"
+        ? activePortfolioCategory
+        : (managedPortfolioCategories[0]?.name || "All");
+
+      renderPortfolio(selected, false);
+    }
+  } catch (error) {
+    console.error("Portfolio sync error:", error);
+  } finally {
+    portfolioSyncBusy = false;
+  }
+}
+
+window.addEventListener("load", () => {
+  window.setInterval(syncPortfolioFromAdmin, 30000);
+});
