@@ -94,6 +94,31 @@ nav button.active{background:#e67e22}
 /* PSD Store Admin Styles */
 .section-block { background: #f9f9f9; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 6px; }
 .item-row { background: #fff; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #eee; }
+/* Portfolio: existing designs in horizontal scrolling row */
+#portfolioList {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 2px 16px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+#portfolioList .item {
+  flex: 0 0 280px;
+  width: 280px;
+  margin: 0;
+  scroll-snap-align: start;
+}
+#portfolioList .item img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+}
+@media (max-width: 600px) {
+  #portfolioList .item { flex-basis: 235px; width: 235px; }
+}
+
 .item-edit-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 .action-row { display: flex; justify-content: space-between; align-items: center; }
 </style>
@@ -768,8 +793,14 @@ function renderPortfolioList() {
         <label class="small">शीर्षक (Title):</label>
         <input type="text" value="${escapeHtml(item.title)}" id="port_title_${item.id}">
         
-        <label class="small">कॅटेगरी (Category):</label>
-        <input type="text" value="${escapeHtml(item.category)}" id="port_cat_${item.id}">
+        <label class="small">Main Category:</label>
+        <input type="text" value="${escapeHtml(item.category || "")}" id="port_cat_${item.id}">
+
+        <label class="small">Subcategory (जुन्या पोस्टसाठी निवडा):</label>
+        <select id="port_sub_${item.id}" style="width:100%;margin-top:5px">
+          <option value="">Subcategory निवडा</option>
+          ${getPortfolioSubcategoryOptions(item.category, item.subcategory)}
+        </select>
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
@@ -816,19 +847,34 @@ async function addPortfolio(){
   }
 }
 
+function getPortfolioSubcategoryOptions(mainCategory, selectedSubcategory) {
+  const categoryName = String(mainCategory || "").trim().toLowerCase();
+  const cat = portfolioCategories.find(item =>
+    String(item.name || "").trim().toLowerCase() === categoryName ||
+    (Array.isArray(item.aliases) && item.aliases.some(alias => String(alias || "").trim().toLowerCase() === categoryName))
+  );
+  const subs = cat && Array.isArray(cat.subcategories) ? cat.subcategories : [];
+  return subs.map(sub => {
+    const selected = String(sub.name) === String(selectedSubcategory || "") ? " selected" : "";
+    return `<option value="${escapeHtml(sub.name)}"${selected}>${escapeHtml(sub.name)}</option>`;
+  }).join("");
+}
+
 async function updatePortfolio(id) {
   const newTitle = getValue(`port_title_${id}`);
   const newCat = getValue(`port_cat_${id}`);
+  const newSubcategory = getValue(`port_sub_${id}`);
 
-  if (!newTitle || !newCat) return alert("शीर्षक आणि कॅटेगरी रिकामी ठेऊ नका!");
+  if (!newTitle || !newCat) return alert("शीर्षक आणि Main Category रिकामी ठेऊ नका!");
+  if (!newSubcategory) return alert("या जुन्या पोस्टसाठी Subcategory निवडा. आधी त्या Main Category मध्ये Subcategory तयार करा.");
 
   try {
     await api("/api/portfolio/" + id, {
       method: "PUT",
-      body: JSON.stringify({ title: newTitle, category: newCat })
+      body: JSON.stringify({ title: newTitle, category: newCat, subcategory: newSubcategory })
     });
     await loadPortfolio();
-    message("Design updated ✅");
+    message("Design आणि Subcategory अपडेट झाले ✅");
   } catch(e) {
     alert("Update error: " + e.message);
   }
@@ -934,6 +980,8 @@ async function loadPortfolioCategories() {
     }
   }
   renderPortfolioCategories();
+  // Re-render existing designs after categories load so their Subcategory dropdowns are populated.
+  renderPortfolioList();
 }
 
 function refreshPortfolioEntryMainOptions() {
