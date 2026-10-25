@@ -41,8 +41,8 @@
         </div>
       </div>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#portfolio" data-i18n="viewWork">माझं काम पाहा →</a>
-        <a class="btn btn-ghost" href="#contact" data-i18n="startProject">कामाबद्दल बोला</a>
+        <a id="heroButton1" class="btn btn-primary" href="#portfolio" data-i18n="viewWork">माझं काम पाहा →</a>
+        <a id="heroButton2" class="btn btn-ghost" href="#contact" data-i18n="startProject">कामाबद्दल बोला</a>
       </div>
     </nav>
     <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
@@ -79,7 +79,7 @@
     </section>
 
     <section class="marquee" aria-label="Services">
-      <div>GRAPHICS DESIGN &nbsp; ✦ &nbsp; SOCIAL MEDIA &nbsp; ✦ &nbsp; BRANDING &nbsp; ✦ &nbsp; DIGITAL MARKETING &nbsp; ✦ &nbsp; GRAPHICS DESIGN &nbsp; ✦ &nbsp;</div>
+      <div class="marquee-track">GRAPHICS DESIGN &nbsp; ✦ &nbsp; SOCIAL MEDIA &nbsp; ✦ &nbsp; BRANDING &nbsp; ✦ &nbsp; DIGITAL MARKETING &nbsp; ✦ &nbsp; GRAPHICS DESIGN &nbsp; ✦ &nbsp;</div>
     </section>
 
     <section id="portfolio" class="section">
@@ -103,6 +103,7 @@
         <div class="compare before"><span>BEFORE</span><div class="sample-text">YOUR<br>DESIGN</div></div>
         <div class="compare after"><span>AFTER</span><div class="sample-text">YOUR<br><b>BRAND</b></div></div>
       </div>
+      <div id="beforeAfterGrid" class="before-after-grid" aria-live="polite"></div>
     </section>
 
     <section id="services" class="section">
@@ -182,7 +183,7 @@
       <img src="assets/logo.png" alt="">
       <div><strong>धर्मवीर ॲडव्हर्टायझिंग</strong><span>Graphics Design • Digital Marketing</span></div>
     </div>
-    <p>© <span id="year"></span> धर्मवीर ॲडव्हर्टायझिंग. All rights reserved.</p>
+    <p id="footerText">© <span id="year"></span> धर्मवीर ॲडव्हर्टायझिंग. All rights reserved.</p>
   </footer>
 
   <div class="toast" id="toast"></div>
