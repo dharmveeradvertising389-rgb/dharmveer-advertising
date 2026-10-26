@@ -441,15 +441,13 @@ async function loadSettings() {
     if (Array.isArray(data) && data.length > 0) {
       const settings = data[0];
 
-      managedSettings = settings;
-      CONTACT.whatsapp = settings.whatsapp || settings.phone || "";
+      CONTACT.whatsapp = settings.whatsapp || "";
       CONTACT.instagram = settings.instagram || "";
       CONTACT.email = settings.email || "";
       CONTACT.logo_url = settings.logo_url || "";
       CONTACT.about = settings.about || "";
 
       updateContact();
-      applyManagedHomeContent();
 
       if (CONTACT.logo_url) {
         document
@@ -564,175 +562,6 @@ function updateContact() {
   }
 }
 
-
-// ---------- Admin Panel dynamic data ----------
-let managedContent = [];
-let managedBeforeAfter = [];
-let managedSettings = {};
-
-function asArray(payload) {
-  if (Array.isArray(payload)) return payload;
-  if (payload && Array.isArray(payload.data)) return payload.data;
-  if (payload && Array.isArray(payload.items)) return payload.items;
-  return [];
-}
-
-async function fetchAdminEndpoint(path) {
-  const response = await fetch(`${API_BASE}${path}${path.includes("?") ? "&" : "?"}t=${Date.now()}`, { cache: "no-store" });
-  if (!response.ok) throw new Error(`${path}: ${response.status}`);
-  return response.json();
-}
-
-function getContentValue(key) {
-  const row = managedContent.find(x => String(x.content_key || x.key || "") === key);
-  if (!row) return "";
-  const value = row.content_value ?? row.value ?? "";
-  if (typeof value !== "string") return value;
-  try {
-    if ((value.startsWith("{") && value.endsWith("}")) || (value.startsWith("[") && value.endsWith("]"))) return JSON.parse(value);
-  } catch (_) {}
-  return value;
-}
-
-function applyManagedAppearance() {
-  const vars = {
-    theme_bg_color: "--bg",
-    theme_text_color: "--text",
-    theme_heading_color: "--heading",
-    theme_paragraph_color: "--muted",
-    theme_button_bg: "--accent",
-    theme_button_text: "--button-text",
-    theme_portfolio_text: "--portfolio-text"
-  };
-  Object.entries(vars).forEach(([key, cssVar]) => {
-    const value = getContentValue(key);
-    if (typeof value === "string" && value.trim()) {
-      document.documentElement.style.setProperty(cssVar, value.trim());
-      document.body.style.setProperty(cssVar, value.trim());
-    }
-  });
-  const texture = getContentValue("theme_bg_texture");
-  if (typeof texture === "string" && texture.trim()) {
-    if (/^(https?:\/\/|data:image\/|\/)/i.test(texture.trim())) {
-      document.body.style.backgroundImage = `url("${texture.trim().replace(/"/g, '\\"')}")`;
-      document.body.style.backgroundSize = "cover";
-      document.body.style.backgroundAttachment = "fixed";
-    } else {
-      document.body.style.backgroundImage = texture.trim();
-    }
-  }
-}
-
-function applyManagedHomeContent() {
-  const mappings = [
-    ["hero_title", ["[data-i18n='heroTitle']", "#heroTitle", ".hero-title"], true],
-    ["hero_description", ["[data-i18n='heroText']", "#heroText", ".hero-text"], false],
-    ["hero_button1_text", ["#heroButton1", "[data-admin-content='hero_button1_text']"], false],
-    ["hero_button2_text", ["#heroButton2", "[data-admin-content='hero_button2_text']"], false],
-    ["creative_text", ["#creativeText", "[data-admin-content='creative_text']"], false],
-    ["branding_text", ["#brandingText", "[data-admin-content='branding_text']"], false],
-    ["marketing_text", ["#marketingText", "[data-admin-content='marketing_text']"], false]
-  ];
-  mappings.forEach(([key, selectors, html]) => {
-    const value = getContentValue(key);
-    if (typeof value === "string" && value.trim()) {
-      selectors.forEach(selector => document.querySelectorAll(selector).forEach(el => {
-        if (html) el.innerHTML = value; else el.textContent = value;
-      }));
-    }
-  });
-
-  const links = [
-    [getContentValue("hero_button1_link"), ".hero .hero-actions a, .hero-actions a", 0],
-    [getContentValue("hero_button2_link"), ".hero .hero-actions a, .hero-actions a", 1]
-  ];
-  links.forEach(([url, selector, index]) => {
-    if (!url) return;
-    const el = document.querySelectorAll(selector)[index];
-    if (el && el.tagName === "A") el.href = String(url);
-  });
-
-  const marquee = getContentValue("marquee_text");
-  if (typeof marquee === "string" && marquee.trim()) {
-    const track = document.querySelector(".marquee-track");
-    const target = document.querySelector("[data-admin-content='marquee_text']");
-    const pieces = marquee.split(/[|•]/).map(x => x.trim()).filter(Boolean);
-    if (track) track.innerHTML = pieces.map(x => `<span>${escapeHTML(x)}</span>`).join("");
-    else if (target) target.textContent = marquee;
-  }
-
-  const footerText = managedSettings.footer_text || getContentValue("footer_text");
-  if (footerText) {
-    document.querySelectorAll("#footerText, [data-admin-content='footer_text']").forEach(el => el.textContent = footerText);
-  }
-  const title = managedSettings.website_title || getContentValue("website_title");
-  if (title) document.title = String(title);
-}
-
-async function loadAdminContent() {
-  try {
-    managedContent = asArray(await fetchAdminEndpoint("/api/content"));
-    applyManagedAppearance();
-    applyManagedHomeContent();
-  } catch (error) {
-    console.warn("Admin content error:", error);
-  }
-}
-
-async function loadManagedCollections() {
-  const jobs = ["/api/services", "/api/reviews", "/api/why-choose", "/api/before-after"];
-  await Promise.all(jobs.map(async path => {
-    try {
-      const rows = asArray(await fetchAdminEndpoint(path));
-      if (path === "/api/services") {
-        services = rows.map(row => [row.icon || "✦", row.title || row.name || "Service", row.description || row.desc || ""]);
-      } else if (path === "/api/reviews") {
-        reviews = rows.map(row => [
-          `${Math.max(1, Math.min(5, Number(row.rating || 5)))} Star Review`,
-          row.review_text || row.review || row.description || "",
-          row.client_name || row.name || "Client"
-        ]);
-      } else if (path === "/api/why-choose") {
-        whyItems = rows.map((row, i) => [
-          row.number || String(i + 1).padStart(2, "0"),
-          row.title || "",
-          row.description || row.desc || ""
-        ]);
-      } else if (path === "/api/before-after") {
-        managedBeforeAfter = rows;
-        renderBeforeAfter();
-      }
-    } catch (error) {
-      console.warn(`Admin endpoint unavailable: ${path}`, error);
-    }
-  }));
-  renderServices();
-  renderWhy();
-  renderReviews();
-}
-
-function renderBeforeAfter() {
-  if (!managedBeforeAfter.length) return;
-  const host = document.querySelector("#beforeAfterGrid, .before-after-grid, [data-admin-before-after-grid]");
-  if (!host) return;
-  host.innerHTML = managedBeforeAfter.map(row => {
-    const before = getImageUrl({ image_url: row.before_image || row.beforeImage || row.before_url });
-    const after = getImageUrl({ image_url: row.after_image || row.afterImage || row.after_url });
-    const title = escapeHTML(row.title || "Design Transformation");
-    const desc = escapeHTML(row.description || "");
-    const beforeLabel = escapeHTML(row.before_label || row.beforeLabel || "Before");
-    const afterLabel = escapeHTML(row.after_label || row.afterLabel || "After");
-    return `<article class="before-after-admin-card">
-      <h3>${title}</h3>
-      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
-        <figure style="margin:0"><img src="${escapeHTML(before)}" alt="${beforeLabel}" loading="lazy" style="width:100%;height:auto;object-fit:contain"><figcaption>${beforeLabel}</figcaption></figure>
-        <figure style="margin:0"><img src="${escapeHTML(after)}" alt="${afterLabel}" loading="lazy" style="width:100%;height:auto;object-fit:contain"><figcaption>${afterLabel}</figcaption></figure>
-      </div>${desc ? `<p>${desc}</p>` : ""}
-    </article>`;
-  }).join("");
-  host.querySelectorAll("img").forEach(img => img.addEventListener("click", () => openModal(img.src, img.alt)));
-}
-
 loadSettings();
 
 const defaultPortfolioItems = [
@@ -773,7 +602,7 @@ const defaultPortfolioItems = [
     image: ""
   }
 ];
-let services = [
+const services = [
   ["✦", "Logo Design", "Brand identity, logo concepts आणि visual direction."],
   ["▣", "Poster Design", "Business, festival, event आणि custom posters."],
   ["◎", "Social Media Design", "Instagram, Facebook आणि digital creatives."],
@@ -782,14 +611,14 @@ let services = [
   ["◌", "Content Creatives", "Campaigns आणि promotions साठी engaging designs."]
 ];
 
-let whyItems = [
+const whyItems = [
   ["01", "Creative Design", "प्रत्येक कामासाठी वेगळा आणि purpose-driven creative approach."],
   ["02", "Professional Work", "Clean, premium आणि उपयोगी final designs."],
   ["03", "Client Focus", "तुमची गरज, audience आणि कामाचा प्रकार लक्षात घेऊन design."],
   ["04", "Digital Support", "Social media आणि digital marketing साठी creative support."]
 ];
 
-let reviews = [
+const reviews = [
   ["Client Review", "तुमचा खरा client feedback इथे दिसेल.", "Client Name"],
   ["Your Review", "काम पूर्ण झाल्यावर client review इथे add करा.", "Client Name"],
   ["Future Review", "नवीन reviews सहज add करता येतील.", "Client Name"]
@@ -943,11 +772,7 @@ function renderPortfolio(category = "Personal", isExpanded = false) {
 
   const uniqueCategoryList = [];
   // Admin मधील categories प्रथम; fallback categories जुन्या साइटसाठी.
-  const categoriesToUse = hasManagedPortfolioCategories
-    ? [...managedCats, ...dynamicCats]
-    : [...defaultCats, ...dynamicCats];
-
-  categoriesToUse.forEach(cat => {
+  [...managedCats, ...defaultCats, ...dynamicCats].forEach(cat => {
     const clean = cleanCategoryName(cat);
     if (clean && !uniqueCategoryList.some(existing => existing.toLowerCase() === clean.toLowerCase())) {
       uniqueCategoryList.push(clean);
@@ -1125,12 +950,8 @@ async function initApp() {
   // Hide loader early to ensure screen doesn't block
   forceHideLoader();
 
-  await Promise.all([
-    loadManagedPortfolioCategories(),
-    loadPortfolioData(),
-    loadAdminContent(),
-    loadManagedCollections()
-  ]);
+  await loadManagedPortfolioCategories();
+  await loadPortfolioData();
 
   const initialCategory = hasManagedPortfolioCategories
     ? (
@@ -1147,8 +968,6 @@ async function initApp() {
   try { updateContact(); } catch (e) {}
   try { setupBeforeAfterClick(); } catch (e) {}
   try { applyLanguage(localStorage.getItem("dv-lang") || "mr"); } catch (e) {}
-  // Language text apply झाल्यावर Admin Panel मधील custom homepage text पुन्हा लागू करा.
-  try { applyManagedHomeContent(); } catch (e) {}
 
   if ($("#year")) {
     $("#year").textContent = new Date().getFullYear();
@@ -1258,25 +1077,4 @@ async function syncPortfolioFromAdmin() {
 
 window.addEventListener("load", () => {
   window.setInterval(syncPortfolioFromAdmin, 30000);
-});
-
-
-// Admin Panel मधील बदल 30 सेकंदांनी पुन्हा तपासा.
-let adminSyncBusy = false;
-async function syncAdminContentFromPanel() {
-  if (adminSyncBusy || document.visibilityState === "hidden") return;
-  adminSyncBusy = true;
-  try {
-    await Promise.all([loadSettings(), loadAdminContent(), loadManagedCollections()]);
-  } finally {
-    adminSyncBusy = false;
-  }
-}
-window.addEventListener("load", () => window.setInterval(syncAdminContentFromPanel, 30000));
-
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") {
-    const modal = document.getElementById("imgModal");
-    if (modal) modal.classList.remove("active");
-  }
 });
