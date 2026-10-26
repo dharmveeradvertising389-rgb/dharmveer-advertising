@@ -185,40 +185,24 @@ if (!document.getElementById("portfolio-custom-styles")) {
 
     /* Portfolio: एका आडव्या रांगेत cards + side scrolling */
     #portfolioGrid {
-      display: flex !important;
-      flex-flow: row nowrap !important;
-      align-items: stretch !important;
-      gap: 22px !important;
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      align-items: start !important;
+      gap: 12px !important;
       width: 100% !important;
       max-width: 100% !important;
-      overflow-x: auto !important;
-      overflow-y: hidden !important;
+      overflow: visible !important;
       padding: 12px 4px 24px !important;
-      scroll-behavior: smooth !important;
-      overscroll-behavior-x: contain !important;
-      -webkit-overflow-scrolling: touch !important;
-      scrollbar-width: thin;
-      scrollbar-color: #ff6600 rgba(255,255,255,0.08);
       box-sizing: border-box !important;
-    }
-
-    #portfolioGrid::-webkit-scrollbar { height: 9px; }
-    #portfolioGrid::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.08);
-      border-radius: 20px;
-    }
-    #portfolioGrid::-webkit-scrollbar-thumb {
-      background: #ff6600;
-      border-radius: 20px;
     }
 
     #portfolioGrid > .portfolio-card {
       display: flex !important;
-      flex: 0 0 300px !important;
+      flex: initial !important;
       flex-direction: column !important;
-      width: 300px !important;
-      min-width: 300px !important;
-      max-width: 300px !important;
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: 100% !important;
       margin: 0 !important;
       overflow: hidden !important;
       border-radius: 12px !important;
@@ -252,9 +236,10 @@ if (!document.getElementById("portfolio-custom-styles")) {
     .portfolio-visual {
       position: relative !important;
       overflow: hidden !important;
-      height: 280px !important;
-      min-height: 280px !important;
-      flex: 0 0 280px !important;
+      height: auto !important;
+      aspect-ratio: 4 / 5 !important;
+      min-height: 0 !important;
+      flex: 0 0 auto !important;
       border-radius: 12px 12px 0 0 !important;
       background-color: #1a1a1a !important;
     }
@@ -264,7 +249,7 @@ if (!document.getElementById("portfolio-custom-styles")) {
     .portfolio-visual img {
       width: 100% !important;
       height: 100% !important;
-      object-fit: cover !important;
+      object-fit: contain !important;
       display: block !important;
       opacity: 1 !important;
       visibility: visible !important;
@@ -288,6 +273,16 @@ if (!document.getElementById("portfolio-custom-styles")) {
       color: #fff !important;
       border-radius: 0 0 12px 12px !important;
       box-sizing: border-box !important;
+    }
+
+    @media (max-width: 900px) {
+      #portfolioGrid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 10px !important; }
+    }
+    @media (max-width: 560px) {
+      #portfolioGrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; }
+      #portfolioGrid .portfolio-info { padding: 8px !important; }
+      #portfolioGrid .portfolio-info h3 { font-size: 12px !important; }
+      #portfolioGrid .portfolio-info p { display: none !important; }
     }
 
     #portfolioGrid .portfolio-info h3 {
@@ -953,13 +948,8 @@ async function initApp() {
   await loadManagedPortfolioCategories();
   await loadPortfolioData();
 
-  const initialCategory = hasManagedPortfolioCategories
-    ? (
-        managedPortfolioCategories.some(cat => cat.name === "Personal")
-          ? "Personal"
-          : (managedPortfolioCategories[0]?.name || "All")
-      )
-    : "Personal";
+  // सुरुवातीला सर्व Portfolio डिझाइन्स एकत्र दाखवा; विद्यमान filters वापरून वेगळी category निवडता येईल.
+  const initialCategory = "All";
 
   try { renderPortfolio(initialCategory, false); } catch (e) {}
   try { renderServices(); } catch (e) {}
@@ -981,13 +971,6 @@ async function initApp() {
       if (mainNav) mainNav.classList.toggle("open");
     };
   }
-
-  $$("#mainNav a").forEach(link => {
-    link.addEventListener("click", () => {
-      const mainNav = $("#mainNav");
-      if (mainNav) mainNav.classList.remove("open");
-    });
-  });
 
   $$(".language-menu button").forEach(b => {
     b.onclick = () => applyLanguage(b.dataset.lang);
