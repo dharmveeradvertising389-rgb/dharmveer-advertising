@@ -198,7 +198,7 @@ if (!document.getElementById("portfolio-custom-styles")) {
     #portfolioGrid {
       display: grid !important;
       grid-template-columns: none !important;
-      grid-template-rows: minmax(0, 1fr) !important;
+      grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
       grid-auto-flow: column !important;
       grid-auto-columns: calc((100% - 20px) / 3) !important;
       align-items: start !important;
