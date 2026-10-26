@@ -183,12 +183,12 @@ if (!document.getElementById("portfolio-custom-styles")) {
       box-shadow: 0 4px 15px rgba(255,102,0,0.5) !important;
     }
 
-    /* Portfolio: एका आडव्या रांगेत cards + side scrolling */
+    /* Portfolio: सर्व डिझाइन्स एकाच Home पेजवर, छोटे 4:5 thumbnails */
     #portfolioGrid {
       display: grid !important;
-      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
       align-items: start !important;
-      gap: 12px !important;
+      gap: 10px !important;
       width: 100% !important;
       max-width: 100% !important;
       overflow: visible !important;
@@ -275,14 +275,18 @@ if (!document.getElementById("portfolio-custom-styles")) {
       box-sizing: border-box !important;
     }
 
-    @media (max-width: 900px) {
-      #portfolioGrid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 10px !important; }
+    @media (max-width: 1100px) {
+      #portfolioGrid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 9px !important; }
     }
-    @media (max-width: 560px) {
-      #portfolioGrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; }
-      #portfolioGrid .portfolio-info { padding: 8px !important; }
-      #portfolioGrid .portfolio-info h3 { font-size: 12px !important; }
+    @media (max-width: 700px) {
+      #portfolioGrid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 7px !important; }
+      #portfolioGrid .portfolio-info { min-height: 0 !important; padding: 6px !important; }
+      #portfolioGrid .portfolio-info h3 { font-size: 10px !important; line-height: 1.25 !important; }
       #portfolioGrid .portfolio-info p { display: none !important; }
+    }
+    @media (max-width: 380px) {
+      #portfolioGrid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 5px !important; }
+      #portfolioGrid .portfolio-info h3 { font-size: 9px !important; }
     }
 
     #portfolioGrid .portfolio-info h3 {
@@ -307,18 +311,19 @@ if (!document.getElementById("portfolio-custom-styles")) {
     }
 
     @media (max-width: 600px) {
-      #portfolioGrid { gap: 14px !important; }
       #portfolioGrid > .portfolio-card {
-        flex-basis: min(78vw, 300px) !important;
-        width: min(78vw, 300px) !important;
-        min-width: min(78vw, 300px) !important;
-        max-width: min(78vw, 300px) !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
       }
       .portfolio-visual {
-        height: 250px !important;
-        min-height: 250px !important;
-        flex-basis: 250px !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        flex-basis: auto !important;
+        aspect-ratio: 4 / 5 !important;
       }
+      .portfolio-visual img { object-fit: contain !important; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -626,7 +631,7 @@ const translations = {
     heroTitle:"तुमच्या ब्रँडला<br><span>एक वेगळी ओळख द्या.</span>",
     heroText:"Graphics Design, Social Media Creatives आणि Digital Marketing — तुमच्या व्यवसायासाठी creative support एकाच ठिकाणी.",
     viewWork:"माझे काम पहा →",
-    startProject:"कामाबद्दल बोलूया",
+    startProject:"संपर्क",
     stat1:"Creative Focus",stat2:"Design Possibilities",stat3:"Digital Presence",
     creative:"Creative",branding:"Branding",marketing:"Marketing",
     portfolioTitle:"निवडक <span>काम</span>",
@@ -653,7 +658,7 @@ const translations = {
     heroTitle:"Give your brand<br><span>a unique identity.</span>",
     heroText:"Graphics Design, Social Media Creatives and Digital Marketing — creative support for your business, all in one place.",
     viewWork:"View My Work →",
-    startProject:"Let's Discuss Your Project",
+    startProject:"Contact",
     stat1:"Creative Focus",stat2:"Design Possibilities",stat3:"Digital Presence",
     creative:"Creative",branding:"Branding",marketing:"Marketing",
     portfolioTitle:"Selected <span>Work</span>",
@@ -680,7 +685,7 @@ const translations = {
     heroTitle:"आपके ब्रांड को<br><span>एक अलग पहचान दें.</span>",
     heroText:"Graphics Design, Social Media Creatives और Digital Marketing — आपके काम के लिए creative support एक ही जगह.",
     viewWork:"मेरा काम देखें →",
-    startProject:"काम के बारे में बात करें",
+    startProject:"संपर्क",
     stat1:"Creative Focus",stat2:"Design Possibilities",stat3:"Digital Presence",
     creative:"Creative",branding:"Branding",marketing:"Marketing",
     portfolioTitle:"चुना हुआ <span>काम</span>",
@@ -998,6 +1003,23 @@ async function initApp() {
       }
     };
   }
+
+  // Dark / light theme toggle; remembers the visitor's choice.
+  const themeBtn = document.getElementById("themeToggle");
+  const setTheme = theme => {
+    document.body.dataset.theme = theme;
+    if (themeBtn) {
+      themeBtn.textContent = theme === "light" ? "🌙 Dark" : "☀️ Light";
+      themeBtn.setAttribute("aria-label", theme === "light" ? "डार्क थीम निवडा" : "लाईट थीम निवडा");
+    }
+    try { localStorage.setItem("dv-theme", theme); } catch (e) {}
+  };
+  let savedTheme = "dark";
+  try { savedTheme = localStorage.getItem("dv-theme") || "dark"; } catch (e) {}
+  setTheme(savedTheme === "light" ? "light" : "dark");
+  if (themeBtn) themeBtn.addEventListener("click", () => {
+    setTheme(document.body.dataset.theme === "light" ? "dark" : "light");
+  });
 
   const feedbackBtn = document.getElementById("giveFeedbackBtn");
 
