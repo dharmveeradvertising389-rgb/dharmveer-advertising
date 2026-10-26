@@ -982,6 +982,13 @@ async function initApp() {
     };
   }
 
+  $$("#mainNav a").forEach(link => {
+    link.addEventListener("click", () => {
+      const mainNav = $("#mainNav");
+      if (mainNav) mainNav.classList.remove("open");
+    });
+  });
+
   $$(".language-menu button").forEach(b => {
     b.onclick = () => applyLanguage(b.dataset.lang);
   });
