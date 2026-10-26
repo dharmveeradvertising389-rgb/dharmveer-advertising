@@ -180,18 +180,37 @@ if (!document.getElementById("portfolio-custom-styles")) {
       background: #ff6600 !important;
       color: #ffffff !important;
       border-color: #ff6600 !important;
-      box-shadow: 0 4px 15px rgba(255,102,0,0.5) !important;
+      box-shadow: 0 4px 15px rgba(255,102,0,0.35) !important;
+    }
+    body[data-theme="light"] .filter-btn {
+      background: #ffffff !important;
+      color: #242424 !important;
+      border-color: #d4d0c9 !important;
+    }
+    body[data-theme="light"] .filter-btn:hover,
+    body[data-theme="light"] .filter-btn.active {
+      background: #ff6600 !important;
+      color: #ffffff !important;
+      border-color: #ff6600 !important;
     }
 
     /* Portfolio: सर्व डिझाइन्स एकाच Home पेजवर, छोटे 4:5 thumbnails */
     #portfolioGrid {
       display: grid !important;
-      grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+      grid-template-columns: none !important;
+      grid-template-rows: minmax(0, 1fr) !important;
+      grid-auto-flow: column !important;
+      grid-auto-columns: calc((100% - 20px) / 3) !important;
       align-items: start !important;
       gap: 10px !important;
       width: 100% !important;
       max-width: 100% !important;
-      overflow: visible !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      overscroll-behavior-x: contain !important;
+      -webkit-overflow-scrolling: touch !important;
+      scroll-snap-type: x mandatory !important;
+      scrollbar-width: thin !important;
       padding: 12px 4px 24px !important;
       box-sizing: border-box !important;
     }
@@ -262,31 +281,56 @@ if (!document.getElementById("portfolio-custom-styles")) {
       transform: scale(1.045) !important;
     }
 
-    /* फोटोखाली गडद पट्टी आणि स्पष्ट डिझाइन नाव */
+    /* फोटोखालील काळी पट्टी आणि डिझाइनचे नाव दाखवू नका; मूळ डेटा DOM मध्ये सुरक्षित राहतो. */
     #portfolioGrid .portfolio-info {
-      display: block !important;
-      flex: 1 0 auto !important;
-      min-height: 58px !important;
-      padding: 14px 16px !important;
-      margin: 0 !important;
-      background: linear-gradient(135deg, #202020, #343434) !important;
-      color: #fff !important;
-      border-radius: 0 0 12px 12px !important;
-      box-sizing: border-box !important;
+      display: none !important;
     }
 
-    @media (max-width: 1100px) {
-      #portfolioGrid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 9px !important; }
+    @media (min-width: 701px) {
+      #portfolioGrid > .portfolio-card { scroll-snap-align: start !important; }
+    }
+    @media (max-width: 1100px) and (min-width: 701px) {
+      #portfolioGrid { grid-auto-columns: calc((100% - 18px) / 3) !important; gap: 9px !important; }
     }
     @media (max-width: 700px) {
-      #portfolioGrid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 7px !important; }
-      #portfolioGrid .portfolio-info { min-height: 0 !important; padding: 6px !important; }
-      #portfolioGrid .portfolio-info h3 { font-size: 10px !important; line-height: 1.25 !important; }
-      #portfolioGrid .portfolio-info p { display: none !important; }
+      /* Mobile-only: एकावेळी 2 वर + 2 खाली; पुढील डिझाइन्ससाठी फक्त grid मध्ये swipe */
+      #portfolioGrid {
+        display: grid !important;
+        grid-template-columns: none !important;
+        grid-template-rows: repeat(2, minmax(0, 1fr)) !important;
+        grid-auto-flow: column !important;
+        grid-auto-columns: calc((100% - 10px) / 2) !important;
+        gap: 10px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        overscroll-behavior-x: contain !important;
+        touch-action: pan-x pan-y !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-snap-type: x mandatory !important;
+        scrollbar-width: thin !important;
+        padding: 10px 2px 16px !important;
+        align-items: start !important;
+      }
+      #portfolioGrid > .portfolio-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 4 / 5 !important;
+        scroll-snap-align: start !important;
+      }
+      #portfolioGrid .portfolio-visual {
+        width: 100% !important;
+        height: 100% !important;
+        aspect-ratio: 4 / 5 !important;
+        border-radius: 10px !important;
+      }
     }
     @media (max-width: 380px) {
-      #portfolioGrid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 5px !important; }
-      #portfolioGrid .portfolio-info h3 { font-size: 9px !important; }
+      #portfolioGrid { gap: 7px !important; grid-auto-columns: calc((100% - 7px) / 2) !important; }
     }
 
     #portfolioGrid .portfolio-info h3 {
@@ -511,54 +555,49 @@ function updateContact() {
   const whatsappEl = document.getElementById("whatsappDisplay");
   const instagramEl = document.getElementById("instagramDisplay");
   const emailEl = document.getElementById("emailDisplay");
+  const whatsappButton = document.getElementById("whatsappContactButton");
+  const instagramButton = document.getElementById("instagramContactButton");
+  const emailButton = document.getElementById("emailContactButton");
 
-  if (whatsappEl) {
-    whatsappEl.textContent = CONTACT.whatsapp
-      ? CONTACT.whatsapp
-      : "नंतर जोडू";
-
-    if (CONTACT.whatsapp) {
-      whatsappEl.style.cursor = "pointer";
-
-      whatsappEl.onclick = () => {
-        window.open(
-          `https://wa.me/${CONTACT.whatsapp}`,
-          "_blank"
-        );
-      };
+  const setLink = (button, url) => {
+    if (!button) return;
+    if (url) {
+      button.href = url;
+      button.style.opacity = "1";
+      button.style.pointerEvents = "auto";
+      button.removeAttribute("aria-disabled");
+    } else {
+      button.href = "#contact";
+      button.style.opacity = ".55";
+      button.style.pointerEvents = "none";
+      button.setAttribute("aria-disabled", "true");
     }
+  };
+
+  if (whatsappEl) whatsappEl.textContent = CONTACT.whatsapp || "नंतर जोडू";
+  if (instagramEl) instagramEl.textContent = CONTACT.instagram || "नंतर जोडू";
+  if (emailEl) emailEl.textContent = CONTACT.email || "नंतर जोडू";
+
+  const phone = String(CONTACT.whatsapp || "").replace(/[^0-9]/g, "");
+  const instagram = String(CONTACT.instagram || "").trim();
+  const instagramUrl = instagram
+    ? (instagram.startsWith("http") ? instagram : `https://instagram.com/${instagram.replace(/^@/, "")}`)
+    : "";
+  setLink(whatsappButton, phone ? `https://wa.me/${phone}` : "");
+  setLink(instagramButton, instagramUrl);
+  setLink(emailButton, CONTACT.email ? `mailto:${CONTACT.email}` : "");
+
+  if (whatsappEl && phone) {
+    whatsappEl.style.cursor = "pointer";
+    whatsappEl.onclick = () => window.open(`https://wa.me/${phone}`, "_blank", "noopener");
   }
-
-  if (instagramEl) {
-    instagramEl.textContent = CONTACT.instagram
-      ? CONTACT.instagram
-      : "नंतर जोडू";
-
-    if (CONTACT.instagram) {
-      instagramEl.style.cursor = "pointer";
-
-      const instaLink = CONTACT.instagram.startsWith("http")
-        ? CONTACT.instagram
-        : `https://instagram.com/${CONTACT.instagram.replace("@", "")}`;
-
-      instagramEl.onclick = () => {
-        window.open(instaLink, "_blank");
-      };
-    }
+  if (instagramEl && instagramUrl) {
+    instagramEl.style.cursor = "pointer";
+    instagramEl.onclick = () => window.open(instagramUrl, "_blank", "noopener");
   }
-
-  if (emailEl) {
-    emailEl.textContent = CONTACT.email
-      ? CONTACT.email
-      : "नंतर जोडू";
-
-    if (CONTACT.email) {
-      emailEl.style.cursor = "pointer";
-
-      emailEl.onclick = () => {
-        window.open(`mailto:${CONTACT.email}`, "_blank");
-      };
-    }
+  if (emailEl && CONTACT.email) {
+    emailEl.style.cursor = "pointer";
+    emailEl.onclick = () => { window.location.href = `mailto:${CONTACT.email}`; };
   }
 }
 

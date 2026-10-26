@@ -31,7 +31,7 @@
       <a href="#services" data-i18n="navServices">Services</a>
       <a href="#about" data-i18n="navAbout">About</a>
       <a href="#reviews" data-i18n="navReviews">Reviews</a>
-      <a href="contact.html" data-i18n="navContact">Contact</a>
+      <a href="#contact" data-i18n="navContact">Contact</a>
       <div class="language">
         <button id="languageBtn">भाषा ▾</button>
         <div class="language-menu">
@@ -42,7 +42,7 @@
       </div>
       <div class="hero-actions">
         <a id="heroButton1" class="btn btn-primary" href="#portfolio" data-i18n="viewWork">माझं काम पाहा →</a>
-        <a id="heroButton2" class="btn btn-ghost" href="contact.html" data-i18n="startProject">कामाबद्दल बोला</a>
+        <a id="heroButton2" class="btn btn-ghost" href="#contact" data-i18n="startProject">कामाबद्दल बोला</a>
       </div>
     </nav>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="थीम बदला">☀️ / 🌙</button>
@@ -60,7 +60,7 @@
         
         <div class="hero-actions" style="display: flex; gap: 12px; flex-wrap: wrap;">
           <a class="btn btn-primary" href="#portfolio" data-i18n="viewWork">माझं काम पाहा →</a>
-          <a class="btn btn-ghost" href="contact.html" data-i18n="startProject">कामाबद्दल बोला</a>
+          <a class="btn btn-ghost" href="#contact" data-i18n="startProject">कामाबद्दल बोला</a>
           <a class="btn btn-primary" href="psd-store.html" style="background: linear-gradient(135deg, #ff6600, #ff8800); border: none;">PSD Store 🛒</a>
         </div>
 
@@ -139,6 +139,37 @@
         <h2 data-i18n="aboutTitle">धर्मवीर ॲडव्हर्टायझिंग</h2>
         <p data-i18n="aboutText">Graphics Design आणि Digital Marketing साठी creative आणि practical solutions देण्याचा आमचा प्रयत्न. सध्या आम्ही घरून काम करतो; भविष्यात office सुरू झाल्यावर location इथे जोडता येईल.</p>
       </div>
+    </section>
+
+    <section id="contact" class="section contact-section">
+      <div class="contact-copy">
+        <p class="eyebrow">08 — CONTACT</p>
+        <h2 data-i18n="contactTitle">तुमच्या project बद्दल <span>बोलूया.</span></h2>
+        <p data-i18n="contactText">Design, poster, social media किंवा digital marketing — कामाची माहिती पाठवा.</p>
+        <div class="contact-link-row">
+          <div class="contact-link-info"><span>WhatsApp / संपर्क</span><strong id="whatsappDisplay">नंतर जोडू</strong></div>
+          <a class="btn btn-primary contact-action" id="whatsappContactButton" href="#contact" target="_blank" rel="noopener">क्लिक करा</a>
+        </div>
+        <div class="contact-link-row">
+          <div class="contact-link-info"><span>Instagram</span><strong id="instagramDisplay">नंतर जोडू</strong></div>
+          <a class="btn btn-primary contact-action" id="instagramContactButton" href="#contact" target="_blank" rel="noopener">क्लिक करा</a>
+        </div>
+        <div class="contact-link-row">
+          <div class="contact-link-info"><span>Gmail</span><strong id="emailDisplay">नंतर जोडू</strong></div>
+          <a class="btn btn-primary contact-action" id="emailContactButton" href="#contact">क्लिक करा</a>
+        </div>
+      </div>
+      <form class="contact-form" id="contactForm">
+        <label data-i18n="nameLabel">नाव<input required name="name" placeholder="तुमचे नाव"></label>
+        <label data-i18n="phoneLabel">मोबाईल नंबर<input required name="phone" placeholder="मोबाईल नंबर"></label>
+        <label data-i18n="workLabel">कामाचा प्रकार
+          <select name="work">
+            <option>Poster Design</option><option>Social Media Design</option><option>Logo / Branding</option><option>Digital Marketing</option><option>Other</option>
+          </select>
+        </label>
+        <label data-i18n="messageLabel">संदेश<textarea name="message" rows="5" placeholder="तुमच्या कामाबद्दल थोडक्यात लिहा"></textarea></label>
+        <button class="btn btn-primary" type="submit" data-i18n="sendMessage">Message तयार करा →</button>
+      </form>
     </section>
 
 
