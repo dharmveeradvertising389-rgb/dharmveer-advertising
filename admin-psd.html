@@ -77,7 +77,7 @@
 
   async function loadData() {
     try {
-      const res = await fetch('/api/psd-store');
+      const res = await fetch('https://falling-tree-3813.dharmveeradvertising389.workers.dev/api/psd-store');
       psdStoreData = await res.json();
       renderAdminView();
     } catch (e) {
@@ -176,7 +176,7 @@
 
   async function saveDataToCloud() {
     try {
-      const res = await fetch('/api/psd-store', {
+      const res = await fetch('https://falling-tree-3813.dharmveeradvertising389.workers.dev/api/psd-store', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ psdData: psdStoreData })
