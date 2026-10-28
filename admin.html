@@ -93,9 +93,8 @@ nav button.active{background:#e67e22}
 
 /* PSD Store Admin Styles */
 .section-block { background: #f9f9f9; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 6px; }
-.item-row { background: #fff; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #eee; }
-.item-edit-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-.action-row { display: flex; justify-content: space-between; align-items: center; }
+.item-row { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px 14px; margin-bottom: 8px; border-radius: 6px; border: 1px solid #eee; font-size: 14px; }
+.action-btns { display: flex; gap: 4px; align-items: center; }
 </style>
 </head>
 
@@ -249,25 +248,6 @@ nav button.active{background:#e67e22}
 
       <div id="portfolioList" style="margin-top: 20px;"></div>
     </div>
-
-    <!-- NEW: Dynamic Portfolio Category Manager -->
-    <div class="card">
-      <h2>🗂️ Portfolio Categories / Subcategories</h2>
-      <p class="small">Main Category आणि प्रत्येक Category मधील Subcategory इथून manage करा.</p>
-      <label>नवीन Main Category</label>
-      <input id="newPortfolioMainCategory" placeholder="उदा. Wedding">
-      <button class="success" onclick="addPortfolioMainCategory()">+ Main Category जोडा</button>
-
-      <label>Subcategory कोणत्या Main Category मध्ये जोडायची?</label>
-      <select id="portfolioMainCategorySelect"></select>
-      <label>Subcategory चे नाव</label>
-      <input id="newPortfolioSubcategory" placeholder="उदा. Birthday / Invitation">
-      <button class="success" onclick="addPortfolioSubcategory()">+ Subcategory जोडा</button>
-
-      <div id="portfolioCategoryManager" style="margin-top:18px;"></div>
-      <button class="success" style="width:100%;margin-top:12px" onclick="savePortfolioCategories()">💾 Categories सेव्ह करा</button>
-      <p class="small">टीप: वेबसाइटच्या Portfolio मध्ये हे पर्याय प्रत्यक्ष दिसण्यासाठी Portfolio frontend ने ही saved category list वापरणे आवश्यक आहे.</p>
-    </div>
   </section>
 
 
@@ -413,32 +393,6 @@ nav button.active{background:#e67e22}
         Save Settings
       </button>
     </div>
-
-    <!-- NEW: Website Appearance Controls -->
-    <div class="card">
-      <h2>🎨 Website Appearance / Background & Text Colours</h2>
-      <p class="small">रंग निवडा किंवा स्वतःचा HEX colour code टाका. Texture साठी direct image URL वापरा.</p>
-
-      <label>Website Background Colour</label>
-      <input type="color" id="theme_bg_color" value="#ffffff">
-      <label>Background Texture Image URL (optional)</label>
-      <input type="url" id="theme_bg_texture" placeholder="https://example.com/texture.png">
-      <label>Default Text Colour</label>
-      <input type="color" id="theme_text_color" value="#222222">
-      <label>Main Heading Colour</label>
-      <input type="color" id="theme_heading_color" value="#111111">
-      <label>Paragraph / Description Colour</label>
-      <input type="color" id="theme_paragraph_color" value="#444444">
-      <label>Button Background Colour</label>
-      <input type="color" id="theme_button_bg" value="#111111">
-      <label>Button Text Colour</label>
-      <input type="color" id="theme_button_text" value="#ffffff">
-      <label>Portfolio Category / Subcategory Text Colour</label>
-      <input type="color" id="theme_portfolio_text" value="#222222">
-
-      <button class="success" onclick="saveAppearanceSettings()">💾 Appearance सेव्ह करा</button>
-      <p class="small">महत्त्वाचे: हे पर्याय Admin Panel मधून settings सेव्ह करतात. Live website वर रंग/Texture लागू होण्यासाठी वेबसाइटच्या CSS/JavaScript ने या settings वाचणे आवश्यक आहे.</p>
-    </div>
   </section>
 
 </div>
@@ -486,8 +440,8 @@ function showSection(id,btn){
   document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
   btn.classList.add("active");
 
-  if(id === 'portfolio') { loadPortfolio(); loadPortfolioCategories(); }
-  if(id === 'settings') loadAppearanceSettings();
+  // टॅब उघडल्यावर ऑटो-डेटा रिफ्रेश
+  if(id === 'portfolio') loadPortfolio();
   if(id === 'psdstore') loadPsdStoreData();
 }
 
@@ -534,15 +488,13 @@ async function loadAll(){
     await loadReviews();
     await loadBeforeAfter();
     await loadWhy();
-    await loadPortfolioCategories();
-    await loadAppearanceSettings();
   }catch(error){
     alert("Data load problem: "+error.message);
   }
 }
 
 /* ==============================================
-   PSD STORE MANAGEMENT (Edit, Move & Cloud Sync)
+   PSD STORE MANAGEMENT (Cloudflare KV API)
    ============================================== */
 
 async function loadPsdStoreData() {
@@ -580,20 +532,11 @@ function renderPsdAdminView() {
       sec.items.forEach((item, itemIdx) => {
         itemsHtml += `
           <div class="item-row">
-            <div class="item-edit-grid">
-              <input type="text" value="${escapeHtml(item.title)}" id="psd_title_${secIdx}_${itemIdx}" placeholder="Title">
-              <input type="number" value="${escapeHtml(item.price)}" id="psd_price_${secIdx}_${itemIdx}" placeholder="Offer Price">
-              <input type="number" value="${escapeHtml(item.originalPrice)}" id="psd_orig_${secIdx}_${itemIdx}" placeholder="Cut Price">
-            </div>
-            <div class="action-row">
-              <div>
-                <button class="edit" style="padding:4px 8px; margin:0;" onclick="updatePsdItem(${secIdx}, ${itemIdx})">✏️ Update</button>
-                <button class="danger" style="padding:4px 8px; margin:0;" onclick="deletePsdItem(${secIdx}, ${itemIdx})">Delete</button>
-              </div>
-              <div>
-                <button onclick="movePsdItem(${secIdx}, ${itemIdx}, -1)">⬆️</button>
-                <button onclick="movePsdItem(${secIdx}, ${itemIdx}, 1)">⬇️</button>
-              </div>
+            <span><strong>${escapeHtml(item.title)}</strong> - ₹${escapeHtml(item.price)} <small style="color:#777;">(जुनी: ₹${escapeHtml(item.originalPrice)})</small></span>
+            <div class="action-btns">
+              <button onclick="movePsdItem(${secIdx}, ${itemIdx}, -1)">⬆️</button>
+              <button onclick="movePsdItem(${secIdx}, ${itemIdx}, 1)">⬇️</button>
+              <button class="danger" style="padding:4px 8px; margin:0;" onclick="deletePsdItem(${secIdx}, ${itemIdx})">Delete</button>
             </div>
           </div>
         `;
@@ -602,10 +545,9 @@ function renderPsdAdminView() {
 
     preview.innerHTML += `
       <div class="section-block">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <input type="text" value="${escapeHtml(sec.sectionTitle)}" id="sec_title_${secIdx}" style="font-weight:bold; color:#e67e22; font-size:16px; margin:0; width:60%;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="color:#e67e22;">${escapeHtml(sec.sectionTitle)}</h3>
           <div>
-            <button class="edit" style="padding:4px 8px; margin:0;" onclick="updatePsdSection(${secIdx})">✏️ Rename</button>
             <button onclick="movePsdSection(${secIdx}, -1)">⬆️ Section</button>
             <button onclick="movePsdSection(${secIdx}, 1)">⬇️ Section</button>
             <button class="danger" style="padding:4px 8px; margin:0;" onclick="deletePsdSection(${secIdx})">Sector Delete</button>
@@ -625,14 +567,6 @@ function addPsdSection() {
   psdStoreData.push({ sectionId: id, sectionTitle: title, items: [] });
   setValue('newSectionTitle', '');
   renderPsdAdminView();
-}
-
-function updatePsdSection(secIdx) {
-  const newTitle = getValue(`sec_title_${secIdx}`);
-  if(!newTitle) return alert("नाव रिकामे ठेऊ नका!");
-  psdStoreData[secIdx].sectionTitle = newTitle;
-  renderPsdAdminView();
-  message("Section नाव बदलले! बदलांसाठी Save वर क्लिक करा.");
 }
 
 function addPsdItem() {
@@ -665,21 +599,6 @@ function addPsdItem() {
   setValue('psdDownloadUrl', '');
 
   renderPsdAdminView();
-}
-
-function updatePsdItem(secIdx, itemIdx) {
-  const newTitle = getValue(`psd_title_${secIdx}_${itemIdx}`);
-  const newPrice = getValue(`psd_price_${secIdx}_${itemIdx}`);
-  const newOrig = getValue(`psd_orig_${secIdx}_${itemIdx}`);
-
-  if (!newTitle || !newPrice) return alert("शीर्षक आणि ऑफर किंमत भरलेली असावी!");
-
-  psdStoreData[secIdx].items[itemIdx].title = newTitle;
-  psdStoreData[secIdx].items[itemIdx].price = newPrice;
-  psdStoreData[secIdx].items[itemIdx].originalPrice = newOrig || newPrice;
-
-  renderPsdAdminView();
-  message("PSD माहिती अपडेट झाली! सेव्ह करण्यासाठी बटणावर क्लिक करा.");
 }
 
 function deletePsdItem(secIdx, itemIdx) {
@@ -847,222 +766,6 @@ function movePortfolio(index, direction) {
   message("क्रम बदलला! बदल सेव्ह करण्यासाठी डिझाईन अपडेट करा.");
 }
 
-
-/* NEW: PORTFOLIO CATEGORY / SUBCATEGORY MANAGEMENT */
-let portfolioCategories = [];
-
-function categorySlug(value) {
-  return String(value || "")
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "") || ("category-" + Date.now());
-}
-
-async function loadPortfolioCategories() {
-  try {
-    const data = await fetch(API_URL + "/api/content").then(r => r.json());
-    const saved = Array.isArray(data) ? data.find(x => x.content_key === "portfolio_categories") : null;
-
-    if (saved && saved.content_value) {
-      // Once the manager has been saved, use its list as the source of truth.
-      // This lets the user intentionally delete old categories without them returning.
-      const parsed = JSON.parse(saved.content_value);
-      if (Array.isArray(parsed)) portfolioCategories = parsed.map(cat => ({...cat, aliases: Array.isArray(cat.aliases) ? cat.aliases : [], subcategories: Array.isArray(cat.subcategories) ? cat.subcategories : []}));
-    } else {
-      // First-time setup: import categories already used by existing portfolio designs,
-      // so those old categories can also be renamed or removed in this manager.
-      const existingNames = [...new Set((Array.isArray(portfolioData) ? portfolioData : [])
-        .map(item => String(item.category || "").trim())
-        .filter(Boolean))];
-      portfolioCategories = existingNames.map(name => ({
-        id: categorySlug(name),
-        name,
-        aliases: [],
-        subcategories: []
-      }));
-      if (portfolioCategories.length) {
-        message("जुन्या Portfolio designs मधील categories आणल्या आहेत. बदल करून Save करा.");
-      }
-    }
-  } catch (e) {
-    console.log("Portfolio category settings load issue:", e.message);
-    // If the categories API is temporarily unavailable, still make existing design
-    // categories manageable in the current session.
-    if (!portfolioCategories.length && Array.isArray(portfolioData)) {
-      const existingNames = [...new Set(portfolioData.map(item => String(item.category || "").trim()).filter(Boolean))];
-      portfolioCategories = existingNames.map(name => ({ id: categorySlug(name), name, subcategories: [] }));
-    }
-  }
-  renderPortfolioCategories();
-}
-
-function renderPortfolioCategories() {
-  const select = document.getElementById("portfolioMainCategorySelect");
-  const list = document.getElementById("portfolioCategoryManager");
-  if (!select || !list) return;
-
-  const previous = select.value;
-  select.innerHTML = "";
-  portfolioCategories.forEach((cat, index) => {
-    const option = document.createElement("option");
-    option.value = String(index);
-    option.textContent = cat.name;
-    select.appendChild(option);
-  });
-  if (previous !== "" && Number(previous) < portfolioCategories.length) select.value = previous;
-
-  if (!portfolioCategories.length) {
-    list.innerHTML = "<p class='small'>अजून Category नाही. वरून Main Category जोडा.</p>";
-    return;
-  }
-
-  list.innerHTML = portfolioCategories.map((cat, index) => `
-    <div class="item">
-      <label>Main Category नाव</label>
-      <input id="portfolio_main_${index}" value="${escapeHtml(cat.name)}">
-      <button class="edit" onclick="renamePortfolioMainCategory(${index})">✏️ नाव बदला</button>
-      <button class="danger" onclick="deletePortfolioMainCategory(${index})">🗑️ Main Category काढा</button>
-      <div style="margin-top:12px;padding:12px;background:#f7f7f7;border-radius:8px">
-        <strong>Subcategories</strong>
-        ${(cat.subcategories || []).map((sub, subIndex) => `
-          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px">
-            <input style="flex:1;min-width:160px;margin:0" id="portfolio_sub_${index}_${subIndex}" value="${escapeHtml(sub.name)}">
-            <button class="edit" onclick="renamePortfolioSubcategory(${index},${subIndex})">Rename</button>
-            <button onclick="copyPortfolioSubcategoryLink(${index},${subIndex})">🔗 Copy Link</button>
-            <button class="danger" onclick="deletePortfolioSubcategory(${index},${subIndex})">Delete</button>
-          </div>
-        `).join("") || "<p class='small'>Subcategory नाही.</p>"}
-      </div>
-    </div>
-  `).join("");
-}
-
-function addPortfolioMainCategory() {
-  const name = getValue("newPortfolioMainCategory");
-  if (!name) return alert("Main Category चे नाव टाका.");
-  if (portfolioCategories.some(c => c.name.toLowerCase() === name.toLowerCase())) return alert("ही Category आधीपासून आहे.");
-  portfolioCategories.push({ id: categorySlug(name), name, aliases: [], subcategories: [] });
-  setValue("newPortfolioMainCategory", "");
-  renderPortfolioCategories();
-}
-
-function addPortfolioSubcategory() {
-  const index = Number(getValue("portfolioMainCategorySelect"));
-  const name = getValue("newPortfolioSubcategory");
-  if (!portfolioCategories.length || !Number.isInteger(index) || !portfolioCategories[index]) return alert("आधी Main Category तयार करा आणि निवडा.");
-  if (!name) return alert("Subcategory चे नाव टाका.");
-  const cat = portfolioCategories[index];
-  cat.subcategories = cat.subcategories || [];
-  if (cat.subcategories.some(s => s.name.toLowerCase() === name.toLowerCase())) return alert("ही Subcategory आधीपासून आहे.");
-  cat.subcategories.push({ id: categorySlug(name), name });
-  setValue("newPortfolioSubcategory", "");
-  renderPortfolioCategories();
-  document.getElementById("portfolioMainCategorySelect").value = String(index);
-}
-
-function renamePortfolioMainCategory(index) {
-  const name = getValue("portfolio_main_" + index).trim();
-  if (!name) return alert("नाव रिकामे ठेवू नका.");
-  if (portfolioCategories.some((c, i) => i !== index && c.name.toLowerCase() === name.toLowerCase())) {
-    return alert("ही Main Category आधीपासून आहे.");
-  }
-  const cat = portfolioCategories[index];
-  const oldName = cat.name;
-  cat.aliases = Array.isArray(cat.aliases) ? cat.aliases : [];
-  if (oldName && oldName !== name && !cat.aliases.includes(oldName)) cat.aliases.push(oldName);
-  cat.name = name;
-  cat.id = categorySlug(name);
-  renderPortfolioCategories();
-  message("Main Category चे नाव बदलले. सेव्ह करा.");
-}
-
-function deletePortfolioMainCategory(index) {
-  if (!confirm("ही Main Category आणि तिच्या Subcategories काढायच्या का?")) return;
-  portfolioCategories.splice(index, 1);
-  renderPortfolioCategories();
-}
-
-function renamePortfolioSubcategory(index, subIndex) {
-  const name = getValue(`portfolio_sub_${index}_${subIndex}`);
-  if (!name) return alert("नाव रिकामे ठेवू नका.");
-  portfolioCategories[index].subcategories[subIndex].name = name;
-  portfolioCategories[index].subcategories[subIndex].id = categorySlug(name);
-  renderPortfolioCategories();
-  message("Subcategory चे नाव बदलले. सेव्ह करा.");
-}
-
-function deletePortfolioSubcategory(index, subIndex) {
-  if (!confirm("ही Subcategory काढायची का?")) return;
-  portfolioCategories[index].subcategories.splice(subIndex, 1);
-  renderPortfolioCategories();
-}
-
-function copyPortfolioSubcategoryLink(index, subIndex) {
-  const cat = portfolioCategories[index];
-  const sub = cat && cat.subcategories && cat.subcategories[subIndex];
-  if (!cat || !sub) return;
-  const url = location.origin + "/portfolio?category=" + encodeURIComponent(cat.id) + "&subcategory=" + encodeURIComponent(sub.id);
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(url).then(() => message("Subcategory link copied!")).catch(() => prompt("ही लिंक Copy करा:", url));
-  } else {
-    prompt("ही लिंक Copy करा:", url);
-  }
-}
-
-async function savePortfolioCategories() {
-  try {
-    await api("/api/content", {
-      method: "POST",
-      body: JSON.stringify({
-        content_key: "portfolio_categories",
-        content_value: JSON.stringify(portfolioCategories)
-      })
-    });
-    message("Portfolio Categories सेव्ह झाल्या ✅");
-  } catch (e) {
-    alert("Categories सेव्ह करताना अडचण: " + e.message);
-  }
-}
-
-/* NEW: WEBSITE APPEARANCE SETTINGS */
-const appearanceKeys = [
-  "theme_bg_color", "theme_bg_texture", "theme_text_color",
-  "theme_heading_color", "theme_paragraph_color",
-  "theme_button_bg", "theme_button_text", "theme_portfolio_text"
-];
-
-async function loadAppearanceSettings() {
-  try {
-    const data = await fetch(API_URL + "/api/content").then(r => r.json());
-    data.forEach(item => {
-      if (appearanceKeys.includes(item.content_key)) {
-        setValue(item.content_key, item.content_value);
-      }
-    });
-  } catch (e) {
-    console.log("Appearance settings load issue:", e.message);
-  }
-}
-
-async function saveAppearanceSettings() {
-  try {
-    for (const key of appearanceKeys) {
-      await api("/api/content", {
-        method: "POST",
-        body: JSON.stringify({
-          content_key: key,
-          content_value: getValue(key)
-        })
-      });
-    }
-    message("Appearance settings सेव्ह झाल्या ✅");
-  } catch (e) {
-    alert("Appearance settings सेव्ह करताना अडचण: " + e.message);
-  }
-}
 
 /* SETTINGS */
 
