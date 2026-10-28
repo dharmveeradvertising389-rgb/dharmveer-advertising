@@ -94,31 +94,6 @@ nav button.active{background:#e67e22}
 /* PSD Store Admin Styles */
 .section-block { background: #f9f9f9; border-left: 4px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 6px; }
 .item-row { background: #fff; padding: 12px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #eee; }
-/* Portfolio: existing designs in horizontal scrolling row */
-#portfolioList {
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 8px 2px 16px;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
-}
-#portfolioList .item {
-  flex: 0 0 280px;
-  width: 280px;
-  margin: 0;
-  scroll-snap-align: start;
-}
-#portfolioList .item img {
-  width: 100%;
-  height: 190px;
-  object-fit: cover;
-}
-@media (max-width: 600px) {
-  #portfolioList .item { flex-basis: 235px; width: 235px; }
-}
-
 .item-edit-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 .action-row { display: flex; justify-content: space-between; align-items: center; }
 </style>
@@ -263,11 +238,10 @@ nav button.active{background:#e67e22}
 
       <input id="portfolioTitle" placeholder="Design / Poster title">
 
-      <label for="portfolioEntryMainCategory">Main Category निवडा</label>
-      <select id="portfolioEntryMainCategory"  required>
-        <option value="">आधी Main Category निवडा</option>
-      </select>
-<input id="portfolioImage" placeholder="Image URL" required>
+      <input id="portfolioCategory"
+        placeholder="Category e.g. Business, Political, Festival">
+
+      <input id="portfolioImage" placeholder="Image URL">
 
       <button class="success" onclick="addPortfolio()">
         Add Design
@@ -278,12 +252,19 @@ nav button.active{background:#e67e22}
 
     <!-- NEW: Dynamic Portfolio Category Manager -->
     <div class="card">
-      <h2>🗂️ Portfolio Main Categories</h2>
+      <h2>🗂️ Portfolio Categories / Subcategories</h2>
       <p class="small">Main Category आणि प्रत्येक Category मधील Subcategory इथून manage करा.</p>
       <label>नवीन Main Category</label>
       <input id="newPortfolioMainCategory" placeholder="उदा. Wedding">
       <button class="success" onclick="addPortfolioMainCategory()">+ Main Category जोडा</button>
-<div id="portfolioCategoryManager" style="margin-top:18px;"></div>
+
+      <label>Subcategory कोणत्या Main Category मध्ये जोडायची?</label>
+      <select id="portfolioMainCategorySelect"></select>
+      <label>Subcategory चे नाव</label>
+      <input id="newPortfolioSubcategory" placeholder="उदा. Birthday / Invitation">
+      <button class="success" onclick="addPortfolioSubcategory()">+ Subcategory जोडा</button>
+
+      <div id="portfolioCategoryManager" style="margin-top:18px;"></div>
       <button class="success" style="width:100%;margin-top:12px" onclick="savePortfolioCategories()">💾 Categories सेव्ह करा</button>
       <p class="small">टीप: वेबसाइटच्या Portfolio मध्ये हे पर्याय प्रत्यक्ष दिसण्यासाठी Portfolio frontend ने ही saved category list वापरणे आवश्यक आहे.</p>
     </div>
@@ -505,7 +486,7 @@ function showSection(id,btn){
   document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));
   btn.classList.add("active");
 
-  if(id === 'portfolio') { loadPortfolio().then(() => loadPortfolioCategories()); }
+  if(id === 'portfolio') { loadPortfolio(); loadPortfolioCategories(); }
   if(id === 'settings') loadAppearanceSettings();
   if(id === 'psdstore') loadPsdStoreData();
 }
@@ -566,7 +547,7 @@ async function loadAll(){
 
 async function loadPsdStoreData() {
   try {
-    const res = await fetch(API_URL + '/api/psd-store');
+    const res = await fetch('/api/psd-store');
     psdStoreData = await res.json();
     renderPsdAdminView();
   } catch (e) {
@@ -734,7 +715,7 @@ function movePsdSection(secIdx, direction) {
 
 async function savePsdDataToCloud() {
   try {
-    const res = await fetch(API_URL + '/api/psd-store', {
+    const res = await fetch('/api/psd-store', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ psdData: psdStoreData })
@@ -780,9 +761,9 @@ function renderPortfolioList() {
         <label class="small">शीर्षक (Title):</label>
         <input type="text" value="${escapeHtml(item.title)}" id="port_title_${item.id}">
         
-        <label class="small">Main Category:</label>
-        <input type="text" value="${escapeHtml(item.category || "")}" id="port_cat_${item.id}">
-</div>
+        <label class="small">कॅटेगरी (Category):</label>
+        <input type="text" value="${escapeHtml(item.category)}" id="port_cat_${item.id}">
+      </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
         <div>
@@ -800,23 +781,22 @@ function renderPortfolioList() {
 
 async function addPortfolio(){
   const title=getValue("portfolioTitle");
-  const mainCategory=getValue("portfolioEntryMainCategory");
+  const category=getValue("portfolioCategory");
   const image_url=getValue("portfolioImage");
-  const mainCat = portfolioCategories.find(cat => cat.id === mainCategory || cat.name === mainCategory);
 
-  if(!title || !mainCat || !image_url){
-    alert("Title, Main Category आणि Image URL भरा.");
+  if(!title||!category||!image_url){
+    alert("Title, Category आणि Image URL भरा.");
     return;
   }
 
   try{
     await api("/api/portfolio",{
       method:"POST",
-      body:JSON.stringify({ title, category: mainCat.name, image_url })
+      body:JSON.stringify({ title, category, image_url })
     });
 
     setValue("portfolioTitle","");
-    setValue("portfolioEntryMainCategory","");
+    setValue("portfolioCategory","");
     setValue("portfolioImage","");
 
     await loadPortfolio();
@@ -830,7 +810,7 @@ async function updatePortfolio(id) {
   const newTitle = getValue(`port_title_${id}`);
   const newCat = getValue(`port_cat_${id}`);
 
-  if (!newTitle || !newCat) return alert("शीर्षक आणि Main Category रिकामी ठेऊ नका!");
+  if (!newTitle || !newCat) return alert("शीर्षक आणि कॅटेगरी रिकामी ठेऊ नका!");
 
   try {
     await api("/api/portfolio/" + id, {
@@ -838,7 +818,7 @@ async function updatePortfolio(id) {
       body: JSON.stringify({ title: newTitle, category: newCat })
     });
     await loadPortfolio();
-    message("Design अपडेट झाले ✅");
+    message("Design updated ✅");
   } catch(e) {
     alert("Update error: " + e.message);
   }
@@ -868,102 +848,94 @@ function movePortfolio(index, direction) {
 }
 
 
+/* NEW: PORTFOLIO CATEGORY / SUBCATEGORY MANAGEMENT */
+let portfolioCategories = [];
+
+function categorySlug(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || ("category-" + Date.now());
+}
+
 async function loadPortfolioCategories() {
   try {
-    // Load existing portfolio designs first so legacy Main Categories are available to manage.
-    if (!Array.isArray(portfolioData) || !portfolioData.length) {
-      try {
-        portfolioData = await fetch(API_URL + "/api/portfolio").then(r => r.json());
-      } catch (_) {}
-    }
-
     const data = await fetch(API_URL + "/api/content").then(r => r.json());
     const saved = Array.isArray(data) ? data.find(x => x.content_key === "portfolio_categories") : null;
-    const migrated = Array.isArray(data) && data.some(x => x.content_key === "portfolio_categories_migrated_v2" && String(x.content_value).toLowerCase() === "true");
 
-    let savedCategories = [];
     if (saved && saved.content_value) {
-      try {
-        const parsed = JSON.parse(saved.content_value);
-        if (Array.isArray(parsed)) savedCategories = parsed.map(cat => ({
-          ...cat,
-          aliases: Array.isArray(cat.aliases) ? cat.aliases : [],
-          subcategories: Array.isArray(cat.subcategories) ? cat.subcategories : []
-        }));
-      } catch (_) {}
-    }
-
-    portfolioCategories = savedCategories;
-
-    // One-time migration: add old categories from existing designs to an already-saved manager list.
-    // After the first save, deleted categories will not be automatically re-added.
-    if (!migrated) {
+      // Once the manager has been saved, use its list as the source of truth.
+      // This lets the user intentionally delete old categories without them returning.
+      const parsed = JSON.parse(saved.content_value);
+      if (Array.isArray(parsed)) portfolioCategories = parsed.map(cat => ({...cat, aliases: Array.isArray(cat.aliases) ? cat.aliases : [], subcategories: Array.isArray(cat.subcategories) ? cat.subcategories : []}));
+    } else {
+      // First-time setup: import categories already used by existing portfolio designs,
+      // so those old categories can also be renamed or removed in this manager.
       const existingNames = [...new Set((Array.isArray(portfolioData) ? portfolioData : [])
         .map(item => String(item.category || "").trim())
         .filter(Boolean))];
-
-      existingNames.forEach(name => {
-        const alreadyKnown = portfolioCategories.some(cat =>
-          String(cat.name || "").trim().toLowerCase() === name.toLowerCase() ||
-          (Array.isArray(cat.aliases) && cat.aliases.some(alias => String(alias).trim().toLowerCase() === name.toLowerCase()))
-        );
-        if (!alreadyKnown) {
-          portfolioCategories.push({ id: categorySlug(name), name, aliases: [], subcategories: [] });
-        }
-      });
-      portfolioCategoriesMigrationPending = true;
-      if (existingNames.length) message("जुन्या Portfolio designs मधील Main Categories आणल्या आहेत. बदल करून Save करा.");
-    } else {
-      portfolioCategoriesMigrationPending = false;
-    }
-
-    // If no saved categories exist, the imported old categories are shown for first-time setup.
-    if (!saved && !portfolioCategories.length) {
-      portfolioCategories = [];
+      portfolioCategories = existingNames.map(name => ({
+        id: categorySlug(name),
+        name,
+        aliases: [],
+        subcategories: []
+      }));
+      if (portfolioCategories.length) {
+        message("जुन्या Portfolio designs मधील categories आणल्या आहेत. बदल करून Save करा.");
+      }
     }
   } catch (e) {
     console.log("Portfolio category settings load issue:", e.message);
+    // If the categories API is temporarily unavailable, still make existing design
+    // categories manageable in the current session.
     if (!portfolioCategories.length && Array.isArray(portfolioData)) {
       const existingNames = [...new Set(portfolioData.map(item => String(item.category || "").trim()).filter(Boolean))];
-      portfolioCategories = existingNames.map(name => ({ id: categorySlug(name), name, aliases: [], subcategories: [] }));
-      portfolioCategoriesMigrationPending = true;
+      portfolioCategories = existingNames.map(name => ({ id: categorySlug(name), name, subcategories: [] }));
     }
   }
   renderPortfolioCategories();
-  // Re-render existing designs after categories load so their Subcategory dropdowns are populated.
-  renderPortfolioList();
 }
-
-function refreshPortfolioEntryMainOptions() {
-  const mainSelect = document.getElementById("portfolioEntryMainCategory");
-  if (!mainSelect) return;
-  const previous = mainSelect.value;
-  mainSelect.innerHTML = '<option value="">Main Category निवडा</option>';
-  portfolioCategories.forEach(cat => {
-    const option = document.createElement("option");
-    option.value = cat.id || cat.name;
-    option.textContent = cat.name;
-    mainSelect.appendChild(option);
-  });
-  if ([...mainSelect.options].some(option => option.value === previous)) mainSelect.value = previous;
-}
-
-function refreshPortfolioSubcategoryOptions() { /* Subcategory is intentionally disabled. */ }
 
 function renderPortfolioCategories() {
+  const select = document.getElementById("portfolioMainCategorySelect");
   const list = document.getElementById("portfolioCategoryManager");
-  if (!list) return;
-  refreshPortfolioEntryMainOptions();
+  if (!select || !list) return;
+
+  const previous = select.value;
+  select.innerHTML = "";
+  portfolioCategories.forEach((cat, index) => {
+    const option = document.createElement("option");
+    option.value = String(index);
+    option.textContent = cat.name;
+    select.appendChild(option);
+  });
+  if (previous !== "" && Number(previous) < portfolioCategories.length) select.value = previous;
+
   if (!portfolioCategories.length) {
-    list.innerHTML = "<p class='small'>अजून Main Category नाही. वरून Main Category जोडा.</p>";
+    list.innerHTML = "<p class='small'>अजून Category नाही. वरून Main Category जोडा.</p>";
     return;
   }
+
   list.innerHTML = portfolioCategories.map((cat, index) => `
     <div class="item">
       <label>Main Category नाव</label>
       <input id="portfolio_main_${index}" value="${escapeHtml(cat.name)}">
       <button class="edit" onclick="renamePortfolioMainCategory(${index})">✏️ नाव बदला</button>
       <button class="danger" onclick="deletePortfolioMainCategory(${index})">🗑️ Main Category काढा</button>
+      <div style="margin-top:12px;padding:12px;background:#f7f7f7;border-radius:8px">
+        <strong>Subcategories</strong>
+        ${(cat.subcategories || []).map((sub, subIndex) => `
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px">
+            <input style="flex:1;min-width:160px;margin:0" id="portfolio_sub_${index}_${subIndex}" value="${escapeHtml(sub.name)}">
+            <button class="edit" onclick="renamePortfolioSubcategory(${index},${subIndex})">Rename</button>
+            <button onclick="copyPortfolioSubcategoryLink(${index},${subIndex})">🔗 Copy Link</button>
+            <button class="danger" onclick="deletePortfolioSubcategory(${index},${subIndex})">Delete</button>
+          </div>
+        `).join("") || "<p class='small'>Subcategory नाही.</p>"}
+      </div>
     </div>
   `).join("");
 }
@@ -977,6 +949,19 @@ function addPortfolioMainCategory() {
   renderPortfolioCategories();
 }
 
+function addPortfolioSubcategory() {
+  const index = Number(getValue("portfolioMainCategorySelect"));
+  const name = getValue("newPortfolioSubcategory");
+  if (!portfolioCategories.length || !Number.isInteger(index) || !portfolioCategories[index]) return alert("आधी Main Category तयार करा आणि निवडा.");
+  if (!name) return alert("Subcategory चे नाव टाका.");
+  const cat = portfolioCategories[index];
+  cat.subcategories = cat.subcategories || [];
+  if (cat.subcategories.some(s => s.name.toLowerCase() === name.toLowerCase())) return alert("ही Subcategory आधीपासून आहे.");
+  cat.subcategories.push({ id: categorySlug(name), name });
+  setValue("newPortfolioSubcategory", "");
+  renderPortfolioCategories();
+  document.getElementById("portfolioMainCategorySelect").value = String(index);
+}
 
 function renamePortfolioMainCategory(index) {
   const name = getValue("portfolio_main_" + index).trim();
@@ -1000,8 +985,397 @@ function deletePortfolioMainCategory(index) {
   renderPortfolioCategories();
 }
 
+function renamePortfolioSubcategory(index, subIndex) {
+  const name = getValue(`portfolio_sub_${index}_${subIndex}`);
+  if (!name) return alert("नाव रिकामे ठेवू नका.");
+  portfolioCategories[index].subcategories[subIndex].name = name;
+  portfolioCategories[index].subcategories[subIndex].id = categorySlug(name);
+  renderPortfolioCategories();
+  message("Subcategory चे नाव बदलले. सेव्ह करा.");
+}
+
+function deletePortfolioSubcategory(index, subIndex) {
+  if (!confirm("ही Subcategory काढायची का?")) return;
+  portfolioCategories[index].subcategories.splice(subIndex, 1);
+  renderPortfolioCategories();
+}
+
+function copyPortfolioSubcategoryLink(index, subIndex) {
+  const cat = portfolioCategories[index];
+  const sub = cat && cat.subcategories && cat.subcategories[subIndex];
+  if (!cat || !sub) return;
+  const url = location.origin + "/portfolio?category=" + encodeURIComponent(cat.id) + "&subcategory=" + encodeURIComponent(sub.id);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(() => message("Subcategory link copied!")).catch(() => prompt("ही लिंक Copy करा:", url));
+  } else {
+    prompt("ही लिंक Copy करा:", url);
+  }
+}
+
+async function savePortfolioCategories() {
+  try {
+    await api("/api/content", {
+      method: "POST",
+      body: JSON.stringify({
+        content_key: "portfolio_categories",
+        content_value: JSON.stringify(portfolioCategories)
+      })
+    });
+    message("Portfolio Categories सेव्ह झाल्या ✅");
+  } catch (e) {
+    alert("Categories सेव्ह करताना अडचण: " + e.message);
+  }
+}
+
+/* NEW: WEBSITE APPEARANCE SETTINGS */
+const appearanceKeys = [
+  "theme_bg_color", "theme_bg_texture", "theme_text_color",
+  "theme_heading_color", "theme_paragraph_color",
+  "theme_button_bg", "theme_button_text", "theme_portfolio_text"
+];
+
+async function loadAppearanceSettings() {
+  try {
+    const data = await fetch(API_URL + "/api/content").then(r => r.json());
+    data.forEach(item => {
+      if (appearanceKeys.includes(item.content_key)) {
+        setValue(item.content_key, item.content_value);
+      }
+    });
+  } catch (e) {
+    console.log("Appearance settings load issue:", e.message);
+  }
+}
+
+async function saveAppearanceSettings() {
+  try {
+    for (const key of appearanceKeys) {
+      await api("/api/content", {
+        method: "POST",
+        body: JSON.stringify({
+          content_key: key,
+          content_value: getValue(key)
+        })
+      });
+    }
+    message("Appearance settings सेव्ह झाल्या ✅");
+  } catch (e) {
+    alert("Appearance settings सेव्ह करताना अडचण: " + e.message);
+  }
+}
+
+/* SETTINGS */
+
+async function loadSettings(){
+  const data=await fetch(API_URL+"/api/settings").then(r=>r.json());
+  if(!data.length)return;
+
+  const s=data[0];
+  setValue("logo_url",s.logo_url);
+  setValue("phone",s.phone);
+  setValue("whatsapp",s.whatsapp);
+  setValue("email",s.email);
+  setValue("instagram",s.instagram);
+  setValue("facebook",s.facebook);
+  setValue("address",s.address);
+  setValue("about",s.about);
+  setValue("footer_text",s.footer_text);
+  setValue("website_title",s.website_title);
+}
+
+async function saveSettings(){
+  try{
+    await api("/api/settings",{
+      method:"PUT",
+      body:JSON.stringify({
+        logo_url:getValue("logo_url"),
+        phone:getValue("phone"),
+        whatsapp:getValue("whatsapp"),
+        email:getValue("email"),
+        instagram:getValue("instagram"),
+        facebook:getValue("facebook"),
+        address:getValue("address"),
+        about:getValue("about"),
+        footer_text:getValue("footer_text"),
+        website_title:getValue("website_title")
+      })
+    });
+    message("Settings saved successfully ✅");
+  }catch(e){
+    alert(e.message);
+  }
+}
 
 
+/* HOME CONTENT */
+
+const contentKeys=[
+  "hero_title",
+  "hero_description",
+  "hero_button1_text",
+  "hero_button1_link",
+  "hero_button2_text",
+  "hero_button2_link",
+  "creative_text",
+  "branding_text",
+  "marketing_text",
+  "marquee_text"
+];
+
+async function loadContent(){
+  const data=await fetch(API_URL+"/api/content").then(r=>r.json());
+  data.forEach(item=>{
+    if(document.getElementById(item.content_key)){
+      setValue(item.content_key, item.content_value);
+    }
+  });
+}
+
+async function saveHome(){
+  try{
+    for(const key of contentKeys){
+      await api("/api/content",{
+        method:"POST",
+        body:JSON.stringify({
+          content_key:key,
+          content_value:getValue(key)
+        })
+      });
+    }
+    await saveSettings();
+    message("Home updated successfully ✅");
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+
+/* SERVICES */
+
+async function loadServices(){
+  const data=await fetch(API_URL+"/api/services").then(r=>r.json());
+  document.getElementById("serviceList").innerHTML=
+    data.map(item=>`
+      <div class="item">
+        <strong>${escapeHtml(item.title)}</strong>
+        <p>${escapeHtml(item.description||"")}</p>
+        <p>Icon: ${escapeHtml(item.icon||"")}</p>
+        <button class="danger" onclick="deleteService(${item.id})">Delete</button>
+      </div>
+    `).join("");
+}
+
+async function addService(){
+  const title=getValue("serviceTitle");
+  if(!title){
+    alert("Service title भरा.");
+    return;
+  }
+
+  try{
+    await api("/api/services",{
+      method:"POST",
+      body:JSON.stringify({
+        title,
+        description:getValue("serviceDescription"),
+        icon:getValue("serviceIcon"),
+        sort_order:Number(getValue("serviceOrder"))||0
+      })
+    });
+
+    setValue("serviceTitle","");
+    setValue("serviceDescription","");
+    setValue("serviceIcon","");
+
+    await loadServices();
+    message("Service added ✅");
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+async function deleteService(id){
+  if(!confirm("हा service delete करायचा आहे का?")) return;
+  try{
+    await api("/api/services/"+id,{ method:"DELETE" });
+    await loadServices();
+    message("Service deleted ✅");
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+
+/* REVIEWS */
+
+async function loadReviews(){
+  const data=await fetch(API_URL+"/api/reviews").then(r=>r.json());
+  document.getElementById("reviewList").innerHTML=
+    data.map(item=>`
+      <div class="item">
+        <strong>${escapeHtml(item.client_name)}</strong>
+        <p>${escapeHtml(item.review_text)}</p>
+        <p>⭐ ${item.rating}/5</p>
+        <button class="danger" onclick="deleteReview(${item.id})">Delete</button>
+      </div>
+    `).join("");
+}
+
+async function addReview(){
+  const client_name=getValue("clientName");
+  const review_text=getValue("reviewText");
+  const rating=Number(getValue("rating"))||5;
+
+  if(!client_name||!review_text){
+    alert("Client name आणि review भरा.");
+    return;
+  }
+
+  try{
+    await api("/api/reviews",{
+      method:"POST",
+      body:JSON.stringify({ client_name, review_text, rating })
+    });
+
+    setValue("clientName","");
+    setValue("reviewText","");
+
+    await loadReviews();
+    message("Review added ✅");
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+async function deleteReview(id){
+  if(!confirm("हा review delete करायचा आहे का?")) return;
+  try{
+    await api("/api/reviews/"+id,{ method:"DELETE" });
+    await loadReviews();
+    message("Review deleted ✅");
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+
+/* BEFORE AFTER */
+
+async function loadBeforeAfter(){
+  const data=await fetch(API_URL+"/api/before-after").then(r=>r.json());
+  document.getElementById("beforeAfterList").innerHTML=
+    data.map(item=>`
+      <div class="item">
+        <img src="${escapeHtml(item.before_image)}">
+        <img src="${escapeHtml(item.after_image)}">
+        <strong>${escapeHtml(item.title||"")}</strong>
+        <p>${escapeHtml(item.description||"")}</p>
+        <button class="danger" onclick="deleteBeforeAfter(${item.id})">Delete</button>
+      </div>
+    `).join("");
+}
+
+async function addBeforeAfter(){
+  const before_image=getValue("beforeImage");
+  const after_image=getValue("afterImage");
+
+  if(!before_image||!after_image){
+    alert("Before आणि After image URL भरा.");
+    return;
+  }
+
+  try{
+    await api("/api/before-after",{
+      method:"POST",
+      body:JSON.stringify({
+        before_image,
+        after_image,
+        before_label:"BEFORE",
+        after_label:"AFTER",
+        title:getValue("beforeTitle"),
+        description:getValue("beforeDescription"),
+        sort_order:Number(getValue("beforeSort"))||0
+      })
+    });
+
+    setValue("beforeImage","");
+    setValue("afterImage","");
+    setValue("beforeTitle","");
+    setValue("beforeDescription","");
+
+    await loadBeforeAfter();
+    message("Before / After added ✅");
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+async function deleteBeforeAfter(id){
+  if(!confirm("हा Before / After delete करायचा आहे का?")) return;
+  try{
+    await api("/api/before-after/"+id,{ method:"DELETE" });
+    await loadBeforeAfter();
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+
+/* WHY CHOOSE */
+
+async function loadWhy(){
+  const data=await fetch(API_URL+"/api/why-choose").then(r=>r.json());
+  document.getElementById("whyList").innerHTML=
+    data.map(item=>`
+      <div class="item">
+        <strong>${escapeHtml(item.number||"")} ${escapeHtml(item.title)}</strong>
+        <p>${escapeHtml(item.description||"")}</p>
+        <button class="danger" onclick="deleteWhy(${item.id})">Delete</button>
+      </div>
+    `).join("");
+}
+
+async function addWhy(){
+  const title=getValue("whyTitle");
+  if(!title){
+    alert("Title भरा.");
+    return;
+  }
+
+  try{
+    await api("/api/why-choose",{
+      method:"POST",
+      body:JSON.stringify({
+        number:getValue("whyNumber"),
+        title,
+        description:getValue("whyDescription"),
+        sort_order:Number(getValue("whyOrder"))||0
+      })
+    });
+
+    setValue("whyNumber","");
+    setValue("whyTitle","");
+    setValue("whyDescription","");
+
+    await loadWhy();
+    message("Point added ✅");
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+async function deleteWhy(id){
+  if(!confirm("हा point delete करायचा आहे का?")) return;
+  try{
+    await api("/api/why-choose/"+id,{ method:"DELETE" });
+    await loadWhy();
+  }catch(e){
+    alert(e.message);
+  }
+}
+
+
+/* HELPERS */
 
 function getValue(id){
   const el=document.getElementById(id);
