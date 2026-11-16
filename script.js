@@ -989,6 +989,28 @@ async function initApp() {
   // Hide loader early to ensure screen doesn't block
   forceHideLoader();
 
+  // Reveal existing sections and cards smoothly as visitors scroll.
+  try {
+    const motionTargets = document.querySelectorAll(
+      ".section:not(.hero), .service, .review, .why-item, .about-logo, .contact-form"
+    );
+    if ("IntersectionObserver" in window) {
+      document.body.classList.add("motion-ready");
+      const motionObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("motion-in");
+            motionObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
+      motionTargets.forEach((element,index) => {
+        element.style.transitionDelay = `${Math.min(index % 4,3)*70}ms`;
+        motionObserver.observe(element);
+      });
+    }
+  } catch (e) {}
+
   await loadManagedPortfolioCategories();
   await loadPortfolioData();
 
