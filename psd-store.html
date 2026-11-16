@@ -727,6 +727,61 @@
       .home-link { font-size: 12px; padding: 7px 13px; }
     }
 
+
+    /* PSD Store theme support */
+    :root { color-scheme: dark; }
+    body { transition: background-color .3s ease, color .3s ease; }
+    .header-actions { display:flex; align-items:center; gap:10px; }
+    .theme-toggle {
+      border:1px solid rgba(255,255,255,.22); background:#202020; color:#fff;
+      border-radius:22px; padding:8px 14px; font-size:13px; font-weight:800;
+      cursor:pointer; transition:background .25s ease, color .25s ease, transform .25s ease;
+      white-space:nowrap;
+    }
+    .theme-toggle:hover { transform:translateY(-2px); }
+    [data-theme="light"] { color-scheme:light; }
+    body[data-theme="light"] { background:#f7f5f0; color:#17202a; }
+    body[data-theme="light"] .site-header { background:#fffaf2; border-bottom:1px solid #e8e1d7; box-shadow:none; }
+    body[data-theme="light"] .brand-link { color:#17202a; }
+    body[data-theme="light"] .home-link { color:#fff; }
+    body[data-theme="light"] .theme-toggle { background:#fff; color:#17202a; border-color:#ddd5ca; }
+    body[data-theme="light"] .store-hero { background:radial-gradient(circle at center, rgba(255,85,0,.12) 0%, rgba(255,85,0,.045) 27%, rgba(247,245,240,0) 62%); }
+    body[data-theme="light"] .hero-logo { filter:none !important; }
+    body[data-theme="light"] .hero-label { background:#fff; color:#17202a; border-color:#e9e3da; box-shadow:none !important; }
+    body[data-theme="light"] .hero-sub-line { color:#17202a; }
+    body[data-theme="light"] .section-header { color:#475569; }
+    body[data-theme="light"] .single-card-banner,
+    body[data-theme="light"] .compact-card { box-shadow:none !important; border:1px solid #e7e2da; }
+    body[data-theme="light"] .nav-arrow { border-color:#64748b; color:#334155; }
+    body[data-theme="light"] .multi-cards-grid { scrollbar-color:#ff5500 #e8e2d9; }
+    body[data-theme="light"] .multi-cards-grid::-webkit-scrollbar-track { background:#e8e2d9; }
+    body[data-theme="light"] .card-info { scrollbar-color:#ff5500 #eee9e1; }
+    body[data-theme="light"] .card-info::-webkit-scrollbar-track { background:#eee9e1; }
+    body[data-theme="light"] .lightbox-content { box-shadow:none !important; }
+
+    /* Subtle motion: no layout or content changes */
+    .store-hero.motion-pending, .section-block.motion-pending { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
+    .store-hero.is-visible, .section-block.is-visible { opacity:1; transform:translateY(0); }
+    .hero-logo { animation:psdLogoFloat 5s ease-in-out infinite; }
+    .hero-label { animation:psdLabelFloat 4.8s ease-in-out infinite; }
+    .label-branding { animation-delay:.7s; }
+    .label-marketing { animation-delay:1.3s; }
+    .compact-card, .single-card-banner { transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease; }
+    .compact-card:hover, .single-card-banner:hover { transform:translateY(-5px); }
+    body[data-theme="light"] .compact-card:hover,
+    body[data-theme="light"] .single-card-banner:hover { box-shadow:none !important; }
+    @keyframes psdLogoFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+    @keyframes psdLabelFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; }
+      .store-hero, .section-block { opacity:1; transform:none; }
+    }
+    @media (max-width:768px) {
+      .header-actions { gap:6px; }
+      .theme-toggle { padding:7px 10px; font-size:11px; }
+      .home-link { padding:7px 10px; }
+    }
+
   </style>
 </head>
 
@@ -741,7 +796,10 @@
           <div class="brand-subtitle">Graphics • Marketing</div>
         </div>
       </a>
-      <a href="index.html" class="home-link">Home</a>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">☀️ Light</button>
+        <a href="index.html" class="home-link">Home</a>
+      </div>
     </div>
   </header>
 
@@ -893,6 +951,69 @@
     /* =========================
        FETCH PSD DATA
     ========================== */
+
+    /* =========================
+       THEME + STORE ANIMATIONS
+    ========================= */
+    const themeToggle = document.getElementById('themeToggle');
+    function applyStoreTheme(theme) {
+      document.body.setAttribute('data-theme', theme);
+      const light = theme === 'light';
+      themeToggle.textContent = light ? '🌙 Dark' : '☀️ Light';
+      themeToggle.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+      try { localStorage.setItem('dharmveer-psd-theme', theme); } catch (e) {}
+    }
+    let savedStoreTheme = 'dark';
+    try { savedStoreTheme = localStorage.getItem('dharmveer-psd-theme') || 'dark'; } catch (e) {}
+    applyStoreTheme(savedStoreTheme);
+    themeToggle.addEventListener('click', () => {
+      applyStoreTheme(document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+    });
+
+    function observeStoreSections() {
+      const selector = '.store-hero, .section-block';
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll(selector).forEach(el => el.classList.add('is-visible'));
+        return;
+      }
+      const observed = new WeakSet();
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove('motion-pending');
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.02, rootMargin: '0px 0px 120px 0px' });
+
+      const scan = root => {
+        const elements = [];
+        if (root.nodeType === 1 && root.matches(selector)) elements.push(root);
+        if (root.querySelectorAll) elements.push(...root.querySelectorAll(selector));
+        elements.forEach(el => {
+          if (observed.has(el)) return;
+          observed.add(el);
+          el.classList.add('motion-pending');
+          observer.observe(el);
+        });
+      };
+      scan(document);
+      const dynamicObserver = new MutationObserver(records => {
+        records.forEach(record => record.addedNodes.forEach(node => {
+          if (node.nodeType === 1) scan(node);
+        }));
+      });
+      dynamicObserver.observe(document.body, { childList:true, subtree:true });
+
+      // Safety fallback: never leave any store content invisible.
+      window.setTimeout(() => {
+        document.querySelectorAll('.motion-pending').forEach(el => {
+          el.classList.remove('motion-pending');
+          el.classList.add('is-visible');
+        });
+      }, 4500);
+    }
 
     async function fetchStoreData() {
 
@@ -1180,6 +1301,7 @@
          DIRECT PSD HASH LINK
       ========================= */
 
+      observeStoreSections();
       requestAnimationFrame(() => {
         requestAnimationFrame(scrollToHashItem);
       });

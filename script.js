@@ -989,27 +989,52 @@ async function initApp() {
   // Hide loader early to ensure screen doesn't block
   forceHideLoader();
 
-  // Reveal existing sections and cards smoothly as visitors scroll.
+  // Reveal sections and dynamically loaded cards without leaving content hidden.
   try {
-    const motionTargets = document.querySelectorAll(
-      ".section:not(.hero), .service, .review, .why-item, .about-logo, .contact-form"
-    );
     if ("IntersectionObserver" in window) {
       document.body.classList.add("motion-ready");
+      const observed = new WeakSet();
       const motionObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
+            entry.target.classList.remove("motion-pending");
             entry.target.classList.add("motion-in");
             motionObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
-      motionTargets.forEach((element,index) => {
-        element.style.transitionDelay = `${Math.min(index % 4,3)*70}ms`;
-        motionObserver.observe(element);
+      }, { threshold: 0.06, rootMargin: "0px 0px 80px 0px" });
+
+      const revealTargets = root => {
+        const selector = ".section:not(.hero), .service, .review, .why-item, .about-logo, .contact-form";
+        const targets = [];
+        if (root.nodeType === 1 && root.matches(selector)) targets.push(root);
+        if (root.querySelectorAll) targets.push(...root.querySelectorAll(selector));
+        targets.forEach((element, index) => {
+          if (observed.has(element)) return;
+          observed.add(element);
+          element.classList.add("motion-pending");
+          element.style.transitionDelay = `${Math.min(index % 4, 3) * 55}ms`;
+          motionObserver.observe(element);
+        });
+      };
+
+      revealTargets(document);
+      const dynamicObserver = new MutationObserver(records => {
+        records.forEach(record => record.addedNodes.forEach(node => {
+          if (node.nodeType === 1) revealTargets(node);
+        }));
       });
+      dynamicObserver.observe(document.body, { childList: true, subtree: true });
+      window.setTimeout(() => {
+        document.querySelectorAll(".motion-pending").forEach(element => {
+          element.classList.remove("motion-pending");
+          element.classList.add("motion-in");
+        });
+      }, 4500);
     }
-  } catch (e) {}
+  } catch (e) {
+    document.querySelectorAll(".motion-pending").forEach(element => element.classList.remove("motion-pending"));
+  }
 
   await loadManagedPortfolioCategories();
   await loadPortfolioData();

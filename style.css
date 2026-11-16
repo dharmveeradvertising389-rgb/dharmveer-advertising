@@ -192,8 +192,8 @@ html,body{max-width:100%;overflow-x:clip}
 .proof-stat strong{display:block;color:var(--accent);font-size:clamp(19px,2.2vw,27px);line-height:1.25;font-weight:900}
 .proof-stat span{display:block;margin-top:4px;color:var(--muted);font-size:10px;line-height:1.4}
 body[data-theme="light"] .floating-card{box-shadow:0 8px 22px rgba(0,0,0,.08)!important}
-.motion-ready .section:not(.hero),.motion-ready .service,.motion-ready .review,.motion-ready .why-item,.motion-ready .about-logo,.motion-ready .contact-form{opacity:0;transform:translateY(26px);transition:opacity .75s ease,transform .75s cubic-bezier(.2,.7,.2,1)}
-.motion-ready .section.motion-in,.motion-ready .service.motion-in,.motion-ready .review.motion-in,.motion-ready .why-item.motion-in,.motion-ready .about-logo.motion-in,.motion-ready .contact-form.motion-in{opacity:1;transform:translateY(0)}
+.motion-ready .motion-pending{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.motion-ready .motion-in{opacity:1;transform:translateY(0)}
 .hero-content{animation:heroContentEnter .85s ease both}.hero-art{animation:heroArtEnter 1s .12s ease both}
 @keyframes heroContentEnter{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes heroArtEnter{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
