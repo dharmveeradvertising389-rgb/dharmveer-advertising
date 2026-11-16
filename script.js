@@ -430,6 +430,48 @@ if (!document.getElementById("portfolio-custom-styles")) {
       font-weight: 500;
       text-align: center;
     }
+
+    /* Portfolio: preserve every uploaded image's original aspect ratio. */
+    #portfolioGrid {
+      grid-template-rows: repeat(2, auto) !important;
+      overflow-y: visible !important;
+      align-items: start !important;
+    }
+    #portfolioGrid > .portfolio-card {
+      height: auto !important;
+      min-height: 0 !important;
+      aspect-ratio: auto !important;
+      align-self: start !important;
+      display: block !important;
+    }
+    #portfolioGrid .portfolio-visual {
+      position: relative !important;
+      inset: auto !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      aspect-ratio: auto !important;
+      overflow: visible !important;
+      display: block !important;
+    }
+    #portfolioGrid .portfolio-visual img {
+      position: relative !important;
+      inset: auto !important;
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      max-width: 100% !important;
+      object-fit: contain !important;
+      object-position: center top !important;
+    }
+    @media (max-width: 700px) {
+      #portfolioGrid { grid-template-rows: repeat(2, auto) !important; }
+      #portfolioGrid > .portfolio-card { aspect-ratio: auto !important; }
+      #portfolioGrid .portfolio-visual {
+        height: auto !important;
+        aspect-ratio: auto !important;
+      }
+    }
   `;
 
   document.head.appendChild(style);
