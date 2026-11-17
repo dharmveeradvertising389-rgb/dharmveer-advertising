@@ -699,11 +699,7 @@ const whyItems = [
   ["04", "Digital Support", "Social media आणि digital marketing साठी creative support."]
 ];
 
-const reviews = [
-  ["Client Review", "तुमचा खरा client feedback इथे दिसेल.", "Client Name"],
-  ["Your Review", "काम पूर्ण झाल्यावर client review इथे add करा.", "Client Name"],
-  ["Future Review", "नवीन reviews सहज add करता येतील.", "Client Name"]
-];
+const reviews = [];
 
 const translations = {
   mr: {
@@ -997,18 +993,113 @@ function renderWhy() {
   }
 }
 
-function renderReviews() {
-  const reviewsGrid = $("#reviewsGrid");
+let allLiveReviews = [];
+let currentReviewPage = 0;
+const REVIEWS_PER_PAGE = 3;
 
-  if (reviewsGrid) {
-    reviewsGrid.innerHTML = reviews.map(x => `
-      <article class="review">
-        <div class="stars">★★★★★</div>
-        <p>“${x[1]}”</p>
-        <strong>${x[2]}</strong>
-        <small>${x[0]}</small>
-      </article>`).join("");
+function renderReviews() {
+  const grid = document.getElementById("reviewsGrid");
+  const pagination = document.getElementById("reviewsPagination");
+  if (!grid) return;
+  const totalPages = Math.max(1, Math.ceil(allLiveReviews.length / REVIEWS_PER_PAGE));
+  currentReviewPage = Math.min(currentReviewPage, totalPages - 1);
+  const pageReviews = allLiveReviews.slice(currentReviewPage * REVIEWS_PER_PAGE, (currentReviewPage + 1) * REVIEWS_PER_PAGE);
+  grid.replaceChildren();
+  pageReviews.forEach(review => {
+    const card = document.createElement("article");
+    card.className = "review";
+    const stars = document.createElement("div");
+    stars.className = "stars";
+    stars.textContent = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
+    stars.setAttribute("aria-label", `${review.rating} पैकी 5 स्टार`);
+    const message = document.createElement("p");
+    message.textContent = `“${review.message}”`;
+    const name = document.createElement("strong");
+    name.textContent = review.name;
+    const label = document.createElement("small");
+    label.textContent = "Verified website review";
+    card.append(stars, message, name, label);
+    grid.append(card);
+  });
+  if (!allLiveReviews.length) {
+    const empty = document.createElement("p");
+    empty.className = "reviews-empty";
+    empty.textContent = "अजून प्रतिक्रिया आलेल्या नाहीत. तुमची प्रतिक्रिया सर्वात आधी द्या!";
+    grid.append(empty);
   }
+  if (pagination) {
+    pagination.hidden = allLiveReviews.length <= REVIEWS_PER_PAGE;
+    const prev = document.getElementById("reviewsPrev");
+    const next = document.getElementById("reviewsNext");
+    const info = document.getElementById("reviewsPageInfo");
+    if (prev) prev.disabled = currentReviewPage === 0;
+    if (next) next.disabled = currentReviewPage >= totalPages - 1;
+    if (info) info.textContent = `${currentReviewPage + 1} / ${totalPages}`;
+  }
+}
+
+async function loadLiveReviews() {
+  try {
+    const response = await fetch("/api/reviews", { cache: "no-store" });
+    if (!response.ok) throw new Error("Reviews load failed");
+    const data = await response.json();
+    allLiveReviews = Array.isArray(data.reviews) ? data.reviews : [];
+    currentReviewPage = 0;
+    renderReviews();
+  } catch (error) {
+    const grid = document.getElementById("reviewsGrid");
+    if (grid) grid.innerHTML = '<p class="reviews-empty">Reviews लोड होऊ शकले नाहीत. कृपया थोड्या वेळाने पुन्हा प्रयत्न करा.</p>';
+  }
+}
+
+function setupReviewForm() {
+  const form = document.getElementById("reviewForm");
+  const ratingInput = document.getElementById("reviewRating");
+  const picker = document.getElementById("ratingPicker");
+  const status = document.getElementById("reviewFormStatus");
+  if (!form || !picker || !ratingInput) return;
+  const setRating = value => {
+    ratingInput.value = String(value);
+    picker.querySelectorAll(".rating-star").forEach(button => {
+      const active = Number(button.dataset.rating) <= value;
+      button.classList.toggle("selected", active);
+      button.setAttribute("aria-checked", Number(button.dataset.rating) === value ? "true" : "false");
+    });
+  };
+  picker.querySelectorAll(".rating-star").forEach(button => button.addEventListener("click", () => setRating(Number(button.dataset.rating))));
+  setRating(5);
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    const submit = document.getElementById("submitReview");
+    const payload = {
+      name: form.elements.name.value.trim(),
+      rating: Number(ratingInput.value),
+      message: form.elements.message.value.trim()
+    };
+    if (!payload.name || !payload.message || payload.rating < 1 || payload.rating > 5) return;
+    submit.disabled = true;
+    status.textContent = "तुमची प्रतिक्रिया प्रकाशित होत आहे...";
+    try {
+      const response = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.error || "Submit failed");
+      status.textContent = "धन्यवाद! तुमची प्रतिक्रिया वेबसाइटवर प्रकाशित झाली आहे.";
+      form.reset();
+      setRating(5);
+      currentReviewPage = 0;
+      await loadLiveReviews();
+    } catch (error) {
+      status.textContent = "Review पाठवता आला नाही. कृपया पुन्हा प्रयत्न करा.";
+    } finally {
+      submit.disabled = false;
+    }
+  });
+  document.getElementById("reviewsPrev")?.addEventListener("click", () => { currentReviewPage--; renderReviews(); });
+  document.getElementById("reviewsNext")?.addEventListener("click", () => { currentReviewPage++; renderReviews(); });
 }
 
 function applyLanguage(lang) {
@@ -1082,7 +1173,7 @@ async function initApp() {
   try { renderPortfolio(initialCategory, false); } catch (e) {}
   try { renderServices(); } catch (e) {}
   try { renderWhy(); } catch (e) {}
-  try { renderReviews(); } catch (e) {}
+  try { setupReviewForm(); await loadLiveReviews(); } catch (e) {}
   try { updateContact(); } catch (e) {}
   try { setupBeforeAfterClick(); } catch (e) {}
   try { applyLanguage(localStorage.getItem("dv-lang") || "mr"); } catch (e) {}
@@ -1144,25 +1235,7 @@ async function initApp() {
     setTheme(document.body.dataset.theme === "light" ? "dark" : "light");
   });
 
-  const feedbackBtn = document.getElementById("giveFeedbackBtn");
 
-  if (feedbackBtn) {
-    feedbackBtn.onclick = () => {
-      const msg = `नमस्कार धर्मवीर ॲडव्हर्टायझिंग,%0A%0Aमला माझी प्रतिक्रिया (Review) द्यायची आहे:%0A%0Aरेटिंग: ⭐⭐⭐⭐⭐%0Aनाव: %0Aप्रतिक्रिया: `;
-
-      if (CONTACT.whatsapp) {
-        window.open(`https://wa.me/${CONTACT.whatsapp}?text=${msg}`, "_blank");
-      } else {
-        const toast = $("#toast");
-
-        if (toast) {
-          toast.textContent = "WhatsApp number नंतर Admin Panel मध्ये जोडा.";
-          toast.classList.add("show");
-          setTimeout(() => toast.classList.remove("show"), 3000);
-        }
-      }
-    };
-  }
 
   forceHideLoader();
 }

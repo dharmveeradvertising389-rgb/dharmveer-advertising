@@ -203,3 +203,26 @@ body[data-theme="light"] .floating-card{box-shadow:0 8px 22px rgba(0,0,0,.08)!im
 @media(max-width:850px){.proof-stats{gap:8px;margin-top:20px}.proof-stat{padding:11px 9px}.proof-stat span{font-size:9px}}
 @media(max-width:560px){.proof-stats{gap:7px}.proof-stat{padding:10px 7px;border-radius:7px}.proof-stat strong{font-size:18px}.proof-stat span{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.hero-logo,.floating-card,.hero-content,.hero-art{animation:none!important}.motion-ready .section:not(.hero),.motion-ready .service,.motion-ready .review,.motion-ready .why-item,.motion-ready .about-logo,.motion-ready .contact-form{opacity:1!important;transform:none!important;transition:none!important}}
+
+
+/* Live client reviews */
+.reviews-pagination{display:flex;align-items:center;justify-content:center;gap:18px;margin:24px 0 34px;color:var(--muted);font-size:12px}
+.reviews-pagination[hidden]{display:none}
+.reviews-pagination button:disabled{opacity:.35;cursor:not-allowed}
+.review-form{max-width:680px;margin:42px auto 0;padding:28px;background:var(--panel);border:1px solid var(--line);border-radius:9px}
+.review-form h3{font-size:21px;margin-bottom:6px}
+.review-form-note{color:var(--muted);font-size:12px;margin-bottom:22px}
+.review-form label{display:block;font-size:12px;font-weight:700;margin:15px 0 7px;color:var(--muted)}
+.review-form input,.review-form textarea{display:block;width:100%;padding:13px;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:5px;font:inherit;font-size:13px;outline:none}
+.review-form input:focus,.review-form textarea:focus{border-color:var(--accent)}
+.rating-picker{display:flex;gap:7px;margin:4px 0 14px}
+.rating-star{border:0;background:transparent;color:#777;font-size:30px;line-height:1;cursor:pointer;padding:2px;transition:color .15s,transform .15s}
+.rating-star.selected{color:var(--accent)}
+.rating-star:hover{transform:scale(1.12)}
+.review-form button[type=submit]{margin-top:18px}
+.review-form button:disabled{opacity:.6;cursor:wait}
+.review-form-status{min-height:18px;margin-top:12px;font-size:12px;color:var(--accent)}
+.reviews-empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:22px}
+body[data-theme="light"] .review-form{background:#fff}
+body[data-theme="light"] .review-form input,body[data-theme="light"] .review-form textarea{background:#fff;color:#171717}
+@media(max-width:650px){.review-form{padding:20px;margin-top:30px}.reviews-pagination{gap:10px}.reviews-pagination .btn{padding:10px 12px;font-size:11px}}

@@ -148,10 +148,31 @@
         <h2 data-i18n="reviewsTitle">Client <span>Reviews</span></h2>
         <p data-i18n="reviewsText">तुमच्या feedback ला आमच्यासाठी विशेष महत्त्व आहे.</p>
       </div>
-      <div class="reviews-grid" id="reviewsGrid"></div>
-      <div style="text-align: center; margin-top: 25px;">
-        <button id="giveFeedbackBtn" class="btn btn-primary">प्रतिक्रिया द्या (Give Feedback) →</button>
+      <div class="reviews-grid" id="reviewsGrid" aria-live="polite"></div>
+      <div class="reviews-pagination" id="reviewsPagination" hidden>
+        <button class="btn btn-outline" id="reviewsPrev" type="button">← मागील</button>
+        <span id="reviewsPageInfo" aria-live="polite"></span>
+        <button class="btn btn-outline" id="reviewsNext" type="button">आणखी प्रतिक्रिया →</button>
       </div>
+      <form class="review-form" id="reviewForm">
+        <h3>तुमचा अनुभव सांगा</h3>
+        <p class="review-form-note">तुमची प्रतिक्रिया थेट वेबसाइटवर प्रकाशित होईल.</p>
+        <label for="reviewName">तुमचे नाव</label>
+        <input id="reviewName" name="name" type="text" maxlength="50" placeholder="नाव लिहा" required>
+        <label>तुमचे Rating</label>
+        <div class="rating-picker" id="ratingPicker" role="radiogroup" aria-label="रेटिंग निवडा">
+          <button type="button" class="rating-star" data-rating="1" role="radio" aria-checked="false" aria-label="1 स्टार">★</button>
+          <button type="button" class="rating-star" data-rating="2" role="radio" aria-checked="false" aria-label="2 स्टार">★</button>
+          <button type="button" class="rating-star" data-rating="3" role="radio" aria-checked="false" aria-label="3 स्टार">★</button>
+          <button type="button" class="rating-star" data-rating="4" role="radio" aria-checked="false" aria-label="4 स्टार">★</button>
+          <button type="button" class="rating-star" data-rating="5" role="radio" aria-checked="false" aria-label="5 स्टार">★</button>
+        </div>
+        <input type="hidden" id="reviewRating" name="rating" value="5">
+        <label for="reviewMessage">तुमची प्रतिक्रिया</label>
+        <textarea id="reviewMessage" name="message" rows="4" maxlength="500" placeholder="आमच्या सेवांबद्दल तुमचा अनुभव लिहा..." required></textarea>
+        <button class="btn btn-primary" id="submitReview" type="submit">Review प्रकाशित करा →</button>
+        <p class="review-form-status" id="reviewFormStatus" role="status"></p>
+      </form>
     </section>
 
     <section id="about" class="section about-section">
