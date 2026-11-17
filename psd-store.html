@@ -760,8 +760,8 @@
     body[data-theme="light"] .lightbox-content { box-shadow:none !important; }
 
     /* Subtle motion: no layout or content changes */
-    .store-hero.motion-pending, .section-block.motion-pending { opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
-    .store-hero.is-visible, .section-block.is-visible { opacity:1; transform:translateY(0); }
+    .store-hero.motion-pending, .section-block.motion-pending { opacity:1 !important; transform:translateY(14px); transition:transform .7s ease; }
+    .store-hero.is-visible, .section-block.is-visible { opacity:1 !important; transform:translateY(0); }
     .hero-logo { animation:psdLogoFloat 5s ease-in-out infinite; }
     .hero-label { animation:psdLabelFloat 4.8s ease-in-out infinite; }
     .label-branding { animation-delay:.7s; }
@@ -996,6 +996,10 @@
           observed.add(el);
           el.classList.add('motion-pending');
           observer.observe(el);
+          window.setTimeout(() => {
+            el.classList.remove('motion-pending');
+            el.classList.add('is-visible');
+          }, 3500);
         });
       };
       scan(document);
