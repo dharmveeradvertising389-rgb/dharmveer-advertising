@@ -1067,12 +1067,7 @@ async function initApp() {
         }));
       });
       dynamicObserver.observe(document.body, { childList: true, subtree: true });
-      window.setTimeout(() => {
-        document.querySelectorAll(".motion-pending").forEach(element => {
-          element.classList.remove("motion-pending");
-          element.classList.add("motion-in");
-        });
-      }, 4500);
+      // Reveal only when the element enters the viewport during scrolling.
     }
   } catch (e) {
     document.querySelectorAll(".motion-pending").forEach(element => element.classList.remove("motion-pending"));

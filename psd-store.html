@@ -996,10 +996,6 @@
           observed.add(el);
           el.classList.add('motion-pending');
           observer.observe(el);
-          window.setTimeout(() => {
-            el.classList.remove('motion-pending');
-            el.classList.add('is-visible');
-          }, 3500);
         });
       };
       scan(document);
@@ -1009,14 +1005,7 @@
         }));
       });
       dynamicObserver.observe(document.body, { childList:true, subtree:true });
-
-      // Safety fallback: never leave any store content invisible.
-      window.setTimeout(() => {
-        document.querySelectorAll('.motion-pending').forEach(el => {
-          el.classList.remove('motion-pending');
-          el.classList.add('is-visible');
-        });
-      }, 4500);
+      // Content remains visible; reveal animation runs on scroll.
     }
 
     async function fetchStoreData() {
