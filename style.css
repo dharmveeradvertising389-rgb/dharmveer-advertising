@@ -192,8 +192,11 @@ html,body{max-width:100%;overflow-x:clip}
 .proof-stat strong{display:block;color:var(--accent);font-size:clamp(19px,2.2vw,27px);line-height:1.25;font-weight:900}
 .proof-stat span{display:block;margin-top:4px;color:var(--muted);font-size:10px;line-height:1.4}
 body[data-theme="light"] .floating-card{box-shadow:0 8px 22px rgba(0,0,0,.08)!important}
-.motion-ready .motion-pending{opacity:1!important;transform:translateY(14px);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.motion-ready .motion-pending{opacity:1!important;transform:translateY(26px);transition:transform .75s cubic-bezier(.2,.7,.2,1)}
 .motion-ready .motion-in{opacity:1!important;transform:translateY(0)}
+/* Scroll reveal applies to each section, service/review card, portfolio tile and proof stat. Content remains visible even before observer activation. */
+.motion-ready .motion-pending{will-change:transform}
+@media(prefers-reduced-motion:reduce){.motion-ready .motion-pending,.motion-ready .motion-in{transform:none!important;transition:none!important}}
 .hero-content{animation:heroContentEnter .85s ease both}.hero-art{animation:heroArtEnter 1s .12s ease both}
 @keyframes heroContentEnter{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes heroArtEnter{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}

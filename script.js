@@ -1047,7 +1047,7 @@ async function initApp() {
       }, { threshold: 0.06, rootMargin: "0px 0px 80px 0px" });
 
       const revealTargets = root => {
-        const selector = ".section:not(.hero), .service, .review, .why-item, .about-logo, .contact-form";
+        const selector = ".section:not(.hero), .service, .review, .why-item, .about-logo, .contact-form, .portfolio-card, .proof-stat";
         const targets = [];
         if (root.nodeType === 1 && root.matches(selector)) targets.push(root);
         if (root.querySelectorAll) targets.push(...root.querySelectorAll(selector));
